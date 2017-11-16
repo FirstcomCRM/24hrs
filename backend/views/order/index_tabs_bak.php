@@ -89,11 +89,18 @@ $this->title = 'Order Management System';
                               //  return $path;
                             },
                           ],
-                          [
-                            'attribute'=>'order_status_id',
-                            'label'=>'Status',
-                            'value'=>'orderStatus.name',
+                        [
+                          'header'=>'Action',
+                          'class'=>'yii\grid\ActionColumn',
+                          'template'=>'{email}',
+                          'options'=>['style'=>'padding:20px'],
+                          'buttons'=>[
+                            'email'=>function($url,$model,$key){
+                                //return Html::a('<i class="fa fa-envelope-open-o" aria-hidden="true"></i>');
+                                  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', ['email','id'=>$key], ['title'=>'Email to customer','data-pjax'=>0]);
+                            },
                           ],
+                        ],
 
 
                           //['class' => 'yii\grid\ActionColumn'],
