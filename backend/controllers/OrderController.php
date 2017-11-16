@@ -114,6 +114,33 @@ class OrderController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionEmail($id){
+
+//      ini_set('max_execution_time', 180);
+//      ini_set("memory_limit", "512M");
+        $data = Order::find()->where(['order_id'=>$id])->one();
+        $name = $data->firstname.' '. $data->lastname;
+        $message = "<p>Greetings, {$name}</p>";
+        $message .= "<p>The items has been delivered</p>";
+        $message .= '<p>Thank you.</p>';
+
+       $mail = Yii::$app->mailer->compose()
+          ->setTo($data->email)
+          ->setFrom(['no-reply@cityflorist.com' => 'no-reply@cityflorist.com'])
+      //    ->setCc($testcc) //temp
+          ->setSubject('Item delivered')
+          ->setHtmlBody($message);
+          //->send()
+       if ($mail->send() ) {
+         Yii::$app->session->setFlash('success', "Email sent to customer");
+       }else{
+        // $mail->getErrorMessage();
+        Yii::$app->session->setFlash('error', "Email failed");
+      }
+        return $this->redirect(['index']);
+
+    }
+
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
