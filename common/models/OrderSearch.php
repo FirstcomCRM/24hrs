@@ -51,7 +51,7 @@ class OrderSearch extends Order
 
       //this one to use
     /* $query->joinWith(['orderProduct'])->select('order.order_id,order.invoice_no,order.invoice_prefix,order.order_status_id,order_product.delivery_date,
-      order_product.delivery_text_time,order_product.name'); */
+      order_product.delivery_text_time,order_product.product_id'); */
 
     //  $query->joinWith(['orderProduct'])->select('order.order_id,order.invoice_no,order.invoice_prefix,order.order_status_id,order_product.delivery_date');
       //samp;e
@@ -73,7 +73,8 @@ class OrderSearch extends Order
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'Order.order_id' => $this->order_id,
+        //    'Order.order_id' => $this->order_id,
+            'order_id' => $this->order_id,
             'invoice_no' => $this->invoice_no,
             'store_id' => $this->store_id,
             'customer_id' => $this->customer_id,
