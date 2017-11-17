@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use common\models\OrderProduct;
 use common\models\OrderStatus;
+use common\models\Product;
 /**
  * This is the model class for table "order".
  *
@@ -183,14 +184,18 @@ class Order extends \yii\db\ActiveRecord
 
     public function getOrderProduct(){
       return $this->hasOne(OrderProduct::className(),['order_id' => 'order_id'] );
-  //  $test = $this->hasMany(OrderProduct::className(),['order_id' => 'order_id'] );
-  //  echo '<pre>';
-  //  var_dump(gettype($test));
-//    echo '</pre>';die();
       //return $this->hasMany(OrderProduct::className(),['order_id' => 'order_id'] );
     }
 
     public function getOrderStatus(){
         return $this->hasOne(OrderStatus::className(),['order_status_id' => 'order_status_id'] );
+    }
+
+    public function getImage(){
+
+      $data = OrderProduct::findOne($this->order_id);
+      $pdata = Product::findOne($data->product_id);
+      return $pdata->image;
+
     }
 }
