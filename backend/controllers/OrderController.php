@@ -39,6 +39,9 @@ class OrderController extends Controller
         $searchModel->order_status_id  = 1;//pending order
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//default query
 
+        //$searchModel_future = new OrderSearch();
+        //$searchModel_future->order_status_id = 1;
+
         $searchModel_done = new OrderSearch();
         $searchModel_done->order_status_id = 5; //completed order
         $dataProvider_done = $searchModel_done->search(Yii::$app->request->queryParams); //get all orders that are  completed
@@ -126,6 +129,7 @@ class OrderController extends Controller
 
        $mail = Yii::$app->mailer->compose()
           ->setTo($data->email)
+        //  ->setTo('eumerjoseph.ramos@yahoo.com')
           ->setFrom(['no-reply@cityflorist.com' => 'no-reply@cityflorist.com'])
       //    ->setCc($testcc) //temp
           ->setSubject('Item delivered')
@@ -134,10 +138,9 @@ class OrderController extends Controller
        if ($mail->send() ) {
          Yii::$app->session->setFlash('success', "Email sent to customer");
        }else{
-        // $mail->getErrorMessage();
         Yii::$app->session->setFlash('error', "Email failed");
       }
-        return $this->redirect(['index']);
+      //  return $this->redirect(['index']);
 
     }
 
