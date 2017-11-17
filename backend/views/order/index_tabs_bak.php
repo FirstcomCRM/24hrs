@@ -30,7 +30,6 @@ $this->title = 'Order Management System';
     </div>
 
 
-
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title"></h3>
@@ -46,7 +45,7 @@ $this->title = 'Order Management System';
         <div class="tab-content">
           <div class="tab-pane fade in active" id="today"> <!--Start of Pending Orders for Today-->
             <div class="table-responsive">
-              <?php Pjax::begin(); ?>
+              <?php Pjax::begin(['timeout' => 10000 ]); ?>
                 <?= GridView::widget([
                       'dataProvider' => $dataProvider,
                     //  'filterModel' => $searchModel,
@@ -73,11 +72,11 @@ $this->title = 'Order Management System';
 
                           ],
 
-                        //  [
-                        //    'attribute'=>'image',
-                        //    'value'=>'orderProduct.product.image',
-                        //  ],
-                          [
+                      /*    [
+                            'attribute'=>'image',
+                            'value'=>'orderProduct.product.image',
+                          ],*/
+                         [
                             'attribute'=>'image',
                             'label'=>'Image',
                             'format'=>'raw',
@@ -85,10 +84,20 @@ $this->title = 'Order Management System';
                                 $data = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
                                 $pdata = Product::find()->where(['product_id'=>$data->product_id])->one();
                                 $path = Yii::getAlias('@image').'/'.$pdata->image;
-                                return '<a href="'.$path.'" data-pjax=0><img style="width:50px;" src="'.$path.'"></a>';
+                                return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
+
                               //  return $path;
                             },
                           ],
+                        /*  [
+                                'attribute'=>'image',
+                                'label'=>'Image',
+                                'format'=>'raw',
+                                'value'=>function($model){
+                                    //return Html::img(Yii::getAlias('@image').'/'.$model->getImage() , ['style'=>'width:50px']);
+                                  //  return $model->getImage();
+                                },
+                              ],*/
                         [
                           'header'=>'Action',
                           'class'=>'yii\grid\ActionColumn',
@@ -97,11 +106,19 @@ $this->title = 'Order Management System';
                           'buttons'=>[
                             'email'=>function($url,$model,$key){
                                 //return Html::a('<i class="fa fa-envelope-open-o" aria-hidden="true"></i>');
-                                  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', ['email','id'=>$key], ['title'=>'Email to customer','data-pjax'=>0]);
+                                //  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', ['email','id'=>$key], ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button','onclick'=>'myEmail()']);
+                                  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', false, ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button',
+                                  'onclick'=>'myEmail('.$model->order_id .')']);
+
                             },
                           ],
                         ],
 
+                        [
+                          'attribute'=>'order_status_id',
+                          'label'=>'Status',
+                          'value'=>'orderStatus.name',
+                        ],
 
                           //['class' => 'yii\grid\ActionColumn'],
                       ],
@@ -116,7 +133,7 @@ $this->title = 'Order Management System';
 
           <div class="tab-pane fade" id="completed"><!--Start of Orders Done-->
 
-            <?php Pjax::begin(); ?>
+            <?php Pjax::begin(['timeout' => 18000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_done,
                   //  'filterModel' => $searchModel,
@@ -184,11 +201,11 @@ $(document).ready(function() {
 
   var myVar = setInterval(function(){ myTimer() }, 1000);
 
-function myTimer() {
-    var d = new Date();
-    var t = d.toLocaleTimeString();
-    document.getElementById("time").innerHTML = t;
-}
+  function myTimer() {
+      var d = new Date();
+      var t = d.toLocaleTimeString();
+      document.getElementById("time").innerHTML = t;
+  }
 });
 JS;
 $this->registerJs($script);
