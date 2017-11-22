@@ -37,6 +37,9 @@ class OrderController extends Controller
     {
         $searchModel = new OrderSearch();
         $searchModel->order_status_id  = 1;//pending order
+        $searchModel->start  = date('Y-m-d');
+        $date = new \DateTime($searchModel->start);
+        $searchModel->end = $date->modify('+1 day')->format('Y-m-d');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//default query
 
         //$searchModel_future = new OrderSearch();
@@ -117,6 +120,15 @@ class OrderController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionComplete($id){
+
+        $data = Order::find()->where(['order_id'=>$id])->one();
+        $data->order_status_id = 5;
+        $data->save(false);
+        Yii::$app->session->setFlash('success', "Order Completed");
+        return $this->redirect(['index']);
+    }
+
     public function actionEmail($id){
 
 //      ini_set('max_execution_time', 180);
@@ -128,8 +140,8 @@ class OrderController extends Controller
         $message .= '<p>Thank you.</p>';
 
        $mail = Yii::$app->mailer->compose()
-          ->setTo($data->email)
-        //  ->setTo('eumerjoseph.ramos@yahoo.com')
+        //  ->setTo($data->email)
+          ->setTo('eumerjoseph.ramos@yahoo.com')
           ->setFrom(['no-reply@cityflorist.com' => 'no-reply@cityflorist.com'])
       //    ->setCc($testcc) //temp
           ->setSubject('Item delivered')
