@@ -79,7 +79,7 @@ class OrderSearch extends Order
         // grid filtering conditions
         $query->andFilterWhere([
         //    'Order.order_id' => $this->order_id,
-            'order_id' => $this->order_id,
+            'order.order_id' => $this->order_id,
             'invoice_no' => $this->invoice_no,
             'order_status_id'=>$this->order_status_id,
 
@@ -93,7 +93,7 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'lastname', $this->lastname])
             ->andFilterWhere(['like', 'email', $this->email])
         //    ->andFilterWhere(['like', 'order_product.delivery_date', $this->delivery_date])
-          ->andFilterWhere(['between', 'order_product.delivery_date', $this->start, $this->end])
+            ->andFilterWhere(['between', 'order_product.delivery_date', $this->start, $this->end])
             ->andFilterWhere(['like', 'order_product.product_id', $this->product_code]);
         return $dataProvider;
     }
