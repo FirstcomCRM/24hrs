@@ -29,7 +29,8 @@ $this->title = 'Order Management System';
       </div>
     </div>
 
-
+    <a href="#">Data</a>
+    <?php echo Html::a('test','#') ?>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title"></h3>
@@ -66,7 +67,8 @@ $this->title = 'Order Management System';
                             'invoice_no',
                         //    'invoice_prefix',
                           [
-                            'attribute'=>'product_id',
+                            //'attribute'=>'product_id',
+                            'attribute'=>'orderProduct.product_id',
                             'label'=>'Product Code',
                             'value'=>'orderProduct.product_id',
 
@@ -101,24 +103,27 @@ $this->title = 'Order Management System';
                         [
                           'header'=>'Action',
                           'class'=>'yii\grid\ActionColumn',
-                          'template'=>'{email}',
+                          'template'=>'{email}{complete}',
                           'options'=>['style'=>'padding:20px'],
                           'buttons'=>[
                             'email'=>function($url,$model,$key){
                                 //return Html::a('<i class="fa fa-envelope-open-o" aria-hidden="true"></i>');
                                 //  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', ['email','id'=>$key], ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button','onclick'=>'myEmail()']);
-                                  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', false, ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button',
+                                  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', '#', ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button',
                                   'onclick'=>'myEmail('.$model->order_id .')']);
 
                             },
+                            'complete'=>function($url,$model,$key){
+                              return Html::a('<i class="fa fa-check fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$key], ['title'=>'Complete Order','data-pjax'=>0]);
+                            }
                           ],
                         ],
 
-                        [
+                      /*  [
                           'attribute'=>'order_status_id',
                           'label'=>'Status',
                           'value'=>'orderStatus.name',
-                        ],
+                        ],*/
 
                           //['class' => 'yii\grid\ActionColumn'],
                       ],
@@ -175,11 +180,23 @@ $this->title = 'Order Management System';
                           //  return $path;
                         },
                       ],
+
                       [
-                        'attribute'=>'order_status_id',
-                        'label'=>'Status',
-                        'value'=>'orderStatus.name',
+                        'header'=>'Action',
+                        'class'=>'yii\grid\ActionColumn',
+                        'template'=>'{email}',
+                        'options'=>['style'=>'padding:20px'],
+                        'buttons'=>[
+                          'email'=>function($url,$model,$key){
+                              //return Html::a('<i class="fa fa-envelope-open-o" aria-hidden="true"></i>');
+                              //  return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', ['email','id'=>$key], ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button','onclick'=>'myEmail()']);
+                                return Html::a('<i class="fa fa-envelope-open-o fa-2x" aria-hidden="true"></i>', false, ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button',
+                                'onclick'=>'myEmail('.$model->order_id .')']);
+
+                          },
+                        ],
                       ],
+
                         //['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>

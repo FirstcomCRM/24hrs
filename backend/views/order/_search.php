@@ -33,7 +33,7 @@ use kartik\daterange\DateRangePicker;
             ],
           ],
           'options'=>[
-            'placeholder'=>'Date',
+            // /'placeholder'=>'Date',
             'class'=>'form-control',
           ],
         ]); ?>
