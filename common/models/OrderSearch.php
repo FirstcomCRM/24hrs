@@ -64,6 +64,9 @@ class OrderSearch extends Order
         ]);
 
         $query->orderBy(['order_id'=>SORT_DESC]);
+        $query->groupBy(['order.order_id']);
+
+        //$query->add a cache function here
         $this->load($params);
 
         if (!empty($this->delivery_date)) {
@@ -92,35 +95,13 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
             ->andFilterWhere(['like', 'email', $this->email])
-        //    ->andFilterWhere(['like', 'order_product.delivery_date', $this->delivery_date])
+            ->andFilterWhere(['like', 'order_product.delivery_date', $this->delivery_date])
             ->andFilterWhere(['between', 'order_product.delivery_date', $this->start, $this->end])
             ->andFilterWhere(['like', 'order_product.product_id', $this->product_code]);
         return $dataProvider;
     }
 
-    public function jonedSearch($params){
-      $query = Order::find();
-      //  ->select('store_name');
-      //    ->leftJoin('order_product', '`order_product`.`order_id` = `order`.`order_id`');
-      //  ->leftJoin('order_product','order_product.order_id'='order.order_id')
-  //      ->all();
+    public function customs($params){
 
-
-      //  echo '<pre>';
-      //  print_r($query);die();
-      //  echo '</pre>';
-
-      $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
-      ]);
-
-      $this->load($params);
-
-      //$query->andFilterWhere(['order_id'=>4015]);
-      echo '<pre>';
-      print_r($dataProvider->getModels() ) ;die();
-      echo '</pre>';
-      return $dataProvider;
     }
 }

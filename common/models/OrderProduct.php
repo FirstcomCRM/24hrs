@@ -79,7 +79,7 @@ class OrderProduct extends \yii\db\ActiveRecord
             'delivery_text_time' => 'Delivery Text Time',
             'delivery_amount' => 'Delivery Amount',
             'collection_date' => 'Collection Date',
-            'collection_time' => 'Collection Time',
+            'collection_time' => 'Collection Time', 
             'collection_text_time' => 'Collection Text Time',
             'collection_amount' => 'Collection Amount',
         ];
@@ -87,5 +87,6 @@ class OrderProduct extends \yii\db\ActiveRecord
 
     public function getProduct(){
       return $this->hasOne(Product::className(),['product_id' => 'product_id'] );
+  //    return $this->has(Product::className(),['product_id' => 'product_id'] );
     }
 }
