@@ -42,26 +42,68 @@ class OrderController extends Controller
         $searchModel->end = $date->modify('+1 day')->format('Y-m-d');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//default query
 
-        //$searchModel_future = new OrderSearch();
-        //$searchModel_future->order_status_id = 1;
+        $searchModel_future = new OrderSearch();
+        $searchModel_future->order_status_id = 1;
+        $date = new \DateTime(date('Y-m-d') );
+        $searchModel_future->start = $date->modify('+2 day')->format('Y-m-d');
+        $searchModel_future->end = $date->modify('+2 year')->format('Y-m-d');
+        $dataProvider_future = $searchModel_future->search(Yii::$app->request->queryParams);//query, get records two days from now till 2years
+      //  print_r(  $dataProvider_future );die();
 
         $searchModel_done = new OrderSearch();
         $searchModel_done->order_status_id = 5; //completed order
         $dataProvider_done = $searchModel_done->search(Yii::$app->request->queryParams); //get all orders that are  completed
-        $time = date('Y-m-d H:i:s');
+      //  $time = date('Y-m-d H:i:s');
+        //echo "<pre>";var_dump($dataProvider_done);echo "</br>";die();
 
         return $this->render('index_tabs_bak', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'dataProvider_done'=> $dataProvider_done,
-            'time'=>$time,
+            'dataProvider_future'=>$dataProvider_future,
+        //    'time'=>$time,
         ]);
+    }
+
+    public function actionHome(){
+      $searchModel = new OrderSearch();
+      $searchModel->order_status_id  = 1;//pending order
+    //  $searchModel->order_id = 4416;
+      $searchModel->start  = date('Y-m-d');
+      $date = new \DateTime($searchModel->start);
+      $searchModel->end = $date->modify('+1 day')->format('Y-m-d');
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//default query
+
+      $searchModel_future = new OrderSearch();
+      $searchModel_future->order_status_id = 1;
+      $start_date = date('Y-m-d');
+      $date = new \DateTime(date('Y-m-d') );
+      $searchModel_future->start = $date->modify('+2 day')->format('Y-m-d');
+      $searchModel_future->end = $date->modify('+2 year')->format('Y-m-d');
+      $dataProvider_future = $searchModel_future->search(Yii::$app->request->queryParams);//query, get records two days from now till 2years
+
+    // print_r($searchModel_future->end);
+    //  die();
+
+      $searchModel_done = new OrderSearch();
+      $searchModel_done->order_status_id = 5; //completed order
+      $dataProvider_done = $searchModel_done->search(Yii::$app->request->queryParams); //get all orders that are  completed
+    //  $time = date('Y-m-d H:i:s');
+
+
+      return $this->render('index', [
+          'searchModel' => $searchModel,
+          'dataProvider' => $dataProvider,
+          'dataProvider_done'=> $dataProvider_done,
+          'dataProvider_future'=>$dataProvider_future,
+      //    'time'=>$time,
+      ]);
     }
 
     /**
      * Displays a single Order model.
      * @param integer $id
-     * @return mixed
+     * @return mixed5
      */
     public function actionView($id)
     {
