@@ -6,74 +6,8 @@ use Yii;
 use common\models\OrderProduct;
 use common\models\OrderStatus;
 use common\models\Product;
-/**
- * This is the model class for table "order".
- *
- * @property integer $order_id
- * @property string $order_source
- * @property integer $invoice_no
- * @property string $invoice_prefix
- * @property integer $store_id
- * @property string $store_name
- * @property string $store_url
- * @property integer $customer_id
- * @property integer $customer_group_id
- * @property string $firstname
- * @property string $lastname
- * @property string $email
- * @property string $telephone
- * @property string $shipping_telephone
- * @property string $fax
- * @property string $custom_field
- * @property string $payment_firstname
- * @property string $payment_lastname
- * @property string $payment_company
- * @property string $payment_address_1
- * @property string $payment_address_2
- * @property string $payment_city
- * @property string $payment_postcode
- * @property string $payment_country
- * @property integer $payment_country_id
- * @property string $payment_zone
- * @property integer $payment_zone_id
- * @property string $payment_address_format
- * @property string $payment_custom_field
- * @property string $payment_method
- * @property string $payment_code
- * @property string $shipping_firstname
- * @property string $shipping_lastname
- * @property string $shipping_company
- * @property string $shipping_address_1
- * @property string $shipping_address_2
- * @property string $shipping_city
- * @property string $shipping_postcode
- * @property string $shipping_country
- * @property integer $shipping_country_id
- * @property string $shipping_zone
- * @property integer $shipping_zone_id
- * @property string $shipping_address_format
- * @property string $shipping_custom_field
- * @property string $shipping_method
- * @property string $shipping_code
- * @property string $comment
- * @property string $total
- * @property integer $order_status_id
- * @property integer $affiliate_id
- * @property string $commission
- * @property integer $marketing_id
- * @property string $tracking
- * @property integer $language_id
- * @property integer $currency_id
- * @property string $currency_code
- * @property string $currency_value
- * @property string $ip
- * @property string $forwarded_ip
- * @property string $user_agent
- * @property string $accept_language
- * @property string $date_added
- * @property string $date_modified
- * @property string $date_invoice
- */
+
+ 
 class Order extends \yii\db\ActiveRecord
 {
     /**
