@@ -39,7 +39,9 @@ use kartik\daterange\DateRangePicker;
         ]); ?>
       </div>
       <div class="col-md-3">
-          <?= $form->field($model, 'product_code') ?>
+        <!---
+          <?php  $form->field($model, 'product_code') ?>
+          ---->
       </div>
     </div>
 
