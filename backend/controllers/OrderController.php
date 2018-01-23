@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Order;
 use common\models\OrderSearch;
+use common\models\OfflineOrder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -36,27 +37,19 @@ class OrderController extends Controller
     public function actionIndex()
     {
         $searchModel = new OrderSearch();
-        $searchModel->order_status_id  = 1;//pending order
-        $searchModel->start  = date('Y-m-d');
-        $date = new \DateTime($searchModel->start);
-        $searchModel->end = $date->modify('+1 day')->format('Y-m-d');
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//default query
+        $dataProvider = $searchModel->today_search(Yii::$app->request->queryParams);//default query
 
         $searchModel_future = new OrderSearch();
-        $searchModel_future->order_status_id = 1;
-        $date = new \DateTime(date('Y-m-d') );
-        $searchModel_future->start = $date->modify('+2 day')->format('Y-m-d');
-        $searchModel_future->end = $date->modify('+2 year')->format('Y-m-d');
-        $dataProvider_future = $searchModel_future->search(Yii::$app->request->queryParams);//query, get records two days from now till 2years
-      //  print_r(  $dataProvider_future );die();
+        $dataProvider_future = $searchModel_future->future_search(Yii::$app->request->queryParams);//query, get records two days from now till 2years
+
 
         $searchModel_done = new OrderSearch();
-        $searchModel_done->order_status_id = 5; //completed order
-        $dataProvider_done = $searchModel_done->search(Yii::$app->request->queryParams); //get all orders that are  completed
+      //  $searchModel_done->order_status_id = 5; //completed order
+        $dataProvider_done = $searchModel_done->completed_search(Yii::$app->request->queryParams); //get all orders that are  completed
       //  $time = date('Y-m-d H:i:s');
         //echo "<pre>";var_dump($dataProvider_done);echo "</br>";die();
 
-        return $this->render('index_tabs_bak', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'dataProvider_done'=> $dataProvider_done,
@@ -67,11 +60,11 @@ class OrderController extends Controller
 
     public function actionHome(){
       $searchModel = new OrderSearch();
-      $searchModel->order_status_id  = 1;//pending order
+    //  $searchModel->order_status_id  = 1;//pending order
     //  $searchModel->order_id = 4416;
-      $searchModel->start  = date('Y-m-d');
-      $date = new \DateTime($searchModel->start);
-      $searchModel->end = $date->modify('+1 day')->format('Y-m-d');
+  //    $searchModel->start  = date('Y-m-d');
+    //  $date = new \DateTime($searchModel->start);
+  //    $searchModel->end = $date->modify('+1 day')->format('Y-m-d');
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//default query
 
       $searchModel_future = new OrderSearch();
@@ -162,12 +155,35 @@ class OrderController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionComplete($id){
+    public function actionComplete($id,$invoice_no){
 
-        $data = Order::find()->where(['order_id'=>$id])->one();
-        $data->order_status_id = 5;
-        $data->save(false);
+        if ($invoice_no != '0') {
+          $data = OfflineOrder::find()->where(['id'=>$id])->one();
+          $data->status = 5;
+          $data->save(false);
+        }else{
+          $data = Order::find()->where(['order_id'=>$id])->one();
+          $data->order_status_id = 5;
+          $data->save(false);
+        }
+
         Yii::$app->session->setFlash('success', "Order Completed");
+        return $this->redirect(['index']);
+    }
+
+    public function actionCancel($id,$invoice_no){
+
+        if ($invoice_no != '0') {
+          $data = OfflineOrder::find()->where(['id'=>$id])->one();
+          $data->status = 7;
+          $data->save(false);
+        }else{
+          $data = Order::find()->where(['order_id'=>$id])->one();
+          $data->order_status_id = 7;
+          $data->save(false);
+        }
+
+        Yii::$app->session->setFlash('success', "Order Cancelled");
         return $this->redirect(['index']);
     }
 
