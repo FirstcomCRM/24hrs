@@ -99,8 +99,8 @@ $gridColumns = [
 [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
-  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-
+//  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
+  'template'=>'{view} {update}{email}{complete}{cancel}',
   'options'=>['style'=>'padding:20px'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
@@ -111,23 +111,24 @@ $gridColumns = [
       return Html::a(' <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
-    'email'=>function($url,$model,$key){
+  /*  'email'=>function($url,$model,$key){
           return Html::a('<i class="fa fa-envelope-open-o " aria-hidden="true"></i>', '#', ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button',
           'onclick'=>'myEmail('.$model['id'] .')']);
 
-    },
-  /*  'mod_email'=>function($url,$model,$key){
-          return Html::a('<i class="fa fa-fighter-jet" aria-hidden="true"></i>', $url,
+    },*/
+    'email'=>function($url,$model,$key){
+          return Html::a('<i class="fa fa-envelope-open-o " aria-hidden="true"></i>', $url,
             [
               'title'=>'Email to customer',
               'data-pjax'=>0,
               'class'=>'modalButton',
-              'value' => Url::to(['offline-order/update', 'id' => $key])
+            //  'value' => Url::to(['order/custom-email', 'id' => $key])
+              'value' => Url::to(['order/custom-email'])
           //    'onclick'=>'myEmail('.$model['id'] .')'
             ]
           );
 
-    },*/
+    },
     'complete'=>function($url,$model,$key){
       return Html::a('<i class="fa fa-check" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Complete Order','data-pjax'=>0]);
     },
@@ -161,10 +162,10 @@ $gridColumns = [
       $url = Url::to(['offline-order/update', 'id'=>$model['id']]);
       return $url;
     }
-  /*  if ($action=='mod_email') {
-      $url = Url::to(['offline-order/create' ]);
+    if ($action=='email') {
+      $url = Url::to(['order/custom-email' ]);
       return $url;
-    }*/
+    }
 
   }
 
@@ -235,7 +236,7 @@ $this->title = 'Order Management System';
           </div><!--End of Pending Future Order-->
 
           <div class="tab-pane fade" id="completed"><!--Start of Orders Done-->
-            <?php Pjax::begin(['timeout' => 10000 ]); ?>
+            <?php Pjax::begin(['timeout' => 18000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_done,
                      'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
@@ -258,7 +259,7 @@ $this->title = 'Order Management System';
 
 <?php
   Modal::begin([
-    'header'=>'Investor Report',
+    'header'=>'Email to Customer',
     'id'=>'modals',
     'size'=>'modal-lg',
     //'clientOptions' => ['backdrop' => false],
@@ -273,9 +274,6 @@ $this->title = 'Order Management System';
 </div>
 
 <?php Modal::end() ?>
-
-
-
 
 
 
