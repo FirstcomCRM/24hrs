@@ -40,6 +40,7 @@ use yii\grid\GridView;
                 'customer_name',
                 'email:email',
                 'contact_number',
+                'remarks:ntext',
                 'recipient_name',
                 'recipient_contact_num',
                 'recipient_address:ntext',

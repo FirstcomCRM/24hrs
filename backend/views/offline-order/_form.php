@@ -76,6 +76,11 @@ ksort($del_time);
           <div class="col-md-4">
             <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
           </div>
+
+            <div class="col-md-12">
+                  <?= $form->field($model, 'remarks')->textarea(['rows' => 4]) ?>
+            </div>
+        
         </div>
 
       </div>
