@@ -6,6 +6,7 @@ use Yii;
 use common\models\Order;
 use common\models\OrderSearch;
 use common\models\OfflineOrder;
+use common\models\EmailForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -212,6 +213,38 @@ class OrderController extends Controller
       }
       //  return $this->redirect(['index']);
 
+    }
+
+    public function actionCustomEmail(){
+        $model = new EmailForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() ) {
+          $ccs = explode(",",$model->cc);
+          $msg = nl2br($model->message);
+        //  print_r($msg);
+        //  die();
+          $mail = Yii::$app->mailer->compose()
+           //  ->setTo($data->email)
+             ->setTo($model->email)
+             ->setFrom(['no-reply@cityflorist.com' => 'no-reply@cityflorist.com'])
+             ->setCc($ccs) //temp
+             ->setSubject($model->title)
+             ->setHtmlBody($msg)
+             ->send();
+        //  echo '<pre>';
+        //  print_r($mail);die();
+         if ($mail ) {
+           Yii::$app->session->setFlash('success', "Email sent to customer");
+         }else{
+           Yii::$app->session->setFlash('error', "Email failed");
+         }
+         return $this->redirect(['index']);
+
+        }else{
+          return $this->renderAjax('_email', [
+              'model' => $model,
+          ]);
+        }
     }
 
     /**
