@@ -176,6 +176,20 @@ $gridColumns = [
 $this->title = 'Order Management System';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<style>
+
+.alignleft {
+	float: left;
+}
+.alignright {
+	float: right;
+}
+.textbox{
+  overflow: hidden;
+}
+</style>
+
 <div class="order-index">
 
 
@@ -183,9 +197,17 @@ $this->title = 'Order Management System';
 
     <h1><?php Html::encode($this->title) ?></h1>
 
-    <div class="current-time well well-sm">
-      <h4> Current Date/Time: <?php echo date('Y-m-d') ?> <span id=time></span></h4>
+    <div class="current-time well well-sm clearfix">
+      <p class="alignleft" style="margin-top:4px">
+          <strong>Current Date/Time: <?php echo date('Y-m-d') ?> <span id=time></span> </strong>
+      </p>
+      <p class="alignright">
+        <?= Html::a('Create Offline Order', ['offline-order/create'], ['class' => 'btn btn-success btn-sm']) ?>
+      </p>
     </div>
+
+
+    <div style="clear: both;"></div>
 
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -202,7 +224,6 @@ $this->title = 'Order Management System';
         <h3 class="panel-title"></h3>
       </div>
       <div class="panel-body"> <!--Start of the panel body for the Lists-->
-        <p class="text-right"><?= Html::a('Create Offline Order', ['offline-order/create'], ['class' => 'btn btn-success']) ?></p>
         <ul class="nav nav-tabs">
           <li class="active"> <a href="#today" data-toggle="tab">Orders Today/Tomorrow</a></li>
           <li> <a href="#future" data-toggle="tab"> Pending Future Orders</a></li>
