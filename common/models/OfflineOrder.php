@@ -37,10 +37,11 @@ class OfflineOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_date', 'delivery_date', 'customer_name', 'email', 'contact_number', 'recipient_name','delivery_time', 'recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code', 'recipient_country'], 'required'],
+            [['invoice_date', 'delivery_date', 'customer_name', 'email', 'contact_number', 'recipient_name','delivery_time', 'recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
             [['invoice_date', 'delivery_date'], 'safe'],
             [['email','recipient_email'],'email'],
             [['status'],'integer'],
+            [['charge','subtotal','grand_total'],'number'],
             [['recipient_address','remarks'], 'string'],
             [['invoice_no', 'contact_number', 'recipient_contact_num', 'recipient_postal_code'], 'string', 'max' => 25],
             [['customer_name'], 'string', 'max' => 100],
@@ -69,8 +70,9 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'recipient_address' => 'Recipient Address',
             'recipient_email' => 'Recipient Email',
             'recipient_postal_code' => 'Recipient Postal Code',
-            'recipient_country' => 'Recipient Country',
+        //    'recipient_country' => 'Recipient Country',
             'Status'=>'Status',
+            'charge'=>'Delivery Charge',
         ];
     }
 
