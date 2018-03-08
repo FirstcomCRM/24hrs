@@ -33,9 +33,10 @@ class OfflineOrderProduct extends \yii\db\ActiveRecord
     {
         return [
             [['item_code', 'quantity', 'unit_price'], 'required'],
-            [['off_order_id', 'item_code', 'quantity'], 'integer'],
+            [['off_order_id', 'quantity'], 'integer'],
             [['unit_price', 'total_amount'], 'number'],
             [['del_date'], 'safe'],
+            [['item_code'],'string','max'=>75],
             [['del_time'], 'string', 'max' => 25],
         ];
     }
