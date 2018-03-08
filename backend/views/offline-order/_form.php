@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
+use common\models\DeliveryTime;
 /* @var $this yii\web\View */
 /* @var $model common\models\OfflineOrder */
 /* @var $form yii\widgets\ActiveForm */
@@ -20,6 +21,8 @@ $del_time = [
   '1:00pm - 9:00pm'=>'1:00pm - 9:00pm',
 ];
 
+$data = DeliveryTime::find()->all();
+$del = ArrayHelper::map($data,'id','delivery_time');
 ksort($del_time);
 ?>
 
@@ -30,7 +33,7 @@ ksort($del_time);
     <!----Customer Panel Box--->
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Customer Information</h3>
+        <h3 class="panel-title">Your Information (Sender's Information)</h3>
       </div>
       <div class="panel-body">
 
@@ -62,25 +65,29 @@ ksort($del_time);
             ]); ?>
           </div>
           <div class="col-md-4">
-              <?= $form->field($model, 'delivery_time')->dropDownList($del_time) ?>
+              <?= $form->field($model, 'delivery_time')->dropDownList($del) ?>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
               <?= $form->field($model, 'customer_name')->textInput(['maxlength' => true]) ?>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
               <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
+          </div>
+
+          <div class="col-md-3">
+            <?= $form->field($model, 'charge')->textInput(['maxlength' => true, 'onchange'=>'getCharge(), getGrandTotal()']) ?>
           </div>
 
             <div class="col-md-12">
                   <?= $form->field($model, 'remarks')->textarea(['rows' => 4]) ?>
             </div>
-        
+
         </div>
 
       </div>
@@ -90,7 +97,7 @@ ksort($del_time);
     <!----Recipient Panel Box--->
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h3 class="panel-title">Recipient's Information</h3>
+        <h3 class="panel-title">Recipient's Information (Delivery Information)</h3>
       </div>
       <div class="panel-body">
 
@@ -113,9 +120,7 @@ ksort($del_time);
           <div class="col-md-4">
               <?= $form->field($model, 'recipient_postal_code')->textInput(['maxlength' => true]) ?>
           </div>
-          <div class="col-md-4">
-              <?= $form->field($model, 'recipient_country')->textInput(['maxlength' => true]) ?>
-          </div>
+
         </div>
 
 
@@ -165,28 +170,47 @@ ksort($del_time);
                     ?>
                     <td>
                       <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
-                      <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+                      <button type="button" class="remove-item btn btn-danger btn-xs" id=<?php echo 'remove-'.$i.'-r' ?> onclick="offRecalc($(this))"><i class="glyphicon glyphicon-minus"></i></button>
                     </td>
 
                     <td>
                       <?= $form->field($line, "[{$i}]item_code")->textInput(['maxlength' => true])->label(false) ?>
                     </td>
                     <td>
-                       <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))'])->label(false) ?>
+                       <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this)), getGrandTotal()', 'placeholder'=>'0.00'])->label(false) ?>
                     </td>
                     <td>
-                      <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this))' ])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this)), getGrandTotal()', 'placeholder'=>'0.00' ])->label(false) ?>
                     </td>
                     <td>
-                      <?= $form->field($line, "[{$i}]total_amount")->textInput(['maxlength' => true,'readOnly'=>true])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]total_amount")->textInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control sumPart', 'placeholder'=>'0.00'])->label(false) ?>
                     </td>
                     <?php endforeach; ?>
               </tr>
             </table>
+            <div class="row total-area">
+              <div class="col-md-8">
+
+              </div>
+              <div class="col-md-3">
+                <?= $form->field($model, 'subtotal')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'onchange'=>'getGrandTotal()']) ?>
+
+                <b>Deliver Charge</b>
+                <?= Html::input('text', 'username', $model->charge, ['class' => 'form-control', 'id'=>'ids','readonly'=>true, 'onchange'=>'getGrandTotal()']) ?>
+
+                <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.0]) ?>
+              </div>
+              <div class="col-md-1">
+
+              </div>
+            </div>
+
+
               </div>
 
           </div>
       <?php DynamicFormWidget::end(); ?>
+
 
     <!--Dynamic table ends here------->
 
