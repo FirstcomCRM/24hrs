@@ -45,6 +45,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = ['label' => 'Offline Order', 'url' => ['/offline-order/index']] ;
+        $menuItems[] = ['label' => 'Delivery Time', 'url' => ['/delivery-time/index']] ;
         $menuItems[] = ['label' => 'Order', 'url' => ['/order/index']] ;
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
