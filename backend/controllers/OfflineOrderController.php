@@ -81,6 +81,11 @@ class OfflineOrderController extends Controller
     {
         $model = new OfflineOrder();
         $modelLine = [new OfflineOrderProduct];
+        $model->invoice_date = date('Y-m-d');
+
+        $date = new \DateTime(date('Y-m-d'));
+        $date->modify('+1 day');
+        $model->delivery_date = $date->format('Y-m-d');
 
         if ($model->load(Yii::$app->request->post())  ) {
             $modelLine = Model::createMultiple(OfflineOrderProduct::classname());
