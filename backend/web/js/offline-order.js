@@ -8,7 +8,7 @@ $(document).ready(function(){
 });
 
 function getTotal(item){
-  console.log('data test');
+
   index  = item.attr("id").replace(/[^0-9.]/g, "");
   newTotal = "offlineorderproduct-"+index+"-total_amount";
   newQty = "offlineorderproduct-"+index+"-quantity";
@@ -20,8 +20,59 @@ function getTotal(item){
       ntotal  = parseFloat((parseFloat(nprice) * parseFloat(nqty))).toFixed(2);
       $('#'+newTotal).val(ntotal);
   //    getTotalAmt();
+      getSubTotal();
   }else{
       ntotal = 0.00;
       $('#'+newTotal).val(ntotal);
   }
+}
+
+function getCharge(){
+    var test = $('#offlineorder-charge').val();
+    $('#ids').val(test);
+
+}
+
+function getSubTotal(){
+  var items = $('.item');
+  var total = 0;
+  items.each(function(index, elem){
+    var totalPart = $(elem).find(".sumPart").val();
+    if ($.isNumeric(totalPart) ) {
+      total = parseFloat(total) + parseFloat(totalPart);
+    }
+  });
+  $('#offlineorder-subtotal').val(total);
+  //quoTotalGst();
+}
+
+function getGrandTotal(){
+  var del_charge = $('#ids').val();
+  var subtot  = $('#offlineorder-subtotal').val();
+  if(!$.isNumeric(del_charge) ){
+    del_charge = 0.00;
+  }
+  if(!$.isNumeric(subtot) ){
+    subtot = 0.00;
+  }
+    var grandtot = parseFloat(subtot)+parseFloat(del_charge);
+    console.log(grandtot);
+//  var total = $('#quotationheader-total_amount').val();
+//  var agst = ((parseFloat(gst)/ parseFloat(100))+1.00);
+//  var totalgst= parseFloat(parseFloat(total) * parseFloat(agst) ).toFixed(2);
+//  console.log(totalgst.toLocaleString('en'));
+  $('#offlineorder-grand_total').val(grandtot);
+}
+
+
+
+function offRecalc(item){
+  var index =  item.attr("id").replace(/[^0-9.]/g, "");
+  removeTotal = "offlineorderproduct-"+index+"-total_amount";
+  removePrice = "offlineorderproduct-"+index+"-unit_price";
+  removeQty = "offlineorderproduct-"+index+"-quantity";
+  $('#'+removeTotal).val(0.00);
+  $('#'+removePrice).val(0.00);
+  $('#'+removeQty).val(0);
+  getSubTotal();
 }
