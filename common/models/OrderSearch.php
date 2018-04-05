@@ -108,10 +108,17 @@ class OrderSearch extends Order
 
     public function today_search($params){
 
-            $query_off = (new \yii\db\Query())
+            /*$query_off = (new \yii\db\Query())
                 ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,b.del_time,b.item_code')
                 ->from('offline_order a')
                 ->leftJoin('offline_order_product b','b.off_order_id=a.id')
+                ->groupBy(['a.id'])
+                ->where(['a.status'=>1]);*/
+            $query_off = (new \yii\db\Query())
+                ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code')
+                ->from('offline_order a')
+                ->leftJoin('offline_order_product b','b.off_order_id=a.id')
+                ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
                 ->groupBy(['a.id'])
                 ->where(['a.status'=>1]);
 
@@ -158,6 +165,7 @@ class OrderSearch extends Order
 
 
 
+
                //print_r($this->start);die();
               // grid filtering conditions
               $query->andFilterWhere([
@@ -168,6 +176,8 @@ class OrderSearch extends Order
 
               if (!empty($this->delivery_date)) {
                 list($this->start,$this->end)= explode(' - ',$this->delivery_date);
+                $this->start =  date('Y-m-d', strtotime($this->start) );
+                $this->end =  date('Y-m-d', strtotime($this->end) );
                 $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
 
               //  die($this->end);
@@ -185,10 +195,17 @@ class OrderSearch extends Order
           }
 
     public function future_search($params){
-      $query_off = (new \yii\db\Query())
+    /*  $query_off = (new \yii\db\Query())
           ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,b.del_time,b.item_code')
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
+          ->groupBy(['a.id'])
+          ->where(['a.status'=>1]);*/
+      $query_off = (new \yii\db\Query())
+          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code')
+          ->from('offline_order a')
+          ->leftJoin('offline_order_product b','b.off_order_id=a.id')
+          ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
           ->groupBy(['a.id'])
           ->where(['a.status'=>1]);
 
@@ -238,6 +255,8 @@ class OrderSearch extends Order
 
         if (!empty($this->delivery_date)) {
           list($this->start,$this->end)= explode(' - ',$this->delivery_date);
+          $this->start =  date('Y-m-d', strtotime($this->start) );
+          $this->end =  date('Y-m-d', strtotime($this->end) );
           $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
 
         //  die($this->end);
@@ -256,13 +275,20 @@ class OrderSearch extends Order
     }
 
     public function completed_search($params){
-      $query_off = (new \yii\db\Query())
+    /*  $query_off = (new \yii\db\Query())
           ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,b.del_time,b.item_code')
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
           ->groupBy(['a.id'])
           ->where(['a.status'=>5])
-          ->orWhere(['a.status'=>7]);
+          ->orWhere(['a.status'=>7]);*/
+      $query_off = (new \yii\db\Query())
+          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code')
+          ->from('offline_order a')
+          ->leftJoin('offline_order_product b','b.off_order_id=a.id')
+          ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
+          ->groupBy(['a.id'])
+          ->where(['a.status'=>1]);
 
       $query_on = (new \yii\db\Query())
           ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id')
@@ -313,6 +339,8 @@ class OrderSearch extends Order
 
         if (!empty($this->delivery_date)) {
           list($this->start,$this->end)= explode(' - ',$this->delivery_date);
+          $this->start =  date('Y-m-d', strtotime($this->start) );
+          $this->end =  date('Y-m-d', strtotime($this->end ) );
           $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
         //  die($this->end);
         }else{
