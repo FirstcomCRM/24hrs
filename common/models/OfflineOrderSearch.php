@@ -43,7 +43,7 @@ class OfflineOrderSearch extends OfflineOrder
     public function search($params)
     {
 
-      $query_off = (new \yii\db\Query())
+    /*  $query_off = (new \yii\db\Query())
           ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,b.del_time,b.item_code')
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
@@ -59,12 +59,13 @@ class OfflineOrderSearch extends OfflineOrder
             ->andWhere(['!=','d.delivery_date','0000-00-00']);
 
           $query = (new \yii\db\Query())
-            ->from(['dummy_name' => $query_off->union($query_on)]);
+            ->from(['dummy_name' => $query_off->union($query_on)]);*/
           //  ->orderBy(['del_date' => SORT_DESC]);
 
         //  echo '<pre>';
         //  print_r($query);
 
+        $query = OfflineOrder::find();
 
         $dataProvider = new ActiveDataProvider([
               'query' => $query,
@@ -72,7 +73,7 @@ class OfflineOrderSearch extends OfflineOrder
 
         ]);
 
-        $dataProvider->setSort([
+      /*  $dataProvider->setSort([
           'defaultOrder' => ['del_date'=>SORT_DESC],
           'attributes'=>[
             'id',
@@ -84,7 +85,7 @@ class OfflineOrderSearch extends OfflineOrder
           //  'unit_price',
           //  'total_price',
           ],
-        ]);
+        ]);*/
 
         $this->load($params);
 
@@ -98,11 +99,12 @@ class OfflineOrderSearch extends OfflineOrder
         $query->andFilterWhere([
             'id' => $this->id,
             'invoice_date' => $this->invoice_date,
-            'del_date' => $this->delivery_date,
+            'delivery_date' => $this->delivery_date,
 
         ]);
 
-        $query->andFilterWhere(['like', 'invoice_no', $this->invoice_no]);
+        $query->andFilterWhere(['like', 'invoice_no', $this->invoice_no])
+              ->andFilterWhere(['like', 'customer_name', $this->customer_name]);
 
 
         return $dataProvider;
