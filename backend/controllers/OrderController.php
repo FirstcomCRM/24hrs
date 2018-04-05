@@ -43,7 +43,6 @@ class OrderController extends Controller
         $searchModel_future = new OrderSearch();
         $dataProvider_future = $searchModel_future->future_search(Yii::$app->request->queryParams);//query, get records two days from now till 2years
 
-
         $searchModel_done = new OrderSearch();
       //  $searchModel_done->order_status_id = 5; //completed order
         $dataProvider_done = $searchModel_done->completed_search(Yii::$app->request->queryParams); //get all orders that are  completed
