@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
+use mPDF;
 use common\models\OfflineOrder;
 use common\models\OfflineOrderSearch;
 use common\models\OfflineOrderProduct;
@@ -81,13 +82,21 @@ class OfflineOrderController extends Controller
     {
         $model = new OfflineOrder();
         $modelLine = [new OfflineOrderProduct];
-        $model->invoice_date = date('Y-m-d');
+        $model->invoice_date = date('d M Y');
 
-        $date = new \DateTime(date('Y-m-d'));
+        $date = new \DateTime(date('d M Y'));
         $date->modify('+1 day');
-        $model->delivery_date = $date->format('Y-m-d');
+        $model->delivery_date = $date->format('d M Y');
 
         if ($model->load(Yii::$app->request->post())  ) {
+            $inv = new \DateTime($model->invoice_date);
+            $model->invoice_date = $inv->format('Y-m-d');
+
+            $del = new \DateTime($model->delivery_date);
+            $model->delivery_date = $del->format('Y-m-d');
+
+
+
             $modelLine = Model::createMultiple(OfflineOrderProduct::classname());
             Model::loadMultiple($modelLine, Yii::$app->request->post());
 
@@ -149,6 +158,11 @@ class OfflineOrderController extends Controller
         $model = $this->findModel($id);
         $modelLine = OfflineOrderProduct::find()->where(['off_order_id' => $id])->all();
 
+        $inv = new \DateTime($model->invoice_date);
+        $model->invoice_date = $inv->format('d M Y');
+
+        $del = new \DateTime($model->delivery_date);
+        $model->delivery_date = $del->format('d M Y');
 
         if ($model->load(Yii::$app->request->post())   ) {
             $oldIDs = ArrayHelper::map($modelLine, 'id', 'id');
@@ -158,6 +172,12 @@ class OfflineOrderController extends Controller
 
             $valid = $model->validate();
             $valid = Model::validateMultiple($offline) && $valid;
+
+            $inv = new \DateTime($model->invoice_date);
+            $model->invoice_date = $inv->format('Y-m-d');
+
+            $del = new \DateTime($model->delivery_date);
+            $model->delivery_date = $del->format('Y-m-d');
 
 
             if ($valid) {
@@ -213,6 +233,34 @@ class OfflineOrderController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionPrintDo($id){
+      $model = $this->findModel($id);
+      $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
+    //  die('test');
+      $mpdf = new mPDF('utf-8','A4');
+      $mpdf->content = $this->renderPartial('print_do',[
+         'model'=>$model,
+         'modelLine' => $modelLine,
+      ]);
+      $mpdf->WriteHTML($mpdf->content);
+      $mpdf->Output('Report-A.pdf','I');
+      exit;
+    }
+
+    public function actionPrintInv($id){
+      $model = $this->findModel($id);
+      $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
+
+      $mpdf = new mPDF('utf-8','A4');
+      $mpdf->content = $this->renderPartial('print_inv',[
+         'model'=>$model,
+         'modelLine' => $modelLine,
+      ]);
+      $mpdf->WriteHTML($mpdf->content);
+      $mpdf->Output('Report-A.pdf','I');
+      exit;
     }
 
     /**
