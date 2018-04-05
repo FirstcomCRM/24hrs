@@ -3,12 +3,13 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use common\models\DeliveryTime;
 /* @var $this yii\web\View */
 /* @var $model common\models\OfflineOrder */
 
-//$this->title = $model->invoice_no;
-//$this->params['breadcrumbs'][] = ['label' => 'Offline Orders', 'url' => ['index']];
-//$this->params['breadcrumbs'][] = $this->title;
+$this->title = $model->invoice_no;
+$this->params['breadcrumbs'][] = ['label' => 'Offline Order', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="offline-order-view">
 
@@ -34,19 +35,38 @@ use yii\grid\GridView;
             'attributes' => [
 
                 'invoice_no',
-                'invoice_date',
-                'delivery_date',
-                'delivery_time',
+                [
+                  'attribute'=>'invoice_date',
+                  'format' => ['date', 'php:d M Y']
+                ],
+                [
+                  'attribute'=>'delivery_date',
+                  'format' => ['date', 'php:d M Y']
+                ],
+
+                [
+                  'attribute'=>'delivery_time',
+                  'value'=>function($model){
+                    $data = DeliveryTime::find()->where(['id'=>$model->delivery_time])->one();
+                    if (!empty($data)) {
+                       return $data->delivery_time;
+                    }else {
+                      return $data = null;
+                    }
+                  }
+                ],
                 'customer_name',
                 'email:email',
                 'contact_number',
+                'charge',
+                'grand_total',
                 'remarks:ntext',
                 'recipient_name',
                 'recipient_contact_num',
                 'recipient_address:ntext',
                 'recipient_email:email',
                 'recipient_postal_code',
-                'recipient_country',
+
             ],
         ]) ?>
       </div>

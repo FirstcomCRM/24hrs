@@ -47,7 +47,8 @@ ksort($del_time);
               'readonly' => true,
               'pluginOptions' => [
                 'autoclose'=>true,
-                'format' => 'php:Y-m-d',
+            //    'format' => 'php:Y-m-d',
+                'format' => 'php:d M Y',
               ],
             ]); ?>
           </div>
@@ -60,7 +61,7 @@ ksort($del_time);
               'readonly' => true,
               'pluginOptions' => [
                 'autoclose'=>true,
-                'format' => 'php:Y-m-d',
+                'format' => 'php:d M Y',
               ],
             ]); ?>
           </div>
@@ -193,12 +194,12 @@ ksort($del_time);
 
               </div>
               <div class="col-md-3">
-                <?= $form->field($model, 'subtotal')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'onchange'=>'getGrandTotal()']) ?>
+                <?= $form->field($model, 'subtotal')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'onchange'=>'getGrandTotal()', 'style'=>'text-align:right']) ?>
 
                 <b>Deliver Charge</b>
-                <?= Html::input('text', 'username', $model->charge, ['class' => 'form-control', 'id'=>'ids','readonly'=>true, 'onchange'=>'getGrandTotal()']) ?>
+                <?= Html::input('text', 'username', $model->charge, ['class' => 'form-control', 'id'=>'ids','readonly'=>true, 'onchange'=>'getGrandTotal()', 'style'=>'text-align:right']) ?>
 
-                <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.0]) ?>
+                <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'style'=>'text-align:right']) ?>
               </div>
               <div class="col-md-1">
 
@@ -216,6 +217,11 @@ ksort($del_time);
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?php if (!$model->isNewRecord): ?>
+            <?= Html::a('<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Create', ['offline-order/print-do', 'id'=>$model->id], ['class' => 'btn btn-default']) ?>
+
+        <?php endif; ?>
+
     </div>
 
     <?php ActiveForm::end(); ?>

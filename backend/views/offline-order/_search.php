@@ -18,36 +18,35 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'invoice_no') ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Search</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-3">
+              <?= $form->field($model, 'invoice_no') ?>
+          </div>
+          <div class="col-md-3">
+              <?= $form->field($model, 'invoice_date') ?>
+          </div>
+          <div class="col-md-3">
+              <?= $form->field($model, 'delivery_date') ?>
+          </div>
+          <div class="col-md-3">
+              <?= $form->field($model, 'customer_name') ?>
+          </div>
 
-    <?= $form->field($model, 'invoice_date') ?>
-
-    <?= $form->field($model, 'delivery_date') ?>
-
-    <?= $form->field($model, 'customer_name') ?>
-
-    <?php // echo $form->field($model, 'email') ?>
-
-    <?php // echo $form->field($model, 'contact_number') ?>
-
-    <?php // echo $form->field($model, 'recipient_name') ?>
-
-    <?php // echo $form->field($model, 'recipient_contact_num') ?>
-
-    <?php // echo $form->field($model, 'recipient_address') ?>
-
-    <?php // echo $form->field($model, 'recipient_email') ?>
-
-    <?php // echo $form->field($model, 'recipient_postal_code') ?>
-
-    <?php // echo $form->field($model, 'recipient_country') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+      </div>
+      <div class="form-group">
+          <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+          <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+      </div>
     </div>
+
+    </div>
+
 
     <?php ActiveForm::end(); ?>
 
