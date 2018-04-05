@@ -9,6 +9,7 @@ use common\models\Product;
 use common\models\OrderProduct;
 use common\models\OfflineOrderProduct;
 use common\models\OrderStatus;
+use common\models\DeliveryTime;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -26,10 +27,25 @@ $gridColumns = [
 [
   'attribute'=>'del_date',
   'label'=>'Delivery Date',
+    'format' => ['date', 'php:d M Y']
 ],
 [
   'attribute'=>'del_time',
   'label'=>'Delivery Time',
+  'value'=>function($model){
+        $tes = (int)$model['del_time'];
+        if (is_numeric($model['del_time']) ) {
+          $data = DeliveryTime::find()->where(['id'=>$model['del_time']])->one();
+          if (!empty($data)) {
+             return $data->id;
+          }else {
+            return $data = null;
+        }
+      }else{
+        return $model['del_time'];
+      }
+  }
+
 ],
 
 'invoice_no',
@@ -41,7 +57,7 @@ $gridColumns = [
     if ($model['invoice_date']== '0000-00-00 00:00:00' || is_null($model['invoice_date'])) {
       return '';
     }else{
-      return date('Y-m-d',strtotime($model['invoice_date']));
+      return date('d M Y',strtotime($model['invoice_date']));
     }
   },
 ],
@@ -100,11 +116,12 @@ $gridColumns = [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-  'template'=>'{view} {update}{email}{complete}{cancel}',
-  'options'=>['style'=>'padding:20px'],
+  'template'=>'{view}  {update}  {email}  {complete}  {cancel}',
+//  'options'=>['style'=>'padding:20px'],
+  //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
-      return Html::a(' <i class="fa fa-eye fa-lg" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'title' => Yii::t('app', 'View'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-eye fa-lg" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0,
       ]);
     },
     'update'=>function($url,$model){
@@ -178,7 +195,6 @@ $this->title = 'Order Management System';
 ?>
 
 <style>
-
 .alignleft {
 	float: left;
 }
@@ -191,9 +207,6 @@ $this->title = 'Order Management System';
 </style>
 
 <div class="order-index">
-
-
-<?php $test = '' ?>
 
     <h1><?php Html::encode($this->title) ?></h1>
 
