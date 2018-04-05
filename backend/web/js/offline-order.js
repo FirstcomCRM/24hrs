@@ -29,7 +29,8 @@ function getTotal(item){
 
 function getCharge(){
     var test = $('#offlineorder-charge').val();
-    $('#ids').val(test);
+    var dummy  = parseFloat(test).toFixed(2);
+    $('#ids').val(dummy);
 
 }
 
@@ -40,6 +41,8 @@ function getSubTotal(){
     var totalPart = $(elem).find(".sumPart").val();
     if ($.isNumeric(totalPart) ) {
       total = parseFloat(total) + parseFloat(totalPart);
+      total = parseFloat(total).toFixed(2);
+    //  total = parseFloat(total).toFixed(2) + parseFloat(totalPart).toFixed(2);
     }
   });
   $('#offlineorder-subtotal').val(total);
@@ -56,14 +59,14 @@ function getGrandTotal(){
     subtot = 0.00;
   }
     var grandtot = parseFloat(subtot)+parseFloat(del_charge);
-    console.log(grandtot);
+    grandtot = parseFloat(grandtot).toFixed(2);
+//    console.log(grandtot);
 //  var total = $('#quotationheader-total_amount').val();
 //  var agst = ((parseFloat(gst)/ parseFloat(100))+1.00);
 //  var totalgst= parseFloat(parseFloat(total) * parseFloat(agst) ).toFixed(2);
 //  console.log(totalgst.toLocaleString('en'));
   $('#offlineorder-grand_total').val(grandtot);
 }
-
 
 
 function offRecalc(item){
