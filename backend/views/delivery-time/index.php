@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                 'delivery_time:ntext',
+              /*  [
+                  'attribute'=>'delivery_time',
+                  'contentOptions' => ['style' => 'padding:20px;'],
+                ],*/
 
                 ['class' => 'yii\grid\ActionColumn'],
             ],
