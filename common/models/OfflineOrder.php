@@ -41,12 +41,14 @@ class OfflineOrder extends \yii\db\ActiveRecord
             [['invoice_date', 'delivery_date'], 'safe'],
             [['email','recipient_email'],'email'],
             [['status'],'integer'],
-            [['charge','subtotal','grand_total'],'number'],
+            [['charge'],'number'],
+            [['subtotal', 'grand_total'],'number','numberPattern' => '/^\s*[-+]?[0-9\,]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
             [['recipient_address','remarks'], 'string'],
             [['invoice_no', 'contact_number', 'recipient_contact_num', 'recipient_postal_code'], 'string', 'max' => 25],
             [['customer_name'], 'string', 'max' => 100],
             [['email', 'recipient_name', 'recipient_email','delivery_time'], 'string', 'max' => 75],
             [['recipient_country'], 'string', 'max' => 50],
+            [['payment'], 'string', 'max' => 75],
         ];
     }
 
@@ -64,7 +66,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'delivery_time'=>'Delivery Time',
             'email' => 'Email',
             'contact_number' => 'Contact Number',
-            'Remarks',
+            'remarks'=>'Message',
             'recipient_name' => 'Recipient Name',
             'recipient_contact_num' => 'Recipient Contact Number',
             'recipient_address' => 'Recipient Address',
@@ -73,7 +75,20 @@ class OfflineOrder extends \yii\db\ActiveRecord
         //    'recipient_country' => 'Recipient Country',
             'Status'=>'Status',
             'charge'=>'Delivery Charge',
+            'payment'=>'Payment Method',
         ];
+    }
+
+    public function beforeSave($insert) {
+        if (parent::beforeSave($insert)) {
+          //  $this->final_sales_price = str_replace(",", "", $this->final_sales_price);
+            $this->subtotal = str_replace(",", "", $this->subtotal);
+            $this->grand_total= str_replace(",", "", $this->grand_total);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getOfflineProduct(){
