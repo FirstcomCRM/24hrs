@@ -50,7 +50,7 @@ $sum = [];
       <p>Instagram: instagram/24hrscityflorist</p>
       <p>Website: www.24hrscityflorist.com</p>
     </td>
-    <td class="test">Invoice</td>
+    <td class="test"><?php echo $model->invoice_no ?></td>
   </tr>
 </table>
 
@@ -58,9 +58,9 @@ $sum = [];
 
 <table class="tax-invoice">
   <tr>
-    <td class="tax-left"> <h4>TAX INVOICE</h4> </td>
+    <td class="tax-left"> <h2>TAX INVOICE</h2> </td>
     <td class="tax-right" style="text-align:right">
-      Purchase Date: <?php echo date('d M Y',strtotime($model->invoice_date)) ?>
+      <strong>PURCHASE DATE:</strong> <?php echo date('d M Y',strtotime($model->invoice_date)) ?>
     </td>
   </tr>
 </table>
@@ -70,14 +70,14 @@ $sum = [];
 <div class="header-a">
   <table border=0>
     <tr>
-      <td>Customer Name</td>
-      <td>Tesst test</td>
-      <td>Contact Number</td>
-      <td>1234</td>
+      <td style="width:25%" class="pads"><strong>CUSTOMER NAME:</strong></td>
+      <td style="width:25%" class="pads"><?php echo $model->customer_name ?></td>
+      <td style="width:25%" class="pads"><strong>CONTACT NUMBER:</strong> </td>
+      <td style="width:25%" class="pads"><?php echo $model->contact_number ?></td>
     </tr>
     <tr>
-      <td>Customer Email</td>
-      <td>asdad@cc.c</td>
+      <td style="width:25%" class="pads"><strong>CUSTOMER EMAIL:</strong></td>
+      <td style="width:25%" class="pads"><?php echo $model->email ?></td>
     </tr>
   </table>
 </div>
@@ -89,8 +89,8 @@ $sum = [];
     <thead>
       <tr>
         <th>SN</th>
-        <th>Description</th>
-        <th>Unit Price</th>
+        <th>ITEM CODE</th>
+        <th>UNIT PRICE</th>
       </tr>
     </thead>
       <tbody>
@@ -98,7 +98,7 @@ $sum = [];
           <tr>
             <td class="pads"><?php echo $i ?></td>
             <td class="pads"><?php echo $value['item_code'] ?></td>
-            <td class="pads"><?php echo '$'.$value['unit_price']?></td>
+            <td class="pads" style="text-align:right"><?php echo '$'. number_format($value['unit_price'],2)?></td>
           </tr>
           <?php $sum[] =  $value['unit_price']?>
           <?php $i++ ?>
@@ -107,8 +107,8 @@ $sum = [];
     <tfoot>
       <tr>
         <td></td>
-        <td>Total</td>
-        <td><?php echo number_format(array_sum($sum),2) ?></td>
+        <td class="pads" style="text-align:right"> <strong>TOTAL:</strong> </td>
+        <td class="pads" style="text-align:right"><?php echo '$'.number_format(array_sum($sum),2) ?></td>
       </tr>
     </tfoot>
   </table>
@@ -131,14 +131,14 @@ $sum = [];
 <div class="header-a">
   <table border=0>
     <tr>
-      <td class="pads">Payment Method</td>
-      <td class="pads">??? CC</td>
+      <td class="pads" colspan=4><strong>PAYMENT METHOD:</strong> <?php echo $model->payment ?></td>
+
     </tr>
     <tr>
-      <td class="pads">Taken By:</td>
-      <td class="pads">??? Jerry</td>
-      <td class="pads">Customer Signature</td>
-      <td class="pads">__________________</td>
+      <td class="pads" style="width:15%"><strong>TAKEN BY:</strong> </td>
+      <td class="pads" style="width:25%">Jerry</td>
+      <td class="pads" style="width:35%;text-align:right"><strong>CUSTOMER SIGNATURE</strong></td>
+      <td class="pads" style="width:20%">____________________________</td>
     </tr>
   </table>
 </div>
