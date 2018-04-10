@@ -10,21 +10,19 @@ use common\models\DeliveryTime;
 /* @var $model common\models\OfflineOrder */
 /* @var $form yii\widgets\ActiveForm */
 
-$del_time = [
-  '5:00pm - 9:00pm'=>'5:00pm - 9:00pm',
-  '12:00am - 7:00am'=>'12:00am - 7:00am',
-  '9:00am - 1:00pm'=>'9:00am - 1:00pm',
-  '9:00pm - 12:00am'=>'9:00pm - 12:00am',
-  '9:00am - 5:00pm'=>'9:00am - 5:00pm',
-  '1:00pm - 5:00pm'=>'1:00pm - 5:00pm',
-  '9:00am - 11:00am'=>'9:00am - 11:00am',
-  '1:00pm - 9:00pm'=>'1:00pm - 9:00pm',
-];
 
 $data = DeliveryTime::find()->all();
 $del = ArrayHelper::map($data,'id','delivery_time');
-ksort($del_time);
+
+$payments = [
+  'Cash on Hand'=>'Cash on Hand',
+  'CC'=>'CC',
+
+]
+
 ?>
+
+
 
 <div class="offline-order-form">
 
@@ -38,7 +36,7 @@ ksort($del_time);
       <div class="panel-body">
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <?php $form->field($model, 'invoice_date')->textInput() ?>
             <?php echo $form->field($model, 'invoice_date')->widget(DatePicker::classname(), [
               'convertFormat'=>true,
@@ -52,8 +50,8 @@ ksort($del_time);
               ],
             ]); ?>
           </div>
-          <div class="col-md-4">
-            <?php $form->field($model, 'delivery_date')->textInput() ?>
+          <div class="col-md-3">
+
             <?php echo $form->field($model, 'delivery_date')->widget(DatePicker::classname(), [
               'convertFormat'=>true,
               'type' => DatePicker::TYPE_COMPONENT_APPEND,
@@ -65,8 +63,11 @@ ksort($del_time);
               ],
             ]); ?>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
               <?= $form->field($model, 'delivery_time')->dropDownList($del) ?>
+          </div>
+          <div class="col-md-3">
+              <?= $form->field($model, 'payment')->dropDownList($payments) ?>
           </div>
         </div>
 
@@ -82,7 +83,7 @@ ksort($del_time);
           </div>
 
           <div class="col-md-3">
-            <?= $form->field($model, 'charge')->textInput(['maxlength' => true, 'onchange'=>'getCharge(), getGrandTotal()']) ?>
+
           </div>
 
             <div class="col-md-12">
@@ -156,11 +157,11 @@ ksort($del_time);
 
             <table class="table table-bordered container-items">
               <thead>
-                <th></th>
-                <th>Item Code</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total Amount</th>
+                <th style="width:8%"></th>
+                <th style="width:32%">Item Code</th>
+                <th style="width:20%">Quantity</th>
+                <th style="width:20%">Unit Price</th>
+                <th style="width:20%">Total Amount</th>
               </thead>
               <?php foreach ($modelLine as $i => $line): ?>
               <tr class="item">
@@ -178,33 +179,52 @@ ksort($del_time);
                       <?= $form->field($line, "[{$i}]item_code")->textInput(['maxlength' => true])->label(false) ?>
                     </td>
                     <td>
-                       <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this)), getGrandTotal()', 'placeholder'=>'0.00'])->label(false) ?>
+                       <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00'])->label(false) ?>
                     </td>
                     <td>
-                      <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this)), getGrandTotal()', 'placeholder'=>'0.00' ])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00' ])->label(false) ?>
                     </td>
                     <td>
-                      <?= $form->field($line, "[{$i}]total_amount")->textInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control sumPart', 'placeholder'=>'0.00'])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]total_amount_text")->textInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]total_amount")->hiddenInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control sumPart', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+
                     </td>
                     <?php endforeach; ?>
               </tr>
+
             </table>
-            <div class="row total-area">
-              <div class="col-md-8">
+            <table class="table ">
+              <tr>
+                <td style="width:8%;border-top:0px"></td>
+                <td style="width:32%;border-top:0px"></td>
+                <td style="width:20%;border-top:0px"></td>
+                <td style="width:20%; vertical-align:middle; text-align:right;border-top:0px">
+                  <label>SubTotal</label>
+                </td>
+                <td style="width:20%;border-top:0px">
+                  <?= $form->field($model, 'subtotal')->textInput(['readonly'=>true, 'placeholder'=>0.00,  'style'=>'text-align:right'])->label(false) ?>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-top:0px"></td>
+                <td style="border-top:0px"></td>
+                <td style="border-top:0px"></td>
+                <td style="border-top:0px;vertical-align:middle; text-align:right;border-top:0px"><label>Delivery Charge</label> </td>
+                <td style="border-top:0px">
+                  <?= $form->field($model, 'charge')->textInput(['maxlength' => true, 'onchange'=>'getGrandTotal()','style'=>'text-align:right'])->label(false) ?>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-top:0px"></td>
+                <td style="border-top:0px"></td>
+                <td style="border-top:0px"></td>
+                <td style="border-top:0px;vertical-align:middle; text-align:right;border-top:0px"><label>Grand Total</label> </td>
+                <td style="border-top:0px">
+                  <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'style'=>'text-align:right'])->label(false) ?>
 
-              </div>
-              <div class="col-md-3">
-                <?= $form->field($model, 'subtotal')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'onchange'=>'getGrandTotal()', 'style'=>'text-align:right']) ?>
-
-                <b>Deliver Charge</b>
-                <?= Html::input('text', 'username', $model->charge, ['class' => 'form-control', 'id'=>'ids','readonly'=>true, 'onchange'=>'getGrandTotal()', 'style'=>'text-align:right']) ?>
-
-                <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'style'=>'text-align:right']) ?>
-              </div>
-              <div class="col-md-1">
-
-              </div>
-            </div>
+                </td>
+              </tr>
+            </table>
 
 
               </div>
@@ -218,7 +238,8 @@ ksort($del_time);
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         <?php if (!$model->isNewRecord): ?>
-            <?= Html::a('<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Create', ['offline-order/print-do', 'id'=>$model->id], ['class' => 'btn btn-default']) ?>
+            <?= Html::a(' Print DO', ['offline-order/print-do', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
+            <?= Html::a(' Print Invoice', ['offline-order/print-inv', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
 
         <?php endif; ?>
 
