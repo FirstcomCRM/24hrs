@@ -22,10 +22,10 @@ $i = 1;
   }
 
   .block-label{
-    width:25%;
+    width:30%;
   }
   .block-echo{
-    width:25%;
+    width:20%;
   }
 
   .block-echo,
@@ -54,7 +54,16 @@ $i = 1;
       <p>Instagram: instagram/24hrscityflorist</p>
       <p>Website: www.24hrscityflorist.com</p>
     </td>
-    <td class="test">Delivery Order</td>
+    <td class="test">
+      <p><h3>DELIVERY ORDER</h3></p>
+      <br>
+      <?php
+    //    $data = $model->invoice_no;
+        $strings = substr($model->invoice_no, 4);
+
+       ?>
+       <h3><?php echo $strings ?></h3>
+    </td>
   </tr>
 </table>
 
@@ -63,19 +72,19 @@ $i = 1;
 <div class="header-block">
   <table class="block" border=0>
     <tr>
-      <td class="block-label">Recipient's Name:</td>
+      <td class="block-label"><strong>RECIPIENT'S NAME:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_name ?></td>
-      <td class="block-label">Delivery Date:</td>
+      <td class="block-label"><strong>DELIVERY DATE:</strong> </td>
       <td class="block-echo"><?php echo $model->delivery_date ?></td>
     </tr>
     <tr>
-      <td class="block-label">Recipient's Contact:</td>
+      <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
-      <td class="block-label">Delivery Time:</td>
+      <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
       <td class="block-echo"><?php echo $data->delivery_time ?></td>
     </tr>
     <tr>
-      <td class="block-label">Delivery Address</td>
+      <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
       <td class="block-echo">
         <?php echo nl2br($model->recipient_address) ?>
       </td>
@@ -99,7 +108,7 @@ $i = 1;
           <tr>
             <td class="pads"><?php echo $i ?></td>
             <td class="pads"><?php echo $value['item_code'] ?></td>
-            <td class="pads"><?php echo $value['quantity']?></td>
+            <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
         <?php endforeach; ?>
@@ -112,11 +121,11 @@ $i = 1;
 <div class="foots">
   <table class="table-foot">
     <tr>
-      <td class="foot-left">Delivered By:</td>
+      <td class="foot-left"><strong>Delivered By:</strong> </td>
       <td class="foot-right">
-        <p>Items Received in good order and condition</p>
+        <p><strong>Items Received in good order and condition</strong> </p>
         <br>
-        <p>___________________________________________</p>
+        <p>__________________________________________________</p>
       </td>
     </tr>
 
