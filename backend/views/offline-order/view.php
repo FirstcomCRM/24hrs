@@ -58,9 +58,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'customer_name',
                 'email:email',
                 'contact_number',
-                'charge',
-                'grand_total',
+
+                [
+                  'attribute'=>'charge',
+                  'format'=>['decimal',2]
+                ],
+
+                [
+                  'attribute'=>'grand_total',
+                  'format'=>['decimal',2]
+                ],
                 'remarks:ntext',
+                'payment',
                 'recipient_name',
                 'recipient_contact_num',
                 'recipient_address:ntext',
