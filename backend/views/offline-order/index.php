@@ -45,37 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                       'format' => ['date', 'php:d M Y']
                     ],
                     'customer_name',
-                    //['class' => 'yii\grid\ActionColumn'],
-                    [
-                      'header'=>'Action',
-                      'class'=>'yii\grid\ActionColumn',
-                      'template'=>'{view}  {update}  {delete}  {do}  {inv}',
-                      'buttons'=>[
-                        'view'=>function($url,$model, $key){
-                          return Html::a(' <i class="fa fa-eye fa-lg" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0,
-                          ]);
-                        },
-                        'update'=>function($url,$model){
-                          return Html::a(' <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
-                          ]);
-                        },
-
-                        'delete'=>function($url,$model){
-                          return Html::a('<i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Delete'),'data-pjax'=>0, 'data-method'=>'post',
-                          ]);
-                        },
-
-                        'do'=>function($url,$model,$key){
-                          return Html::a('<i class="fa fa-check" aria-hidden="true"></i>', ['print-do', 'id'=>$model['id']  ], ['title'=>'Print DO','data-pjax'=>0]);
-                        },
-                        'inv'=>function($url,$model,$key){
-                          return Html::a('<i class="fa fa-times" aria-hidden="true"></i>', ['print-inv', 'id'=>$model['id'] ], ['title'=>'Print Invoice','data-pjax'=>0]);
-                        },
-                      ],
-
-
-
-                    ],
+                    ['class' => 'yii\grid\ActionColumn'],
 
                 ],
             ]); ?>
