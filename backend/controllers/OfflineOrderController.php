@@ -83,7 +83,7 @@ class OfflineOrderController extends Controller
         $model = new OfflineOrder();
         $modelLine = [new OfflineOrderProduct];
         $model->invoice_date = date('d M Y');
-
+        $model->charge=0.00;
         $date = new \DateTime(date('d M Y'));
         $date->modify('+1 day');
         $model->delivery_date = $date->format('d M Y');
@@ -163,6 +163,8 @@ class OfflineOrderController extends Controller
 
         $del = new \DateTime($model->delivery_date);
         $model->delivery_date = $del->format('d M Y');
+        $model->subtotal = number_format($model->subtotal,2);
+        $model->grand_total = number_format($model->grand_total,2);
 
         if ($model->load(Yii::$app->request->post())   ) {
             $oldIDs = ArrayHelper::map($modelLine, 'id', 'id');
@@ -261,6 +263,20 @@ class OfflineOrderController extends Controller
       $mpdf->WriteHTML($mpdf->content);
       $mpdf->Output('Report-A.pdf','I');
       exit;
+    }
+
+    public function actionAjaxAmount(){
+      if ( Yii::$app->request->post() ) {
+        $ntotal = Yii::$app->request->post()['ntotal'];
+        return number_format($ntotal,2);
+      }
+    }
+
+    public function actionAjaxSub(){
+      if ( Yii::$app->request->post() ) {
+        $ntotal = Yii::$app->request->post()['ntotal'];
+        return $ntotal;
+      }
     }
 
     /**
