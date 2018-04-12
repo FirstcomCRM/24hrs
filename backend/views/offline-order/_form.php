@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use yii\bootstrap\Modal;
 use kartik\widgets\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
@@ -67,7 +69,7 @@ $payments = [
               <?= $form->field($model, 'delivery_time')->dropDownList($del) ?>
           </div>
           <div class="col-md-3">
-              <?= $form->field($model, 'payment')->dropDownList($payments) ?>
+
           </div>
         </div>
 
@@ -95,6 +97,9 @@ $payments = [
       </div>
     </div>
     <!----Customer Panel BoxEnd --->
+
+
+
 
     <!----Recipient Panel Box--->
     <div class="panel panel-info">
@@ -130,6 +135,25 @@ $payments = [
     </div>
     <!----Recipient Panel Box End--->
 
+    <!--Gift To box start--->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Gift To (Optional)</h3>
+        </div>
+        <div class="panel-body">
+          <?= $form->field($model, 'gift_to')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'gift_from')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'gift_message')->textarea(['rows' => 4]) ?>
+            <?= Html::a('View Sample Message', null, ['class' => 'btn btn-default modalButton',
+              'value'=>Url::to(['offline-order/gift'])
+            //  'value' => Url::to(['order/custom-email'])
+              ])
+             ?>
+
+        </div>
+      </div>
+    <!--Gift To box end--->
+
     <!--Dynamic table start here------->
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -159,9 +183,9 @@ $payments = [
               <thead>
                 <th style="width:8%"></th>
                 <th style="width:32%">Item Code</th>
-                <th style="width:20%">Quantity</th>
-                <th style="width:20%">Unit Price</th>
-                <th style="width:20%">Total Amount</th>
+                <th style="width:20%;text-align:right">Quantity</th>
+                <th style="width:20%;text-align:right">Unit Price</th>
+                <th style="width:20%;text-align:right" >Total Amount</th>
               </thead>
               <?php foreach ($modelLine as $i => $line): ?>
               <tr class="item">
@@ -179,10 +203,10 @@ $payments = [
                       <?= $form->field($line, "[{$i}]item_code")->textInput(['maxlength' => true])->label(false) ?>
                     </td>
                     <td>
-                       <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00'])->label(false) ?>
+                       <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
                     </td>
                     <td>
-                      <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00' ])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right' ])->label(false) ?>
                     </td>
                     <td>
                       <?= $form->field($line, "[{$i}]total_amount_text")->textInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
@@ -196,7 +220,9 @@ $payments = [
             <table class="table ">
               <tr>
                 <td style="width:8%;border-top:0px"></td>
-                <td style="width:32%;border-top:0px"></td>
+                <td style="width:32%;border-top:0px">
+                  <?= $form->field($model, 'payment')->dropDownList($payments,['prompt'=>'Payment Method'])->label(false) ?>
+                </td>
                 <td style="width:20%;border-top:0px"></td>
                 <td style="width:20%; vertical-align:middle; text-align:right;border-top:0px">
                   <label>SubTotal</label>
@@ -248,3 +274,21 @@ $payments = [
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+  Modal::begin([
+    'header'=>'Gift To',
+    'id'=>'modals',
+    'size'=>'modal-lg',
+    //'clientOptions' => ['backdrop' => false],
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal" id="mclose" onclick="mclose()">Add message</a> ',
+  //  'closeButton'=>'tag',
+  ]);
+
+ ?>
+
+<div class="" id="modalContent">
+
+</div>
+
+<?php Modal::end() ?>
