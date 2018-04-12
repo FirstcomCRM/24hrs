@@ -9,6 +9,7 @@ use common\models\OfflineOrderSearch;
 use common\models\OfflineOrderProduct;
 use common\models\OfflineRunningTable;
 use common\models\Model;
+use common\models\Jgmg;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -277,6 +278,29 @@ class OfflineOrderController extends Controller
         $ntotal = Yii::$app->request->post()['ntotal'];
         return $ntotal;
       }
+    }
+
+    public function actionAjaxGift(){
+      $selects = '';
+      if ( Yii::$app->request->post() ) {
+        $occ = Yii::$app->request->post()['occassion'];
+        $data = Jgmg::find()->where(['gmg_occ'=>$occ])->select(['gmg_message'])->all();
+      //  print_r($data);die();
+        $selects .="<option value = '' SELECTED='SELECTED'>Select One</option>";
+        foreach ($data as $key => $value) {
+        //  echo "<option value='".$value->gmg_message."'>".$value->gmg_message."</option>";
+            $selects.="<option value='".$value->gmg_message."'>".$value->gmg_message."</option>";
+        }
+        //print_r($selects);die();
+        return $selects;
+      //  return number_format($ntotal,2);
+      }
+    }
+
+    public function actionGift(){
+      return $this->renderAjax('gift', [
+        //  'model' => $model,
+      ]);
     }
 
     /**
