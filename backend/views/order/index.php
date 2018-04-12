@@ -15,6 +15,11 @@ use common\models\DeliveryTime;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 //gridcolumn used by Order today and pending future orders
+
+//echo '<pre>';
+//print_r($dataProvider->getModels() );
+//die();
+
 $gridColumns = [
   ['class' => 'yii\grid\SerialColumn'],
 
@@ -61,7 +66,8 @@ $gridColumns = [
     }
   },
 ],
-[
+
+/*[
   'attribute'=>'item_code',
   'format'=>'raw',
   'value'=>function($model){
@@ -80,7 +86,8 @@ $gridColumns = [
 
       return $prods;
   },
-],
+],*/
+
 [
   'attribute'=>'status',
   'label'=>'Status',
@@ -90,12 +97,13 @@ $gridColumns = [
   },
 ],
 
- /*[
+ [
     'attribute'=>'image',
     'label'=>'Image',
     'format'=>'raw',
     'value'=>function($model){
-        $data = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
+        //$data = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
+        $data = OrderProduct::find()->where(['order_id'=>$model['id'] ])->one();
         if (!empty($data)) {
             $pdata = Product::find()->where(['product_id'=>$data->product_id])->one();
         }else{
@@ -110,7 +118,7 @@ $gridColumns = [
         }
 
     },
-  ],*/
+  ],
 
 [
   'header'=>'Action',
@@ -140,7 +148,8 @@ $gridColumns = [
               'data-pjax'=>0,
               'class'=>'modalButton',
             //  'value' => Url::to(['order/custom-email', 'id' => $key])
-              'value' => Url::to(['order/custom-email'])
+              //'value' => Url::to(['order/custom-email'])
+              'value' => Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ])
           //    'onclick'=>'myEmail('.$model['id'] .')'
             ]
           );
@@ -180,7 +189,9 @@ $gridColumns = [
       return $url;
     }
     if ($action=='email') {
-      $url = Url::to(['order/custom-email' ]);
+      $url = Url::to(['order/custom-email', 'id'=>$model['id'] ]);
+    //  $url = Url::to(['order/test', 'id'=>$model['id'] ]);
+    //  $url = Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=> $model['invoice_no'] ]);
       return $url;
     }
 
@@ -210,27 +221,28 @@ $this->title = 'Order Management System';
 
     <h1><?php Html::encode($this->title) ?></h1>
 
-    <div class="current-time well well-sm clearfix">
-      <p class="alignleft" style="margin-top:4px">
-          <strong>Current Date/Time: <?php echo date('Y-m-d') ?> <span id=time></span> </strong>
-      </p>
-      <p class="alignright">
-        <?= Html::a('Create Offline Order', ['offline-order/create'], ['class' => 'btn btn-success btn-sm']) ?>
-      </p>
-    </div>
-
-
-    <div style="clear: both;"></div>
-
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="margin-bottom:10px">
       <div class="panel-heading">
-        <h3 class="panel-title">Search</h3>
+
+        <div class="row">
+          <div class="col-md-4">
+            <h3 class="panel-title">Search</h3>
+          </div>
+          <div class="col-md-4">
+            <strong>Current Date/Time: <?php echo date('Y-m-d') ?> <span id=time></span> </strong>
+
+          </div>
+          <div class="col-md-4 text-right">
+              <?= Html::a('Create Offline Order', ['offline-order/create'], ['class' => 'btn btn-success btn-sm', 'style'=>'padding:2px 4px; font-size:10px;']) ?>
+          </div>
+        </div>
+
+
       </div>
       <div class="panel-body">
           <?php echo  $this->render('_search', ['model' => $searchModel]); ?>
       </div>
     </div>
-
 
     <div class="panel panel-warning">
       <div class="panel-heading">
@@ -241,10 +253,12 @@ $this->title = 'Order Management System';
           <li class="active"> <a href="#today" data-toggle="tab">Orders Today/Tomorrow</a></li>
           <li> <a href="#future" data-toggle="tab"> Pending Future Orders</a></li>
           <li> <a href="#completed" data-toggle="tab"> Orders Done</a></li>
+          <li> <a href="#canceled" data-toggle="tab"> Orders Canceled</a></li>
         </ul>
 
         <br>
         <div class="tab-content">
+
           <div class="tab-pane fade in active" id="today"> <!--Start of Pending Orders for Today-->
             <div class="table-responsive">
               <?php Pjax::begin(['timeout' => 10000 ]); ?>
@@ -278,9 +292,18 @@ $this->title = 'Order Management System';
                     'columns' => $gridColumns,
                 ]); ?>
             <?php Pjax::end(); ?>
-
-
           </div><!--End of Orders Done-->
+
+          <div class="tab-pane fade" id="canceled"><!--Start of Orders Cancel-->
+            <?php Pjax::begin(['timeout' => 18000 ]); ?>
+              <?= GridView::widget([
+                    'dataProvider' => $dataProvider_cancel,
+                     'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
+                  //  'filterModel' => $searchModel,
+                    'columns' => $gridColumns,
+                ]); ?>
+            <?php Pjax::end(); ?>
+          </div><!--End of Orders Cancel-->
 
         </div>
 
