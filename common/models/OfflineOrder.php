@@ -43,12 +43,12 @@ class OfflineOrder extends \yii\db\ActiveRecord
             [['status'],'integer'],
             [['charge'],'number'],
             [['subtotal', 'grand_total'],'number','numberPattern' => '/^\s*[-+]?[0-9\,]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-            [['recipient_address','remarks'], 'string'],
+            [['recipient_address','remarks','gift_message'], 'string'],
             [['invoice_no', 'contact_number', 'recipient_contact_num', 'recipient_postal_code'], 'string', 'max' => 25],
             [['customer_name'], 'string', 'max' => 100],
             [['email', 'recipient_name', 'recipient_email','delivery_time'], 'string', 'max' => 75],
             [['recipient_country'], 'string', 'max' => 50],
-            [['payment'], 'string', 'max' => 75],
+            [['payment','gift_to','gift_from'], 'string', 'max' => 75],
         ];
     }
 
@@ -76,6 +76,9 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'Status'=>'Status',
             'charge'=>'Delivery Charge',
             'payment'=>'Payment Method',
+            'gift_to'=>'Gift To',
+            'gift_from'=>'Gift From',
+            'gift_message'=>'Message',
         ];
     }
 
