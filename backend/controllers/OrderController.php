@@ -44,8 +44,12 @@ class OrderController extends Controller
         $dataProvider_future = $searchModel_future->future_search(Yii::$app->request->queryParams);//query, get records two days from now till 2years
 
         $searchModel_done = new OrderSearch();
-      //  $searchModel_done->order_status_id = 5; //completed order
         $dataProvider_done = $searchModel_done->completed_search(Yii::$app->request->queryParams); //get all orders that are  completed
+
+        $searchModel_cancel = new OrderSearch();
+        $dataProvider_cancel = $searchModel_done->canceled_search(Yii::$app->request->queryParams); //get all orders that are  completed
+
+        //  $searchModel_done->order_status_id = 5; //completed order
       //  $time = date('Y-m-d H:i:s');
         //echo "<pre>";var_dump($dataProvider_done);echo "</br>";die();
 
@@ -54,6 +58,7 @@ class OrderController extends Controller
             'dataProvider' => $dataProvider,
             'dataProvider_done'=> $dataProvider_done,
             'dataProvider_future'=>$dataProvider_future,
+            'dataProvider_cancel'=>$dataProvider_cancel,
         //    'time'=>$time,
         ]);
     }
@@ -214,8 +219,16 @@ class OrderController extends Controller
 
     }
 
-    public function actionCustomEmail(){
+    public function actionCustomEmail($id,$invoice_no){
         $model = new EmailForm();
+
+        if ($invoice_no == '0') {
+          $data = Order::find()->where(['order_id'=>$id])->one();
+          $model->email = $data->email;
+        }else{
+          $data = OfflineOrder::find()->where(['id'=>$id])->one();
+          $model->email = $data->email;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() ) {
           $ccs = explode(",",$model->cc);
@@ -244,6 +257,11 @@ class OrderController extends Controller
               'model' => $model,
           ]);
         }
+    }
+
+
+    public function actionTest($id){
+      print_r($id);die();
     }
 
     /**
