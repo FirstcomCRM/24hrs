@@ -2,10 +2,31 @@
   JS for purchase offline orders
 */
 
-
 $(document).ready(function(){
 
+
 });
+
+//at views/offline-order/gift.php, trigger mechaniasm for Select Occassion dropdownlist
+function mocc(){
+  var occassion = $('#occassions').val();
+  $.post("?r=offline-order/ajax-gift",{
+        occassion:occassion,
+    },
+    function(data, status){
+      //$('#'+newTotalText).val(data);
+      $("#moptions").html(data);
+    });
+
+
+}
+//at views/offline-order/_form.php, trigger mechanias for close button modal
+function mclose(){
+  var mgift = $('#moptions').val();
+  //offlineorder-gift_message
+  $('#offlineorder-gift_message').val(mgift);
+//  console.log(mgift);
+}
 
 function getTotal(item){
 //offlineorderproduct-0-total_amount_text
@@ -100,7 +121,7 @@ function getGrandTotal(){
   if(!$.isNumeric(subtot) ){
     subtot = 0.00;
   }
-    console.log(subtot+'subtotal-below');
+  //  console.log(subtot+'subtotal-below');
     var grandtot = parseFloat(subtot)+parseFloat(del_charge);
     grandtot = parseFloat(grandtot).toFixed(2);
 
