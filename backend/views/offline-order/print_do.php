@@ -8,9 +8,15 @@ $i = 1;
 
 
 <style>
+
+  body{
+    font-family: Arial;
+  }
+
   table{
     width:100%;
     border-collapse: collapse;
+
   }
 
   .test{
@@ -32,11 +38,17 @@ $i = 1;
   .block-label,
   .pads{
     padding: 5px;
+
+
   }
 
   .foot-left,
   .foot-right{
     width: 50%;
+  }
+
+  .tests{
+    font-size: 11px;
   }
 
 
@@ -47,7 +59,7 @@ $i = 1;
   <tr>
     <td><img src="../web/logo/logo.jpg" alt=""></td>
     <td>
-      <p><h4>24HRS CITY FLORIST</h4></p>
+      <p class="tests"><h4>24HRS CITY FLORIST</h4></p>
       <p>161 Lavender Street #01-05 Singapore 338750  Tel: 63964222</p>
       <p>Fax: 6396 4236 </p>
       <p>Facebook: facebook.com/cityflorist</p>
@@ -59,8 +71,8 @@ $i = 1;
       <br>
       <?php
     //    $data = $model->invoice_no;
-        $strings = substr($model->invoice_no, 4);
-
+      //  $strings = substr($model->invoice_no, 4);
+          $strings = $model->invoice_no;
        ?>
        <h3><?php echo $strings ?></h3>
     </td>
@@ -72,7 +84,7 @@ $i = 1;
 <div class="header-block">
   <table class="block" border=0>
     <tr>
-      <td class="block-label"><strong>RECIPIENT'S NAME:</strong> </td>
+      <td class="block-label" style:"font-family:Arial"><strong>RECIPIENT'S NAME:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_name ?></td>
       <td class="block-label"><strong>DELIVERY DATE:</strong> </td>
       <td class="block-echo"><?php echo $model->delivery_date ?></td>

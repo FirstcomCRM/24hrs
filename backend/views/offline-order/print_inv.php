@@ -1,10 +1,25 @@
 <?php
 
+use common\models\OfflinePayment;
 
 $i = 1;
 $sum = [];
+
+
+$datum= OfflinePayment::find()->where(['id'=>$model->payment])->one();
+if (!empty($datum)) {
+  $payments = $datum->payment_method;
+}else{
+  $payments = null;
+}
+
  ?>
 <style>
+
+  body{
+    font-family: Arial;
+  }
+
   table{
     width:100%;
     border-collapse: collapse;
@@ -36,14 +51,20 @@ $sum = [];
     width: 50%;
   }
 
+  .tests{
+    font-size: 11px;
+  }
 
 </style>
+
+
+
 
 <table class="title-area" border=0>
   <tr>
     <td><img src="../web/logo/logo.jpg" alt=""></td>
     <td>
-      <p><h4>24HRS CITY FLORIST</h4></p>
+      <p class="tests"><h4>24HRS CITY FLORIST</h4></p>
       <p>161 Lavender Street #01-05 Singapore 338750  Tel: 63964222</p>
       <p>Fax: 6396 4236 </p>
       <p>Facebook: facebook.com/cityflorist</p>
@@ -131,7 +152,7 @@ $sum = [];
 <div class="header-a">
   <table border=0>
     <tr>
-      <td class="pads" colspan=4><strong>PAYMENT METHOD:</strong> <?php echo $model->payment ?></td>
+      <td class="pads" colspan=4><strong>PAYMENT METHOD:</strong> <?php echo $payments ?></td>
 
     </tr>
     <tr>
