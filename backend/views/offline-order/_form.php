@@ -6,8 +6,11 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use kartik\widgets\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
+use kartik\widgets\TimePicker;
 use yii\helpers\ArrayHelper;
 use common\models\DeliveryTime;
+use common\models\OfflinePayment;
+use common\models\OfflineCategory;
 /* @var $this yii\web\View */
 /* @var $model common\models\OfflineOrder */
 /* @var $form yii\widgets\ActiveForm */
@@ -16,11 +19,17 @@ use common\models\DeliveryTime;
 $data = DeliveryTime::find()->all();
 $del = ArrayHelper::map($data,'id','delivery_time');
 
-$payments = [
+$data = OfflinePayment::find()->all();
+$payments = ArrayHelper::map($data,'id','payment_method');
+
+$data = OfflineCategory::find()->all();
+$cat = ArrayHelper::map($data,'id','off_category');
+
+/*$payments = [
   'Cash on Hand'=>'Cash on Hand',
   'CC'=>'CC',
 
-]
+];*/
 
 ?>
 
@@ -33,7 +42,7 @@ $payments = [
     <!----Customer Panel Box--->
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Your Information (Sender's Information)</h3>
+        <h3 class="panel-title">Customer Information (Sender's Information)</h3>
       </div>
       <div class="panel-body">
 
@@ -66,10 +75,11 @@ $payments = [
             ]); ?>
           </div>
           <div class="col-md-3">
-              <?= $form->field($model, 'delivery_time')->dropDownList($del) ?>
+            <?php $form->field($model, 'delivery_time')->dropDownList($del) ?>
+            <?= $form->field($model, 'delivery_time_start')->widget(TimePicker::classname(), []); ?>
           </div>
           <div class="col-md-3">
-
+            <?= $form->field($model, 'delivery_time_end')->widget(TimePicker::classname(), []); ?>
           </div>
         </div>
 
@@ -128,31 +138,22 @@ $payments = [
               <?= $form->field($model, 'recipient_postal_code')->textInput(['maxlength' => true]) ?>
           </div>
 
+
         </div>
 
+        <?= $form->field($model, 'gift_to')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'gift_from')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'gift_message')->textarea(['rows' => 4]) ?>
+        <?= Html::a('View Sample Message', null, ['class' => 'btn btn-default modalButton', 'style'=>'margin-bottom:5px',
+              'value'=>Url::to(['offline-order/gift'])
+            //  'value' => Url::to(['order/custom-email'])
+              ])
+       ?>
 
       </div>
     </div>
     <!----Recipient Panel Box End--->
 
-    <!--Gift To box start--->
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Gift To (Optional)</h3>
-        </div>
-        <div class="panel-body">
-          <?= $form->field($model, 'gift_to')->textInput(['maxlength' => true]) ?>
-          <?= $form->field($model, 'gift_from')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'gift_message')->textarea(['rows' => 4]) ?>
-            <?= Html::a('View Sample Message', null, ['class' => 'btn btn-default modalButton',
-              'value'=>Url::to(['offline-order/gift'])
-            //  'value' => Url::to(['order/custom-email'])
-              ])
-             ?>
-
-        </div>
-      </div>
-    <!--Gift To box end--->
 
     <!--Dynamic table start here------->
     <div class="panel panel-default">
@@ -181,11 +182,13 @@ $payments = [
 
             <table class="table table-bordered container-items">
               <thead>
-                <th style="width:8%"></th>
-                <th style="width:32%">Item Code</th>
-                <th style="width:20%;text-align:right">Quantity</th>
-                <th style="width:20%;text-align:right">Unit Price</th>
-                <th style="width:20%;text-align:right" >Total Amount</th>
+                <th style="width:10%"></th>
+                <th style="width:25%">Category</th>
+                <th style="width:10%">Product Code</th>
+                <th style="width:25%">Description</th>
+                <th style="width:10%;text-align:right">Quantity</th>
+                <th style="width:10%;text-align:right">Unit Price</th>
+                <th style="width:10%;text-align:right" >Total Amount</th>
               </thead>
               <?php foreach ($modelLine as $i => $line): ?>
               <tr class="item">
@@ -198,9 +201,18 @@ $payments = [
                       <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
                       <button type="button" class="remove-item btn btn-danger btn-xs" id=<?php echo 'remove-'.$i.'-r' ?> onclick="offRecalc($(this))"><i class="glyphicon glyphicon-minus"></i></button>
                     </td>
+                    <td>
+                      <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
+                      <?= $form->field($line, "[{$i}]category")->dropDownList($cat)->label(false) ?>
+
+                    </td>
 
                     <td>
                       <?= $form->field($line, "[{$i}]item_code")->textInput(['maxlength' => true])->label(false) ?>
+                    </td>
+                    <td>
+                      <?= $form->field($line, "[{$i}]description")->textInput(['maxlength' => true])->label(false) ?>
+
                     </td>
                     <td>
                        <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
@@ -217,38 +229,45 @@ $payments = [
               </tr>
 
             </table>
-            <table class="table ">
+            <table class="table" style="margin-bottom: 5px;">
               <tr>
-                <td style="width:8%;border-top:0px"></td>
-                <td style="width:32%;border-top:0px">
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:25%;border-top:0px">
                   <?= $form->field($model, 'payment')->dropDownList($payments,['prompt'=>'Payment Method'])->label(false) ?>
                 </td>
-                <td style="width:20%;border-top:0px"></td>
-                <td style="width:20%; vertical-align:middle; text-align:right;border-top:0px">
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:25%;border-top:0px"></td>
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:10%; vertical-align:middle; text-align:right;border-top:0px">
                   <label>SubTotal</label>
                 </td>
-                <td style="width:20%;border-top:0px">
+                <td style="width:10%;border-top:0px">
                   <?= $form->field($model, 'subtotal')->textInput(['readonly'=>true, 'placeholder'=>0.00,  'style'=>'text-align:right'])->label(false) ?>
                 </td>
               </tr>
               <tr>
-                <td style="border-top:0px"></td>
-                <td style="border-top:0px"></td>
-                <td style="border-top:0px"></td>
-                <td style="border-top:0px;vertical-align:middle; text-align:right;border-top:0px"><label>Delivery Charge</label> </td>
-                <td style="border-top:0px">
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:25%;border-top:0px"></td>
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:25%;border-top:0px"></td>
+                <td style="width:10%;border-top:0px;vertical-align:middle; text-align:right;border-top:0px" colspan="2">
+                  <label>Delivery Charge</label>
+                </td>
+                <td style="width:10%; vertical-align:middle; text-align:right;border-top:0px">
                   <?= $form->field($model, 'charge')->textInput(['maxlength' => true, 'onchange'=>'getGrandTotal()','style'=>'text-align:right'])->label(false) ?>
                 </td>
+
               </tr>
               <tr>
-                <td style="border-top:0px"></td>
-                <td style="border-top:0px"></td>
-                <td style="border-top:0px"></td>
-                <td style="border-top:0px;vertical-align:middle; text-align:right;border-top:0px"><label>Grand Total</label> </td>
-                <td style="border-top:0px">
-                  <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'style'=>'text-align:right'])->label(false) ?>
-
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:25%;border-top:0px"> </td>
+                <td style="width:10%;border-top:0px"></td>
+                <td style="width:25%;border-top:0px"></td>
+                <td style="width:10%;border-top:0px;vertical-align:middle; text-align:right;border-top:0px" colspan="2">
+                  <label>Grand Total</label>
                 </td>
+                <td style="width:10%; vertical-align:middle; text-align:right;border-top:0px">
+                  <?= $form->field($model, 'grand_total')->textInput(['readonly'=>true, 'placeholder'=>0.00, 'style'=>'text-align:right'])->label(false) ?>                </td>
               </tr>
             </table>
 
@@ -266,6 +285,7 @@ $payments = [
         <?php if (!$model->isNewRecord): ?>
             <?= Html::a(' Print DO', ['offline-order/print-do', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
             <?= Html::a(' Print Invoice', ['offline-order/print-inv', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
+            <?= Html::a('Print DO+Inv', ['offline-order/print-dinv', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
 
         <?php endif; ?>
 
@@ -274,6 +294,7 @@ $payments = [
     <?php ActiveForm::end(); ?>
 
 </div>
+
 
 <?php
   Modal::begin([
