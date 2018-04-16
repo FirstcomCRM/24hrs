@@ -7,7 +7,7 @@ use common\models\OrderProduct;
 use common\models\OrderStatus;
 use common\models\Product;
 
- 
+
 class Order extends \yii\db\ActiveRecord
 {
     /**
@@ -39,6 +39,7 @@ class Order extends \yii\db\ActiveRecord
             [['payment_company', 'shipping_company', 'ip', 'forwarded_ip'], 'string', 'max' => 40],
             [['payment_address_1', 'payment_address_2', 'payment_city', 'payment_country', 'payment_zone', 'payment_method', 'payment_code', 'shipping_address_1', 'shipping_address_2', 'shipping_city', 'shipping_country', 'shipping_zone', 'shipping_method', 'shipping_code'], 'string', 'max' => 128],
             [['payment_postcode', 'shipping_postcode'], 'string', 'max' => 10],
+            [['remarks'],'string'],
 
         ];
     }
@@ -113,6 +114,7 @@ class Order extends \yii\db\ActiveRecord
             'date_added' => 'Date Added',
             'date_modified' => 'Date Modified',
             'date_invoice' => 'Date Invoice',
+            'remarks'=>'Remarks',
         ];
     }
 
