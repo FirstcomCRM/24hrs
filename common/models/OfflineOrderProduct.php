@@ -33,10 +33,11 @@ class OfflineOrderProduct extends \yii\db\ActiveRecord
     {
         return [
             [['item_code', 'quantity', 'unit_price'], 'required'],
-            [['off_order_id', 'quantity'], 'integer'],
+            [['off_order_id', 'quantity','category'], 'integer'],
             [['unit_price', 'total_amount'], 'number'],
             [['del_date'], 'safe'],
             [['item_code'],'string','max'=>75],
+            [['description'],'string','max'=>255],
             [['del_time','total_amount_text'], 'string', 'max' => 25],
         ];
     }
@@ -55,6 +56,8 @@ class OfflineOrderProduct extends \yii\db\ActiveRecord
             'total_amount' => 'Total Amount',
             'del_date' => 'Del Date',
             'del_time' => 'Del Time',
+            'category'=>'Category',
+            'description'=>'Description',
         ];
     }
 }
