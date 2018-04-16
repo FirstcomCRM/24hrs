@@ -85,9 +85,10 @@ class OfflineOrderController extends Controller
         $modelLine = [new OfflineOrderProduct];
         $model->invoice_date = date('d M Y');
         $model->charge=0.00;
-        $date = new \DateTime(date('d M Y'));
-        $date->modify('+1 day');
-        $model->delivery_date = $date->format('d M Y');
+      //  $date = new \DateTime(date('d M Y'));
+      //  $date->modify('+1 day');
+      //  $model->delivery_date = $date->format('d M Y');
+        $model->delivery_date = date('d M Y');
 
         if ($model->load(Yii::$app->request->post())  ) {
             $inv = new \DateTime($model->invoice_date);
@@ -96,7 +97,7 @@ class OfflineOrderController extends Controller
             $del = new \DateTime($model->delivery_date);
             $model->delivery_date = $del->format('Y-m-d');
 
-
+          //  print_r($model->delivery_time_start);die();
 
             $modelLine = Model::createMultiple(OfflineOrderProduct::classname());
             Model::loadMultiple($modelLine, Yii::$app->request->post());
@@ -109,7 +110,9 @@ class OfflineOrderController extends Controller
                 try {
                     $run = OfflineRunningTable::findOne(1);
                     //  $quo = 'QUO-'. sprintf("%007d", $model->ID);
-                    $model->invoice_no ='INV-'.sprintf("%005d",$run->value);
+                    $years = date('y');
+                    //$model->invoice_no ='INV-'.sprintf("%005d",$run->value);
+                    $model->invoice_no =$years.'-'.sprintf("%005d",$run->value);
                     $run->value++;
                     $run->save(false);
                     if ($flag = $model->save(false)) {
@@ -166,6 +169,9 @@ class OfflineOrderController extends Controller
         $model->delivery_date = $del->format('d M Y');
         $model->subtotal = number_format($model->subtotal,2);
         $model->grand_total = number_format($model->grand_total,2);
+
+        $model->delivery_time_start = date('h:i A', strtotime($model->delivery_time_start) );
+        $model->delivery_time_end = date('h:i A', strtotime($model->delivery_time_end) );
 
         if ($model->load(Yii::$app->request->post())   ) {
             $oldIDs = ArrayHelper::map($modelLine, 'id', 'id');
@@ -280,6 +286,20 @@ class OfflineOrderController extends Controller
       }
     }
 
+    public function actionPrintDinv($id){
+      $model = $this->findModel($id);
+      $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
+
+      $mpdf = new mPDF('utf-8','A4');
+      $mpdf->content = $this->renderPartial('print_dinv',[
+         'model'=>$model,
+         'modelLine' => $modelLine,
+      ]);
+      $mpdf->WriteHTML($mpdf->content);
+      $mpdf->Output('Report-A.pdf','I');
+      exit;
+    }
+
     public function actionAjaxGift(){
       $selects = '';
       if ( Yii::$app->request->post() ) {
@@ -296,6 +316,24 @@ class OfflineOrderController extends Controller
       //  return number_format($ntotal,2);
       }
     }
+
+    public function actionUpdateRemark($id){
+      $model = $this->findModel($id);
+  //    print_r($model);die();
+      if ($model->load(Yii::$app->request->post())   ) {
+        $model->save(false);
+        Yii::$app->session->setFlash('success', "Offline order remark updated");
+        return $this->redirect(['order/index']);
+      }else{
+        return $this->render('_remarks', [
+            'model' => $model,
+            //'modelLine'=>$modelLine,
+            //'dataProvider'=>$dataProvider,
+        ]);
+      }
+
+    }
+
 
     public function actionGift(){
       return $this->renderAjax('gift', [
