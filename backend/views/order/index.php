@@ -34,6 +34,8 @@ $gridColumns = [
   'label'=>'Delivery Date',
     'format' => ['date', 'php:d M Y']
 ],
+//'offremarks',
+
 [
   'attribute'=>'del_time',
   'label'=>'Delivery Time',
@@ -66,7 +68,11 @@ $gridColumns = [
     }
   },
 ],
-
+'item_code',
+[
+  'attribute'=>'offremarks',
+  'label'=>'Remarks'
+],
 /*[
   'attribute'=>'item_code',
   'format'=>'raw',
@@ -111,8 +117,19 @@ $gridColumns = [
         }
 
         if (!empty($pdata) ) {
-          $path = Yii::getAlias('@image').'/'.$pdata->image;
-          return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
+        //  $path = Yii::getAlias('@image').'/'.$pdata->image;
+           $path = Yii::getAlias('@roots').'/image/'.$pdata->image;
+          if (file_exists($path) ) {
+            //  return 'exist';
+            $path = Yii::getAlias('@image').'/'.$pdata->image;
+            return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
+          }else{
+            $path = '../web/logo/defaults.jpg';
+            //$path = Yii::getAlias('@image').'/'.$pdata->image;
+            return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
+            //return $path;
+
+          }
         }else{
           return $pdata = null;
         }
@@ -124,16 +141,16 @@ $gridColumns = [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-  'template'=>'{view}  {update}  {email}  {complete}  {cancel}',
+  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  ',
 //  'options'=>['style'=>'padding:20px'],
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
-      return Html::a(' <i class="fa fa-eye fa-lg" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0,
       ]);
     },
     'update'=>function($url,$model){
-      return Html::a(' <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
   /*  'email'=>function($url,$model,$key){
@@ -142,7 +159,7 @@ $gridColumns = [
 
     },*/
     'email'=>function($url,$model,$key){
-          return Html::a('<i class="fa fa-envelope-open-o " aria-hidden="true"></i>', $url,
+          return Html::a('<i class="fa fa-envelope-open-o  fa-2x" aria-hidden="true"></i>', $url,
             [
               'title'=>'Email to customer',
               'data-pjax'=>0,
@@ -156,10 +173,20 @@ $gridColumns = [
 
     },
     'complete'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-check" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Complete Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa-check fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Complete Order','data-pjax'=>0]);
     },
     'cancel'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-times" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa-times fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
+    },
+    'remarks'=>function($url,$model,$key){
+      if ($model['invoice_no'] != '0') {
+        return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0]);
+
+      }else{
+        return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Remarks','data-pjax'=>0]);
+
+      }
+
     },
   ],
   'visibleButtons'=>[
@@ -219,11 +246,8 @@ $this->title = 'Order Management System';
 
 <div class="order-index">
 
-    <h1><?php Html::encode($this->title) ?></h1>
-
-    <div class="panel panel-default" style="margin-bottom:10px">
+    <div class="panel panel-default">
       <div class="panel-heading">
-
         <div class="row">
           <div class="col-md-4">
             <h3 class="panel-title">Search</h3>
@@ -237,7 +261,6 @@ $this->title = 'Order Management System';
           </div>
         </div>
 
-
       </div>
       <div class="panel-body">
           <?php echo  $this->render('_search', ['model' => $searchModel]); ?>
@@ -245,9 +268,7 @@ $this->title = 'Order Management System';
     </div>
 
     <div class="panel panel-warning">
-      <div class="panel-heading">
-        <h3 class="panel-title"></h3>
-      </div>
+
       <div class="panel-body"> <!--Start of the panel body for the Lists-->
         <ul class="nav nav-tabs">
           <li class="active"> <a href="#today" data-toggle="tab">Orders Today/Tomorrow</a></li>
