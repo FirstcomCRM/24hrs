@@ -230,6 +230,8 @@ class OrderController extends Controller
           $model->email = $data->email;
         }
 
+        $model->title = 'Invoice:'.$invoice_no;
+
         if ($model->load(Yii::$app->request->post()) && $model->validate() ) {
           $ccs = explode(",",$model->cc);
           $msg = nl2br($model->message);
@@ -257,6 +259,23 @@ class OrderController extends Controller
               'model' => $model,
           ]);
         }
+    }
+
+    public function actionUpdateRemark($id){
+      $model = $this->findModel($id);
+
+      if ($model->load(Yii::$app->request->post())   ) {
+        $model->save(false);
+        Yii::$app->session->setFlash('success', "Online order remark updated");
+        return $this->redirect(['order/index']);
+      }else{
+        return $this->render('_remarks', [
+            'model' => $model,
+            //'modelLine'=>$modelLine,
+            //'dataProvider'=>$dataProvider,
+        ]);
+      }
+
     }
 
 
