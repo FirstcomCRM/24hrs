@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   'format' => ['date', 'php:d M Y']
                 ],
 
-                [
+                /*[
                   'attribute'=>'delivery_time',
                   'value'=>function($model){
                     $data = DeliveryTime::find()->where(['id'=>$model->delivery_time])->one();
@@ -53,6 +53,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     }else {
                       return $data = null;
                     }
+                  }
+                ],*/
+                [
+                  'attribute'=>'delivery_time_start',
+                  'value'=>function($model){
+                    return date('h:i A', strtotime($model->delivery_time_start) );
+                  }
+                ],
+                [
+                  'attribute'=>'delivery_time_end',
+                  'value'=>function($model){
+                    return date('h:i A', strtotime($model->delivery_time_end) );
                   }
                 ],
                 'customer_name',
