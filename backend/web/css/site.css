@@ -118,3 +118,12 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+
+/*
+add new property add panel-body of boostrap, reduce padding-bottom
+*/
+
+.panel-body{
+  padding-bottom:1px;
+}
