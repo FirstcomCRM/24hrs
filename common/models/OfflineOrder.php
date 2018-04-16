@@ -37,10 +37,10 @@ class OfflineOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_date', 'delivery_date', 'customer_name', 'email', 'contact_number', 'recipient_name','delivery_time', 'recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
-            [['invoice_date', 'delivery_date'], 'safe'],
+            [['invoice_date', 'delivery_date', 'customer_name', 'email', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
+            [['invoice_date', 'delivery_date','delivery_time_start','delivery_time_end'], 'safe'],
             [['email','recipient_email'],'email'],
-            [['status'],'integer'],
+            [['status','payment',],'integer'],
             [['charge'],'number'],
             [['subtotal', 'grand_total'],'number','numberPattern' => '/^\s*[-+]?[0-9\,]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
             [['recipient_address','remarks','gift_message'], 'string'],
@@ -48,7 +48,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
             [['customer_name'], 'string', 'max' => 100],
             [['email', 'recipient_name', 'recipient_email','delivery_time'], 'string', 'max' => 75],
             [['recipient_country'], 'string', 'max' => 50],
-            [['payment','gift_to','gift_from'], 'string', 'max' => 75],
+            [['gift_to','gift_from'], 'string', 'max' => 75],
         ];
     }
 
@@ -64,9 +64,11 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'delivery_date' => 'Delivery Date',
             'customer_name' => 'Customer Name',
             'delivery_time'=>'Delivery Time',
+            'delivery_time_start'=>'Delivery Time Start',
+            'delivery_time_end'=>'Delivery Time End',
             'email' => 'Email',
             'contact_number' => 'Contact Number',
-            'remarks'=>'Message',
+            'remarks'=>'Remarks',
             'recipient_name' => 'Recipient Name',
             'recipient_contact_num' => 'Recipient Contact Number',
             'recipient_address' => 'Recipient Address',
@@ -87,7 +89,8 @@ class OfflineOrder extends \yii\db\ActiveRecord
           //  $this->final_sales_price = str_replace(",", "", $this->final_sales_price);
             $this->subtotal = str_replace(",", "", $this->subtotal);
             $this->grand_total= str_replace(",", "", $this->grand_total);
-
+            $this->delivery_time_start = date('H:i:s',strtotime($this->delivery_time_start) );
+            $this->delivery_time_end = date('H:i:s',strtotime($this->delivery_time_end) );
             return true;
         } else {
             return false;
