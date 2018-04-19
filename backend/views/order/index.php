@@ -71,7 +71,11 @@ $gridColumns = [
 'item_code',
 [
   'attribute'=>'offremarks',
-  'label'=>'Remarks'
+  'label'=>'Remarks',
+  'format'=>'html',
+  'value'=>function($model){
+    return nl2br($model['offremarks']);
+  }
 ],
 /*[
   'attribute'=>'item_code',
@@ -141,12 +145,12 @@ $gridColumns = [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  ',
+  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
 //  'options'=>['style'=>'padding:20px'],
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
-      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
       ]);
     },
     'update'=>function($url,$model){
@@ -178,36 +182,46 @@ $gridColumns = [
     'cancel'=>function($url,$model,$key){
       return Html::a('<i class="fa fa-times fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
     },
+    'ship'=>function($url,$model,$key){
+      return Html::a('<i class="fa fa fa-ship fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Ship Order','data-pjax'=>0]);
+    },
     'remarks'=>function($url,$model,$key){
       if ($model['invoice_no'] != '0') {
         return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0]);
 
       }else{
         return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Remarks','data-pjax'=>0]);
-
       }
-
     },
+
   ],
   'visibleButtons'=>[
-    'view'=> function($model){
+    //'view'=> function($model){
     //  return $model['invoice_no'] !='0'&& ($model['status'] != 5 );
-      return $model['invoice_no'] !='0';
-    },
+  //    return $model['invoice_no'] !='0';
+  //  },
     'update'=>function($model){
         return $model['invoice_no'] !='0' && ($model['status'] != 5 && $model['status'] != 7);
     },
     'complete'=>function($model){
-      return $model['status'] != 5 && $model['status'] != 7;
+      return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
     },
     'cancel'=>function($model){
-      return $model['status'] != 5 && $model['status'] != 7;
+      return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
+    },
+    'ship'=>function($model){
+      return $model['status'] != 1 && $model['status'] != 7;
     },
   ],
   'urlCreator'=> function($action,$model,$key,$index){
     if ($action ==='view'){
       //$url = '?r=offline-order%2Fview&id='.$model['id'];
-      $url = Url::to(['offline-order/view', 'id'=>$model['id']]);
+      if ($model['invoice_no']!='0') {
+        $url = Url::to(['offline-order/view', 'id'=>$model['id']]);
+      }else{
+        $url = Url::to(['order/view', 'id'=>$model['id']]);
+      }
+
       return $url;
     }
     if ($action==='update') {
