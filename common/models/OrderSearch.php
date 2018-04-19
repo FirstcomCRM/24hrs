@@ -123,7 +123,7 @@ class OrderSearch extends Order
                 ->where(['a.status'=>1]);
 
             $query_on = (new \yii\db\Query())
-                ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+                  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
                 ->from('order c')
                 ->leftJoin('order_product d','d.order_id=c.order_id')
                 ->groupBy(['c.order_id'])
@@ -140,6 +140,9 @@ class OrderSearch extends Order
 
               $dataProvider = new ActiveDataProvider([
                     'query' => $query,
+                    'pagination'=>[
+                      'pageSize'=>10,
+                    ],
                 //    'sort'=> ['defaultOrder' => ['dadst'=>SORT_DESC]]
 
               ]);
@@ -202,7 +205,7 @@ class OrderSearch extends Order
           ->groupBy(['a.id'])
           ->where(['a.status'=>1]);*/
       $query_off = (new \yii\db\Query())
-          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code')
+          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
           ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
@@ -210,7 +213,7 @@ class OrderSearch extends Order
           ->where(['a.status'=>1]);
 
       $query_on = (new \yii\db\Query())
-          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id')
+          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
@@ -227,6 +230,9 @@ class OrderSearch extends Order
 
         $dataProvider = new ActiveDataProvider([
               'query' => $query,
+              'pagination'=>[
+                'pageSize'=>10,
+              ],
           //    'sort'=> ['defaultOrder' => ['dadst'=>SORT_DESC]]
 
         ]);
@@ -283,22 +289,23 @@ class OrderSearch extends Order
           ->where(['a.status'=>5])
           ->orWhere(['a.status'=>7]);*/
       $query_off = (new \yii\db\Query())
-          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code')
+          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
           ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
           ->groupBy(['a.id'])
-          ->where(['a.status'=>5]);
+          ->where(['a.status'=>5])
+          ->orWhere(['a.status'=>3]);
 
       $query_on = (new \yii\db\Query())
-          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id')
+          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
           ->limit(500)
           ->orderBy(['d.delivery_date'=>SORT_DESC])
-          ->where(['c.order_status_id'=>5]);
-          //->orWhere(['c.order_status_id'=>7]);
+          ->where(['c.order_status_id'=>5])
+          ->orWhere(['c.order_status_id'=>3]);
 
     //      ->andWhere(['!=','d.delivery_date','0000-00-00']);
 
@@ -312,6 +319,9 @@ class OrderSearch extends Order
 
         $dataProvider = new ActiveDataProvider([
               'query' => $query,
+              'pagination'=>[
+                'pageSize'=>10,
+              ],
           //    'sort'=> ['defaultOrder' => ['dadst'=>SORT_DESC]]
 
         ]);
@@ -366,7 +376,7 @@ class OrderSearch extends Order
           ->where(['a.status'=>5])
           ->orWhere(['a.status'=>7]);*/
       $query_off = (new \yii\db\Query())
-          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code')
+          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
           ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
@@ -374,7 +384,7 @@ class OrderSearch extends Order
           ->where(['a.status'=>7]);
 
       $query_on = (new \yii\db\Query())
-          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id')
+          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
@@ -395,6 +405,9 @@ class OrderSearch extends Order
 
         $dataProvider = new ActiveDataProvider([
               'query' => $query,
+              'pagination'=>[
+                'pageSize'=>10,
+              ],
           //    'sort'=> ['defaultOrder' => ['dadst'=>SORT_DESC]]
 
         ]);
