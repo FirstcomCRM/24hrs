@@ -15,10 +15,7 @@ use yii\widgets\ActiveForm;
 
   <?= $form->field($model, 'title') ?>
 
-  <?= $form->field($model, 'cc')->textarea(['rows' => 4]) ?>
-
   <?= $form->field($model, 'message')->textarea(['rows' => 6]) ?>
-
 
   <div class="form-group">
       <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
