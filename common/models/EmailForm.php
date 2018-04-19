@@ -22,7 +22,7 @@ class EmailForm extends Model
         return [
 
             [['email', 'title','message'], 'required'],
-            [['cc'],'string'],
+          //  [['cc'],'string'],
             [['email'],'email'],
 
         ];
