@@ -101,7 +101,7 @@ class OrderController extends Controller
     /**
      * Displays a single Order model.
      * @param integer $id
-     * @return mixed5
+     * @return mixed
      */
     public function actionView($id)
     {
@@ -160,8 +160,8 @@ class OrderController extends Controller
         return $this->redirect(['index']);
     }
 
+    //Function changed status to Complete
     public function actionComplete($id,$invoice_no){
-
         if ($invoice_no != '0') {
           $data = OfflineOrder::find()->where(['id'=>$id])->one();
           $data->status = 5;
@@ -176,8 +176,8 @@ class OrderController extends Controller
         return $this->redirect(['index']);
     }
 
+    //Function changed status to Cancel
     public function actionCancel($id,$invoice_no){
-
         if ($invoice_no != '0') {
           $data = OfflineOrder::find()->where(['id'=>$id])->one();
           $data->status = 7;
@@ -189,6 +189,22 @@ class OrderController extends Controller
         }
 
         Yii::$app->session->setFlash('success', "Order Cancelled");
+        return $this->redirect(['index']);
+    }
+
+    //Function changed status to Shipped
+    public function actionShip($id,$invoice_no){
+        if ($invoice_no != '0') {
+          $data = OfflineOrder::find()->where(['id'=>$id])->one();
+          $data->status = 3;
+          $data->save(false);
+        }else{
+          $data = Order::find()->where(['order_id'=>$id])->one();
+          $data->order_status_id = 3;
+          $data->save(false);
+        }
+
+        Yii::$app->session->setFlash('success', "Order Shipped");
         return $this->redirect(['index']);
     }
 
@@ -219,6 +235,9 @@ class OrderController extends Controller
 
     }
 
+    //Function that sends an email to the customer
+    //$id = order id of either offline or online Order
+    //$invoice_no - invoice no. means to determine whether to use Online order or offline order
     public function actionCustomEmail($id,$invoice_no){
         $model = new EmailForm();
 
@@ -233,7 +252,8 @@ class OrderController extends Controller
         $model->title = 'Invoice:'.$invoice_no;
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() ) {
-          $ccs = explode(",",$model->cc);
+      //    $ccs = explode(",",$model->cc);
+          $ccs = 'jerry@24hrscityflorist.com';
           $msg = nl2br($model->message);
         //  print_r($msg);
         //  die();
@@ -261,9 +281,9 @@ class OrderController extends Controller
         }
     }
 
+    //function update remarks on either offline or online orders
     public function actionUpdateRemark($id){
       $model = $this->findModel($id);
-
       if ($model->load(Yii::$app->request->post())   ) {
         $model->save(false);
         Yii::$app->session->setFlash('success', "Online order remark updated");
@@ -278,7 +298,7 @@ class OrderController extends Controller
 
     }
 
-
+    //function a dummy function
     public function actionTest($id){
       print_r($id);die();
     }
