@@ -91,6 +91,7 @@ class OfflineOrderController extends Controller
         $model->delivery_date = date('d M Y');
 
         if ($model->load(Yii::$app->request->post())  ) {
+
             $inv = new \DateTime($model->invoice_date);
             $model->invoice_date = $inv->format('Y-m-d');
 
@@ -174,19 +175,24 @@ class OfflineOrderController extends Controller
         $model->delivery_time_end = date('h:i A', strtotime($model->delivery_time_end) );
 
         if ($model->load(Yii::$app->request->post())   ) {
+
             $oldIDs = ArrayHelper::map($modelLine, 'id', 'id');
             $offline = Model::createMultiple(OfflineOrderProduct::classname(), $modelLine);
             Model::loadMultiple($offline, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($offline, 'id', 'id')));
 
             $valid = $model->validate();
+          //  var_dump($valid);
+          //  print_r($model->getErrors());
             $valid = Model::validateMultiple($offline) && $valid;
+
 
             $inv = new \DateTime($model->invoice_date);
             $model->invoice_date = $inv->format('Y-m-d');
 
             $del = new \DateTime($model->delivery_date);
             $model->delivery_date = $del->format('Y-m-d');
+
 
 
             if ($valid) {
@@ -244,6 +250,8 @@ class OfflineOrderController extends Controller
         return $this->redirect(['index']);
     }
 
+    //Function Print Delivery Orders
+    //$id - offline order primary id
     public function actionPrintDo($id){
       $model = $this->findModel($id);
       $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
@@ -258,6 +266,8 @@ class OfflineOrderController extends Controller
       exit;
     }
 
+    //Function Print Delivery Invoice
+    //$id - offline order primary id
     public function actionPrintInv($id){
       $model = $this->findModel($id);
       $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
@@ -272,6 +282,7 @@ class OfflineOrderController extends Controller
       exit;
     }
 
+    //Ajax Function. Set the value and commas.
     public function actionAjaxAmount(){
       if ( Yii::$app->request->post() ) {
         $ntotal = Yii::$app->request->post()['ntotal'];
@@ -286,6 +297,8 @@ class OfflineOrderController extends Controller
       }
     }
 
+    //Function Print Delivery Orders and Invoice Orders
+    //$id - offline order primary id
     public function actionPrintDinv($id){
       $model = $this->findModel($id);
       $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
@@ -300,6 +313,7 @@ class OfflineOrderController extends Controller
       exit;
     }
 
+    //Ajax function. Dependent dropdown based on the selected occassion. Echo list of messages
     public function actionAjaxGift(){
       $selects = '';
       if ( Yii::$app->request->post() ) {
@@ -317,6 +331,7 @@ class OfflineOrderController extends Controller
       }
     }
 
+    //Function to update remarks on offline order. Triggered at online order index table
     public function actionUpdateRemark($id){
       $model = $this->findModel($id);
   //    print_r($model);die();
@@ -335,6 +350,7 @@ class OfflineOrderController extends Controller
     }
 
 
+    //FUnction. Modal that renders the gift.php in ajax method
     public function actionGift(){
       return $this->renderAjax('gift', [
         //  'model' => $model,
