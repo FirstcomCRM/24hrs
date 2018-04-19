@@ -72,13 +72,6 @@ AppAsset::register($this);
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; 24 Hrs City Florist <?= date('Y') ?></p>
-
-        <p class="pull-right">Powered by: <?php echo Html::a('Firstcom Solutions','https://www.firstcom.com.sg/') ?></p>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 </body>
