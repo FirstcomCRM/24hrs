@@ -193,8 +193,6 @@ class OfflineOrderController extends Controller
             $del = new \DateTime($model->delivery_date);
             $model->delivery_date = $del->format('Y-m-d');
 
-
-
             if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
                   try {
