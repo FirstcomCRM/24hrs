@@ -58,8 +58,6 @@ if (!empty($datum)) {
 </style>
 
 
-
-
 <table class="title-area" border=0>
   <tr>
     <td><img src="../web/logo/logo.jpg" alt=""></td>
@@ -140,9 +138,9 @@ if (!empty($datum)) {
 <div class="header-a">
   <table border=0>
     <tr>
-      <td style="width:20%; vertical-align:top; padding:5px"><strong>Message:</strong> </td>
+      <td style="width:15%; vertical-align:top; padding:5px"><strong>Message:</strong> </td>
       <td style="padding:5px;">
-        <?php echo nl2br($model->remarks) ?>
+        <?php  echo nl2br($model->remarks) ?>
       </td>
   </table>
 </div>
