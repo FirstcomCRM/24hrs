@@ -4,12 +4,20 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use common\models\DeliveryTime;
+use common\models\OfflinePayment;
+use common\models\OfflineCategory;
 /* @var $this yii\web\View */
 /* @var $model common\models\OfflineOrder */
 
 $this->title = $model->invoice_no;
-$this->params['breadcrumbs'][] = ['label' => 'Offline Order', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = ['label' => 'Offline Order', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
+$total = 0;
+foreach ($dataProvider->getModels() as $key => $value) {
+  $total += $value->total_amount;
+}
+
+
 ?>
 <div class="offline-order-view">
 
@@ -73,15 +81,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 [
                   'attribute'=>'charge',
-                  'format'=>['decimal',2]
+                  'value'=>function($model){
+                    return '$'.number_format($model->charge,2);
+                  }
+                //  'format'=>['decimal',2]
                 ],
 
                 [
                   'attribute'=>'grand_total',
-                  'format'=>['decimal',2]
+                  'value'=>function($model){
+                    return '$'.number_format($model->grand_total,2);
+                  }
+                  //'format'=>['decimal',2]
                 ],
                 'remarks:ntext',
-                'payment',
+              //  'payment',
+                [
+                  'attribute'=>'payment',
+                  'value'=>function($model){
+                    $data = OfflinePayment::find()->where(['id'=>$model->payment])->one();
+                    if (!empty($data)  ) {
+                        return $data->payment_method;
+                    }else{
+                      return $data = null;
+                    }
+
+                  }
+                ],
                 'recipient_name',
                 'recipient_contact_num',
                 'recipient_address:ntext',
@@ -100,20 +126,53 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="panel-body">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'showFooter'=>TRUE,
           //  'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-                'item_code',
-                'quantity:decimal',
+                [
+                  'attribute'=>'category',
+                  'value'=>function($model){
+                    $data = OfflineCategory::find()->where(['id'=>$model->category])->one();
+                    if (!empty($data)) {
+                      return $data->off_category;
+                    }else{
+                      return $data = null;
+                    }
 
+                  }
+                ],
+                'item_code',
+                //'quantity:decimal',
+                [
+                  'attribute'=>'quantity',
+                   'format'=>['decimal',2],
+                   'headerOptions' => ['style'=>'text-align:right'],
+                   'contentOptions' => ['style' => 'text-align:right'],
+                   'footerOptions'=>['style' => 'text-align:right'],
+                ],
                 [
                   'attribute'=>'unit_price',
-                  'format'=>['decimal',2]
+                //  'format'=>['decimal',2],
+                  'headerOptions' => ['style'=>'text-align:right'],
+                  'contentOptions' => ['style' => 'text-align:right'],
+                  'footerOptions'=>['style' => 'text-align:right'],
+                  'footer'=>'<strong>Total</strong>',
+                  'value'=>function($model){
+                      return '$'.number_format($model->unit_price,2);
+                  }
                 ],
                 [
                   'attribute'=>'total_amount',
-                  'format'=>['decimal',2]
+                  'headerOptions' => ['style'=>'text-align:right'],
+                  'contentOptions' => ['style' => 'text-align:right'],
+                  'footerOptions'=>['style' => 'text-align:right'],
+                //  'format'=>['decimal',2],
+                  'footer' => '$'.number_format($total,2),
+                  'value'=>function($model){
+                    return '$'.number_format($model->total_amount,2);
+                  }
                 ]
 
             //    ['class' => 'yii\grid\ActionColumn'],
