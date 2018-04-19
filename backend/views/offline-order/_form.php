@@ -33,6 +33,12 @@ $cat = ArrayHelper::map($data,'id','off_category');
 
 ?>
 
+<style>
+  .panel-body{
+      padding-bottom:1px;
+  }
+</style>
+
 
 
 <div class="offline-order-form">
@@ -41,7 +47,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
 
     <!----Customer Panel Box--->
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div class="panel-heading" style="padding-bottom: 2px;">
         <h3 class="panel-title">Customer Information (Sender's Information)</h3>
       </div>
       <div class="panel-body">
@@ -94,13 +100,11 @@ $cat = ArrayHelper::map($data,'id','off_category');
             <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
           </div>
 
-          <div class="col-md-3">
-
+          <div class="col-md-3" style="margin-bottom: -10px;" >
+              <?= $form->field($model, 'remarks')->textarea(['rows' => 2]) ?>
           </div>
 
-            <div class="col-md-12">
-                  <?= $form->field($model, 'remarks')->textarea(['rows' => 4]) ?>
-            </div>
+
 
         </div>
 
@@ -109,46 +113,46 @@ $cat = ArrayHelper::map($data,'id','off_category');
     <!----Customer Panel BoxEnd --->
 
 
-
-
     <!----Recipient Panel Box--->
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h3 class="panel-title">Recipient's Information (Delivery Information)</h3>
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding-bottom: 2px;">
+        <div class="row">
+          <div class="col-md-6">
+            <h3 class="panel-title">Recipient's Information (Delivery Information)</h3>
+          </div>
+          <div class="col-md-6 text-right">
+              <?= Html::a('View Sample Message', null, ['class' => 'btn btn-default btn-xs modalButton', 'style'=>'margin-bottom:5px',
+                      'value'=>Url::to(['offline-order/gift'])
+                    //  'value' => Url::to(['order/custom-email'])
+                      ])
+             ?>
+          </div>
+        </div>
       </div>
+
       <div class="panel-body">
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3" style="margin-bottom: -10px;">
               <?= $form->field($model, 'recipient_name')->textInput(['maxlength' => true]) ?>
-          </div>
-          <div class="col-md-4">
-              <?= $form->field($model, 'recipient_contact_num')->textInput(['maxlength' => true]) ?>
-          </div>
-          <div class="col-md-4">
-              <?= $form->field($model, 'recipient_address')->textarea(['rows' => 4]) ?>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
               <?= $form->field($model, 'recipient_email')->textInput(['maxlength' => true]) ?>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3" style="margin-bottom: -10px;">
+              <?= $form->field($model, 'recipient_contact_num')->textInput(['maxlength' => true]) ?>
               <?= $form->field($model, 'recipient_postal_code')->textInput(['maxlength' => true]) ?>
           </div>
-
-
+          <div class="col-md-3" style="margin-bottom: -10px;">
+              <?= $form->field($model, 'recipient_address')->textarea(['rows' => 4]) ?>
+          </div>
+          <div class="col-md-3" style="margin-bottom: -10px;">
+              <?= $form->field($model, 'gift_message')->textarea(['rows' => 4]) ?>
+          </div>
         </div>
 
-        <?= $form->field($model, 'gift_to')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'gift_from')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'gift_message')->textarea(['rows' => 4]) ?>
-        <?= Html::a('View Sample Message', null, ['class' => 'btn btn-default modalButton', 'style'=>'margin-bottom:5px',
-              'value'=>Url::to(['offline-order/gift'])
-            //  'value' => Url::to(['order/custom-email'])
-              ])
-       ?>
+
+        <?php $form->field($model, 'gift_to')->textInput(['maxlength' => true]) ?>
+        <?php $form->field($model, 'gift_from')->textInput(['maxlength' => true]) ?>
+
 
       </div>
     </div>
@@ -165,8 +169,9 @@ $cat = ArrayHelper::map($data,'id','off_category');
                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                 'widgetBody' => '.container-items', // required: css class selector
                 'widgetItem' => '.item', // required: css class
-                'limit' => 300, // the maximum times, an element can be cloned (default 999)
+                'limit' => 5, // the maximum times, an element can be cloned (default 999)
                 'min' => 1, // 0 or 1 (default 1)
+                //'min' => 3, // 0 or 1 (default 1)
                 'insertButton' => '.add-item', // css class
                 'deleteButton' => '.remove-item', // css class
                 'model' => $modelLine[0],
@@ -180,7 +185,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
                 ],
             ]); ?>
 
-            <table class="table table-bordered container-items">
+            <table class="table table-bordered container-items" style="margin-bottom: 2px;">
               <thead>
                 <th style="width:10%"></th>
                 <th style="width:25%">Category</th>
@@ -228,8 +233,92 @@ $cat = ArrayHelper::map($data,'id','off_category');
                     <?php endforeach; ?>
               </tr>
 
+              <!--add two more line fields??---->
+              <?php if ($line->isNewRecord): ?>
+                <?php foreach ($modelLine as $i => $line): ?>
+                  <tr class="item">
+                        <?php
+                              if (! $line->isNewRecord) {
+                                  echo Html::activeHiddenInput($line, "[{$i}]id");
+                              }
+                        ?>
+                        <td>
+                          <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+                          <button type="button" class="remove-item btn btn-danger btn-xs" id=<?php echo 'remove-'.$i.'-r' ?> onclick="offRecalc($(this))"><i class="glyphicon glyphicon-minus"></i></button>
+                        </td>
+                        <td>
+                          <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
+                          <?= $form->field($line, "[{$i}]category")->dropDownList($cat)->label(false) ?>
+
+                        </td>
+
+                        <td>
+                          <?= $form->field($line, "[{$i}]item_code")->textInput(['maxlength' => true])->label(false) ?>
+                        </td>
+                        <td>
+                          <?= $form->field($line, "[{$i}]description")->textInput(['maxlength' => true])->label(false) ?>
+
+                        </td>
+                        <td>
+                           <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+                        </td>
+                        <td>
+                          <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right' ])->label(false) ?>
+                        </td>
+                        <td>
+                          <?= $form->field($line, "[{$i}]total_amount_text")->textInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+                          <?= $form->field($line, "[{$i}]total_amount")->hiddenInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control sumPart', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+
+                        </td>
+
+                  </tr>
+                <?php endforeach; ?>
+
+                <?php foreach ($modelLine as $i => $line): ?>
+                <tr class="item">
+                      <?php
+                            if (! $line->isNewRecord) {
+                                echo Html::activeHiddenInput($line, "[{$i}]id");
+                            }
+                      ?>
+                      <td>
+                        <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+                        <button type="button" class="remove-item btn btn-danger btn-xs" id=<?php echo 'remove-'.$i.'-r' ?> onclick="offRecalc($(this))"><i class="glyphicon glyphicon-minus"></i></button>
+                      </td>
+                      <td>
+                        <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
+                        <?= $form->field($line, "[{$i}]category")->dropDownList($cat)->label(false) ?>
+
+                      </td>
+
+                      <td>
+                        <?= $form->field($line, "[{$i}]item_code")->textInput(['maxlength' => true])->label(false) ?>
+                      </td>
+                      <td>
+                        <?= $form->field($line, "[{$i}]description")->textInput(['maxlength' => true])->label(false) ?>
+
+                      </td>
+                      <td>
+                         <?= $form->field($line, "[{$i}]quantity")->textInput(['maxlength' => true, 'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+                      </td>
+                      <td>
+                        <?= $form->field($line, "[{$i}]unit_price")->textInput(['maxlength' => true,'onchange'=>'getTotal($(this))', 'placeholder'=>'0.00','style'=>'text-align:right' ])->label(false) ?>
+                      </td>
+                      <td>
+                        <?= $form->field($line, "[{$i}]total_amount_text")->textInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+                        <?= $form->field($line, "[{$i}]total_amount")->hiddenInput(['maxlength' => true,'readOnly'=>true, 'class'=>'form-control sumPart', 'placeholder'=>'0.00','style'=>'text-align:right'])->label(false) ?>
+
+                      </td>
+
+                </tr>
+              <?php endforeach; ?>
+
+            <?php endif; ?>
+
+
+
             </table>
-            <table class="table" style="margin-bottom: 5px;">
+            <table class="table" style="margin-bottom: -15px;">
               <tr>
                 <td style="width:10%;border-top:0px"></td>
                 <td style="width:25%;border-top:0px">
