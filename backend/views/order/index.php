@@ -103,7 +103,13 @@ $gridColumns = [
   'label'=>'Status',
   'value'=>function($model){
     $data = OrderStatus::findOne($model['status']);
-    return $data->name;
+    if ($model['status'] == '3') {
+      $data->name = 'Delivered';
+      return $data->name;
+    }else{
+        return $data->name;
+    }
+
   },
 ],
 
@@ -183,7 +189,7 @@ $gridColumns = [
       return Html::a('<i class="fa fa-times fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
     },
     'ship'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa fa-ship fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Ship Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa fa-car fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Ship Order','data-pjax'=>0]);
     },
     'remarks'=>function($url,$model,$key){
       if ($model['invoice_no'] != '0') {
