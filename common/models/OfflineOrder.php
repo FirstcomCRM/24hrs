@@ -81,7 +81,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'payment'=>'Payment Method',
             'gift_to'=>'Gift To',
             'gift_from'=>'Gift From',
-            'gift_message'=>'Message',
+            'gift_message'=>'Gift Message',
         ];
     }
 
