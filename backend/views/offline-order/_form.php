@@ -208,7 +208,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
                     </td>
                     <td>
                       <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
-                      <?= $form->field($line, "[{$i}]category")->dropDownList($cat)->label(false) ?>
+                      <?= $form->field($line, "[{$i}]category")->dropDownList($cat,['prompt'=>'Please Select'])->label(false) ?>
 
                     </td>
 
@@ -248,7 +248,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
                         </td>
                         <td>
                           <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
-                          <?= $form->field($line, "[{$i}]category")->dropDownList($cat)->label(false) ?>
+                          <?= $form->field($line, "[{$i}]category")->dropDownList($cat,['prompt'=>'Please Select'])->label(false) ?>
 
                         </td>
 
@@ -287,7 +287,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
                       </td>
                       <td>
                         <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
-                        <?= $form->field($line, "[{$i}]category")->dropDownList($cat)->label(false) ?>
+                        <?= $form->field($line, "[{$i}]category")->dropDownList($cat,['prompt'=>'Please Select'])->label(false) ?>
 
                       </td>
 
@@ -322,7 +322,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
               <tr>
                 <td style="width:10%;border-top:0px"></td>
                 <td style="width:25%;border-top:0px">
-                  <?= $form->field($model, 'payment')->dropDownList($payments,['prompt'=>'Payment Method'])->label(false) ?>
+                  <?= $form->field($model, 'payment')->dropDownList($payments,['prompt'=>'Select Payment Method'])->label(false) ?>
                 </td>
                 <td style="width:10%;border-top:0px"></td>
                 <td style="width:25%;border-top:0px"></td>
