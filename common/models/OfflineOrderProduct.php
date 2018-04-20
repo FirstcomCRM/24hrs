@@ -32,7 +32,7 @@ class OfflineOrderProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_code', 'quantity', 'unit_price'], 'required'],
+            //[['item_code', 'quantity', 'unit_price'], 'required'],
             [['off_order_id', 'quantity','category'], 'integer'],
             [['unit_price', 'total_amount'], 'number'],
             [['del_date'], 'safe'],
