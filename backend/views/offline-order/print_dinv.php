@@ -69,6 +69,11 @@ if (!empty($datum)) {
 
 </style>
 
+<?php
+
+$testc = count($modelLine);
+
+ ?>
 
 
 <table class="title-area" border=0>
@@ -133,26 +138,28 @@ if (!empty($datum)) {
             <td class="pads" style="text-align:right"><?php echo '$'. number_format($value['unit_price'],2)?></td>
           </tr>
           <?php $sum[] =  $value['unit_price']?>
-          <?php $i++ ?>
+            <?php $i++ ?>
         <?php endforeach; ?>
             <?php if ($testc == 1): ?>
               <tr>
-                <td class="pads"></td>
+                <td class="pads"><?php echo $i ?></td>
                 <td class="pads"></td>
                 <td class="pads"></td>
               </tr>
+              <?php $i++ ?>
               <tr>
-                <td class="pads"></td>
+                <td class="pads"> <?php echo $i ?></td>
                 <td class="pads"></td>
                 <td class="pads"></td>
               </tr>
             <?php elseif($testc == 2): ?>
               <tr>
-                <td class="pads"></td>
+                <td class="pads"> <?php echo $i ?></td>
                 <td class="pads"></td>
                 <td class="pads"></td>
               </tr>
             <?php endif; ?>
+
       </tbody>
     <tfoot>
       <?php if ($sum == null): ?>
@@ -273,18 +280,19 @@ if (!empty($datum)) {
         <?php endforeach; ?>
         <?php if ($testc == 1): ?>
           <tr>
-            <td class="pads"></td>
+            <td class="pads"><?php echo $i ?></td>
             <td class="pads"></td>
             <td class="pads"></td>
           </tr>
+          <?php $i++ ?>
           <tr>
-            <td class="pads"></td>
+            <td class="pads"><?php echo $i ?></td>
             <td class="pads"></td>
             <td class="pads"></td>
           </tr>
         <?php elseif($testc == 2): ?>
           <tr>
-            <td class="pads"></td>
+            <td class="pads"><?php echo $i ?></td>
             <td class="pads"></td>
             <td class="pads"></td>
           </tr>
@@ -388,6 +396,25 @@ Print Do+DO
           </tr>
           <?php $i++ ?>
         <?php endforeach; ?>
+          <?php if ($testc == 1): ?>
+            <tr>
+              <td class="pads"><?php echo $i ?></td>
+              <td class="pads"></td>
+              <td class="pads"></td>
+            </tr>
+            <?php $i++ ?>
+            <tr>
+              <td class="pads"> <?php echo $i ?></td>
+              <td class="pads"></td>
+              <td class="pads"></td>
+            </tr>
+          <?php elseif($testc == 2): ?>
+            <tr>
+              <td class="pads"> <?php echo $i ?></td>
+              <td class="pads"></td>
+              <td class="pads"></td>
+            </tr>
+          <?php endif; ?>
       </tbody>
   </table>
 </div>
@@ -480,6 +507,25 @@ Print Do+DO
           </tr>
           <?php $i++ ?>
         <?php endforeach; ?>
+        <?php if ($testc == 1): ?>
+          <tr>
+            <td class="pads"><?php echo $i ?></td>
+            <td class="pads"></td>
+            <td class="pads"></td>
+          </tr>
+          <?php $i++ ?>
+          <tr>
+            <td class="pads"> <?php echo $i ?></td>
+            <td class="pads"></td>
+            <td class="pads"></td>
+          </tr>
+        <?php elseif($testc == 2): ?>
+          <tr>
+            <td class="pads"> <?php echo $i ?></td>
+            <td class="pads"></td>
+            <td class="pads"></td>
+          </tr>
+        <?php endif; ?>
       </tbody>
   </table>
 </div>

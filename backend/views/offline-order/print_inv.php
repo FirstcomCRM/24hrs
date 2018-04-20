@@ -57,6 +57,11 @@ if (!empty($datum)) {
 
 </style>
 
+<?php
+
+$testc = count($modelLine);
+
+ ?>
 
 <table class="title-area" border=0>
   <tr>
@@ -122,6 +127,25 @@ if (!empty($datum)) {
           <?php $sum[] =  $value['unit_price']?>
           <?php $i++ ?>
         <?php endforeach; ?>
+        <?php if ($testc == 1): ?>
+          <tr>
+            <td class="pads"><?php echo $i ?></td>
+            <td class="pads"></td>
+            <td class="pads"></td>
+          </tr>
+          <?php $i++ ?>
+          <tr>
+            <td class="pads"> <?php echo $i ?></td>
+            <td class="pads"></td>
+            <td class="pads"></td>
+          </tr>
+        <?php elseif($testc == 2): ?>
+          <tr>
+            <td class="pads"> <?php echo $i ?></td>
+            <td class="pads"></td>
+            <td class="pads"></td>
+          </tr>
+        <?php endif; ?>
       </tbody>
     <tfoot>
       <tr>
