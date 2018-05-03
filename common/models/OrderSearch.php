@@ -148,7 +148,7 @@ class OrderSearch extends Order
               ]);
 
               $dataProvider->setSort([
-                'defaultOrder' => ['del_date'=>SORT_DESC],
+                'defaultOrder' => ['del_date'=>SORT_ASC],
                 'attributes'=>[
                   'id',
                   'invoice_no',
@@ -185,10 +185,14 @@ class OrderSearch extends Order
 
               //  die($this->end);
               }else{
+                $ndef = '2018-05-01';
                 $this->start = date('Y-m-d');
                 $date = new \DateTime($this->start);
                 $this->end = $date->modify('+1 day')->format('Y-m-d');
-                $query->andFilterWhere(['<=','del_date',$this->end]);
+              //  $query->andFilterWhere(['<=','del_date',$this->end])
+                //    ->andFilterWhere(['>=','del_date',$ndef]);
+                $query->andWhere(['<=','del_date',$this->end])
+                    ->andWhere(['>=','del_date',$ndef]);
               }
 
               $query->andFilterWhere(['like', 'invoice_no', $this->invoice_no]);
@@ -238,7 +242,7 @@ class OrderSearch extends Order
         ]);
 
         $dataProvider->setSort([
-          'defaultOrder' => ['del_date'=>SORT_DESC],
+          'defaultOrder' => ['del_date'=>SORT_ASC],
           'attributes'=>[
             'id',
             'invoice_no',
