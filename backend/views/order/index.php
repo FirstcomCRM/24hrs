@@ -151,7 +151,8 @@ $gridColumns = [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
+//  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
+  'template'=>'{view}  {update}   {remarks}   {complete}   {cancel}  {ship}',
 //  'options'=>['style'=>'padding:20px'],
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
@@ -174,6 +175,7 @@ $gridColumns = [
               'title'=>'Email to customer',
               'data-pjax'=>0,
               'class'=>'modalButton',
+
             //  'value' => Url::to(['order/custom-email', 'id' => $key])
               //'value' => Url::to(['order/custom-email'])
               'value' => Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ])
