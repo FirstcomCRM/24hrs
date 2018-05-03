@@ -37,7 +37,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_date', 'delivery_date', 'customer_name', 'email', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
+            [['invoice_date', 'delivery_date','payment', 'customer_name', 'email', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
             [['invoice_date', 'delivery_date','delivery_time_start','delivery_time_end'], 'safe'],
             [['email','recipient_email'],'email'],
             [['status','payment','delivery_time'],'integer'],
