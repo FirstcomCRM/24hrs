@@ -149,7 +149,15 @@ $pone = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
 
     </div>
     <div class="col-md-6">
-      <strong>Delivery Date:</strong>   <?php echo date('l d M Y', strtotime($pone->delivery_date) ) ?>
+      <strong>Delivery Date:</strong>
+        <?php
+          if ($pone->delivery_date == '1970-01-01') {
+            echo date('l d M Y', strtotime($pone->collection_date) );
+          }else{
+            echo date('l d M Y', strtotime($pone->delivery_date) );
+          }
+
+        ?>
       <br>
       <strong>Delivery time:</strong>   <?php echo $pone->delivery_text_time ?>
     </div>
