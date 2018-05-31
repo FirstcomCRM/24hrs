@@ -60,7 +60,16 @@ class OrderController extends Controller
             'dataProvider_future'=>$dataProvider_future,
             'dataProvider_cancel'=>$dataProvider_cancel,
         //    'time'=>$time,
-        ]);
+      ]);
+
+              /*  return $this->render('indextest', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'dataProvider_done'=> $dataProvider_done,
+                    'dataProvider_future'=>$dataProvider_future,
+                    'dataProvider_cancel'=>$dataProvider_cancel,
+                //    'time'=>$time,
+              ]);*/
     }
 
     public function actionHome(){
@@ -161,8 +170,8 @@ class OrderController extends Controller
     }
 
     //Function changed status to Complete
-    public function actionComplete($id,$invoice_no){
-        if ($invoice_no != '0') {
+    public function actionComplete($id,$off_detect){
+        if ($off_detect == '77') {
           $data = OfflineOrder::find()->where(['id'=>$id])->one();
           $data->status = 5;
           $data->save(false);
@@ -177,8 +186,8 @@ class OrderController extends Controller
     }
 
     //Function changed status to Cancel
-    public function actionCancel($id,$invoice_no){
-        if ($invoice_no != '0') {
+    public function actionCancel($id,$off_detect){
+        if ($off_detect == '77') {
           $data = OfflineOrder::find()->where(['id'=>$id])->one();
           $data->status = 7;
           $data->save(false);
@@ -193,8 +202,8 @@ class OrderController extends Controller
     }
 
     //Function changed status to Shipped
-    public function actionShip($id,$invoice_no){
-        if ($invoice_no != '0') {
+    public function actionShip($id,$off_detect){
+        if ($off_detect == '77') {
           $data = OfflineOrder::find()->where(['id'=>$id])->one();
           $data->status = 3;
           $data->save(false);
@@ -238,10 +247,10 @@ class OrderController extends Controller
     //Function that sends an email to the customer
     //$id = order id of either offline or online Order
     //$invoice_no - invoice no. means to determine whether to use Online order or offline order
-    public function actionCustomEmail($id,$invoice_no){
+    public function actionCustomEmail($id,$invoice_no, $off_detect){
         $model = new EmailForm();
 
-        if ($invoice_no == '0') {
+        if ($off_detct != '0') {
           $data = Order::find()->where(['order_id'=>$id])->one();
           $model->email = $data->email;
         }else{
