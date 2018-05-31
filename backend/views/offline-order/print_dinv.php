@@ -22,12 +22,13 @@ if (!empty($datum)) {
 
   body{
     font-family: Arial;
+
   }
 
   table{
     width:100%;
     border-collapse: collapse;
-
+    font-size: 12px;
   }
 
   .test{
@@ -235,7 +236,7 @@ $testc = count($modelLine);
 <hr>
 
 <div class="header-block">
-  <table class="block" border=0>
+  <table class="block" border=1>
     <tr>
       <td class="block-label" style:"font-family:Arial"><strong>RECIPIENT'S NAME:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_name ?></td>
@@ -246,12 +247,12 @@ $testc = count($modelLine);
       <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
       <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
-      <td class="block-echo"><?php echo $data->delivery_time ?></td>
+      <td class="block-echo"><?php echo $model->delivery_time ?></td>
     </tr>
     <tr>
       <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
-      <td class="block-echo">
-        <?php echo nl2br($model->recipient_address) ?>
+      <td class="block-echo" colspan="3">
+        <?php echo $model->recipient_address ?>
       </td>
     </tr>
   </table>
@@ -365,12 +366,12 @@ Print Do+DO
       <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
       <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
-      <td class="block-echo"><?php echo $data->delivery_time ?></td>
+      <td class="block-echo"><?php echo $model->delivery_time ?></td>
     </tr>
     <tr>
       <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
-      <td class="block-echo">
-        <?php echo nl2br($model->recipient_address) ?>
+      <td class="block-echo" colspan="3">
+        <?php echo $model->recipient_address ?>
       </td>
     </tr>
   </table>
@@ -476,12 +477,12 @@ Print Do+DO
       <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
       <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
-      <td class="block-echo"><?php echo $data->delivery_time ?></td>
+      <td class="block-echo"><?php echo $model->delivery_time ?></td>
     </tr>
     <tr>
       <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
-      <td class="block-echo">
-        <?php echo nl2br($model->recipient_address) ?>
+      <td class="block-echo" colspan="3">
+        <?php echo $model->recipient_address ?>
       </td>
     </tr>
   </table>
