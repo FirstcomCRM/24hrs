@@ -37,15 +37,15 @@ class OfflineOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_date', 'delivery_date','payment', 'customer_name', 'email', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
+            [['invoice_date', 'delivery_date','payment', 'customer_name', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
             [['invoice_date', 'delivery_date','delivery_time_start','delivery_time_end'], 'safe'],
             [['email','recipient_email'],'email'],
-            [['status','payment','delivery_time'],'integer'],
+            [['status','payment','off_detect','contact_number', 'recipient_contact_num'],'integer'],
             [['charge'],'number'],
             [['subtotal', 'grand_total'],'number','numberPattern' => '/^\s*[-+]?[0-9\,]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
             [['recipient_address','remarks'], 'string'],
             [['gift_message'],'string','max'=>150],
-            [['invoice_no', 'contact_number', 'recipient_contact_num', 'recipient_postal_code'], 'string', 'max' => 25],
+            [['invoice_no', 'recipient_postal_code','delivery_time'], 'string', 'max' => 25],
             [['customer_name'], 'string', 'max' => 100],
             [['email', 'recipient_name', 'recipient_email'], 'string', 'max' => 75],
             [['recipient_country'], 'string', 'max' => 50],
@@ -90,6 +90,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
           //  $this->final_sales_price = str_replace(",", "", $this->final_sales_price);
             $this->subtotal = str_replace(",", "", $this->subtotal);
             $this->grand_total= str_replace(",", "", $this->grand_total);
+            $this->delivery_time = $this->delivery_time_start.' - '.$this->delivery_time_end;
             $this->delivery_time_start = date('H:i:s',strtotime($this->delivery_time_start) );
             $this->delivery_time_end = date('H:i:s',strtotime($this->delivery_time_end) );
             return true;
