@@ -311,8 +311,10 @@ class OfflineOrderController extends Controller
     //$id - offline order primary id
     public function actionPrintDinv($id){
       $model = $this->findModel($id);
-      $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
-
+    //  $modelLine = OfflineOrderProduct::find()->where(['off_order_id'=>$id])->asArray()->all();
+      $modelLine = OfflineOrderProduct::getOffline($id);
+      //echo '<pre>';
+      //print_r($modelLine);die();
       $mpdf = new mPDF('utf-8','A4');
       $mpdf->content = $this->renderPartial('print_dinv',[
          'model'=>$model,
