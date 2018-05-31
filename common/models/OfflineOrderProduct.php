@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use yii\db\Query;
 /**
  * This is the model class for table "offline_order_product".
  *
@@ -59,5 +59,15 @@ class OfflineOrderProduct extends \yii\db\ActiveRecord
             'category'=>'Category',
             'description'=>'Description',
         ];
+    }
+
+    public static function getOffline($id){
+      $query = new Query();
+      $result =  $query->select(['a.*', 'd.off_category'])
+                ->from('offline_order_product a')
+                ->leftJoin('offline_category d', 'd.id = a.category')
+                ->where(['a.off_order_id'=>$id])
+                ->all();
+      return $result;
     }
 }
