@@ -97,7 +97,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
               <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-3">
-            <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true,'type'=>'number','style'=>'text-align:right']) ?>
           </div>
 
           <div class="col-md-3" style="margin-bottom: -10px;" >
@@ -138,7 +138,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
               <?= $form->field($model, 'recipient_email')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-3" style="margin-bottom: -10px;">
-              <?= $form->field($model, 'recipient_contact_num')->textInput(['maxlength' => true]) ?>
+              <?= $form->field($model, 'recipient_contact_num')->textInput(['maxlength' => true,'type'=>'number','style'=>'text-align:right']) ?>
               <?= $form->field($model, 'recipient_postal_code')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-3" style="margin-bottom: -10px;">
@@ -237,6 +237,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
               <?php if ($line->isNewRecord): ?>
                 <?php foreach ($modelLine as $i => $line): ?>
                   <tr class="item">
+                    <?php $i++ ?>
                         <?php
                               if (! $line->isNewRecord) {
                                   echo Html::activeHiddenInput($line, "[{$i}]id");
@@ -276,6 +277,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
 
                 <?php foreach ($modelLine as $i => $line): ?>
                 <tr class="item">
+                  <?php $i= $i+2 ?>
                       <?php
                             if (! $line->isNewRecord) {
                                 echo Html::activeHiddenInput($line, "[{$i}]id");
@@ -286,9 +288,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
                         <button type="button" class="remove-item btn btn-danger btn-xs" id=<?php echo 'remove-'.$i.'-r' ?> onclick="offRecalc($(this))"><i class="glyphicon glyphicon-minus"></i></button>
                       </td>
                       <td>
-                        <?php $form->field($line, "[{$i}]category")->textInput(['maxlength' => true])->label(false) ?>
                         <?= $form->field($line, "[{$i}]category")->dropDownList($cat,['prompt'=>'Please Select'])->label(false) ?>
-
                       </td>
 
                       <td>
