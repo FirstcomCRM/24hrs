@@ -7,7 +7,7 @@ use common\models\OfflinePayment;
 $data = DeliveryTime::find()->where(['id'=>$model->delivery_time])->one();
 $i = 1;
 
-
+$model->delivery_date = date('d M Y', strtotime($model->delivery_date) );
 $datum= OfflinePayment::find()->where(['id'=>$model->payment])->one();
 if (!empty($datum)) {
   $payments = $datum->payment_method;
@@ -50,8 +50,12 @@ if (!empty($datum)) {
   .block-label,
   .pads{
     padding: 5px;
+  }
 
 
+
+  .centers{
+    text-align: center;
   }
 
   .foot-left,
@@ -94,11 +98,17 @@ $testc = count($modelLine);
 
 <hr>
 
-<table class="tax-invoice">
+
+
+<table class="tax-invoice" border=0>
   <tr>
-    <td class="tax-left"> <h2>TAX INVOICE</h2> </td>
-    <td class="tax-right" style="text-align:right">
-      <strong>PURCHASE DATE:</strong> <?php echo date('d M Y',strtotime($model->invoice_date)) ?>
+    <td class="tax-left" style="width:25%"> <h2>TAX INVOICE</h2> </td>
+    <td class="tax-left" style="width:25%"> </td>
+    <td class="tax-right pads" style="text-align:right;width:38%">
+      <strong>PURCHASE DATE: </strong>
+    </td>
+    <td class="tax-right" style="text-align:right;width:12%;">
+      <?php echo date('d M Y',strtotime($model->invoice_date)) ?>
     </td>
   </tr>
 </table>
@@ -108,34 +118,37 @@ $testc = count($modelLine);
 <div class="header-a">
   <table border=0>
     <tr>
-      <td style="width:25%" class="pads"><strong>CUSTOMER NAME:</strong></td>
-      <td style="width:25%" class="pads"><?php echo $model->customer_name ?></td>
-      <td style="width:25%" class="pads"><strong>CONTACT NUMBER:</strong> </td>
-      <td style="width:25%" class="pads"><?php echo $model->contact_number ?></td>
+      <td style="width:19%;" class="pads"><strong>CUSTOMER NAME:</strong></td>
+      <td style="width:31%" class="pads"><?php echo $model->customer_name ?></td>
+      <td style="width:38%;text-align:right" class="pads"><strong>CONTACT NUMBER:</strong></td>
+      <td style="width:12%;" class="pads"><?php echo $model->contact_number ?> </td>
     </tr>
     <tr>
-      <td style="width:25%" class="pads"><strong>CUSTOMER EMAIL:</strong></td>
-      <td style="width:25%" class="pads"><?php echo $model->email ?></td>
+      <td class="pads"><strong>CUSTOMER EMAIL:</strong></td>
+      <td class="pads"><?php echo $model->email ?></td>
     </tr>
   </table>
 </div>
-
 <br>
+
+
 
 <div class="tax-order">
   <table class="table-order" border=1>
     <thead>
       <tr>
-        <th>SN</th>
-        <th>ITEM CODE</th>
-        <th>UNIT PRICE</th>
+        <th style="width:10%">SN</th>
+        <th style="width:25%">Category</th>
+        <th style="width:50%">ITEM CODE</th>
+        <th style="width:15%">UNIT PRICE</th>
       </tr>
     </thead>
       <tbody>
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['item_code'] ?></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"><?php echo $value['off_category'] ?></td>
+            <td class="pads centers"><?php echo $value['item_code'].'-'.$value['description'] ?></td>
             <td class="pads" style="text-align:right"><?php echo '$'. number_format($value['unit_price'],2)?></td>
           </tr>
           <?php $sum[] =  $value['unit_price']?>
@@ -143,21 +156,24 @@ $testc = count($modelLine);
         <?php endforeach; ?>
             <?php if ($testc == 1): ?>
               <tr>
-                <td class="pads"><?php echo $i ?></td>
-                <td class="pads"></td>
-                <td class="pads"></td>
+                <td class="pads centers"><?php echo $i ?></td>
+                <td class="pads centers"></td>
+                <td class="pads centers"></td>
+                <td class="pads centers"></td>
               </tr>
               <?php $i++ ?>
               <tr>
-                <td class="pads"> <?php echo $i ?></td>
-                <td class="pads"></td>
-                <td class="pads"></td>
+                <td class="pads centers"> <?php echo $i ?></td>
+                <td class="pads centers"></td>
+                <td class="pads centers"></td>
+                <td class="pads centers"></td>
               </tr>
             <?php elseif($testc == 2): ?>
               <tr>
-                <td class="pads"> <?php echo $i ?></td>
-                <td class="pads"></td>
-                <td class="pads"></td>
+                <td class="pads centers"> <?php echo $i ?></td>
+                <td class="pads centers"></td>
+                <td class="pads centers"></td>
+                <td class="pads centers"></td>
               </tr>
             <?php endif; ?>
 
@@ -167,6 +183,7 @@ $testc = count($modelLine);
         <?php $sum[] = 0; ?>
       <?php endif; ?>
       <tr>
+        <td></td>
         <td></td>
         <td class="pads" style="text-align:right"> <strong>TOTAL:</strong> </td>
         <td class="pads" style="text-align:right"><?php echo '$'.number_format(array_sum($sum),2) ?></td>
@@ -180,7 +197,7 @@ $testc = count($modelLine);
 <div class="header-a">
   <table border=0>
     <tr>
-      <td style="width:20%; vertical-align:top; padding:5px"><strong>Message:</strong> </td>
+      <td style="width:11%; vertical-align:top; padding:5px"><strong>Message:</strong> </td>
       <td style="padding:5px;">
         <?php echo nl2br($model->remarks) ?>
       </td>
@@ -236,7 +253,7 @@ $testc = count($modelLine);
 <hr>
 
 <div class="header-block">
-  <table class="block" border=1>
+  <table class="block" border=0>
     <tr>
       <td class="block-label" style:"font-family:Arial"><strong>RECIPIENT'S NAME:</strong> </td>
       <td class="block-echo"><?php echo $model->recipient_name ?></td>
@@ -274,7 +291,7 @@ $testc = count($modelLine);
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
             <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['item_code'] ?></td>
+            <td class="pads"><?php echo $value['off_category'] ?></td>
             <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
@@ -392,7 +409,7 @@ Print Do+DO
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
             <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['item_code'] ?></td>
+            <td class="pads"><?php echo $value['off_category'] ?></td>
             <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
@@ -503,7 +520,7 @@ Print Do+DO
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
             <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['item_code'] ?></td>
+            <td class="pads"><?php echo $value['off_category'] ?></td>
             <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
