@@ -29,28 +29,38 @@ $gridColumns = [
   'label'=>'Order ID',
 ],
 
-[
+/*[
   'attribute'=>'del_date',
   'label'=>'Delivery Date',
     'format' => ['date', 'php:d M Y']
+],*/
+//'coldate',
+[
+  'attribute'=>'delivery_date',
+  'label'=>'Delivery Date',
+  'value'=>function($model){
+    if ($model['delivery_date'] == '1970-01-01') {
+      return date('d M Y', strtotime($model['coldate']) );
+    }else{
+      return date('d M Y', strtotime($model['delivery_date']) );
+    }
+  }
 ],
-//'offremarks',
 
+//'offremarks',
+//'collect_text',
 [
   'attribute'=>'del_time',
   'label'=>'Delivery Time',
   'value'=>function($model){
-        $tes = (int)$model['del_time'];
-        if (is_numeric($model['del_time']) ) {
-          $data = DeliveryTime::find()->where(['id'=>$model['del_time']])->one();
-          if (!empty($data)) {
-             return $data->id;
-          }else {
-            return $data = null;
+        if ($model['off_detect']!='77') {
+            if ($model['del_time'] == '') {
+               return $model['collect_text'];
+            }else{
+
+              return $model['del_time'];
+            }
         }
-      }else{
-        return $model['del_time'];
-      }
   }
 
 ],
@@ -69,6 +79,7 @@ $gridColumns = [
   },
 ],
 'item_code',
+//'off_detect',
 [
   'attribute'=>'offremarks',
   'label'=>'Remarks',
@@ -152,7 +163,7 @@ $gridColumns = [
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
 //  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
-  'template'=>'{view}  {update}   {remarks}   {complete}   {cancel}  {ship}',
+  'template'=>'{view}  {update}   {remarks}  ',
 //  'options'=>['style'=>'padding:20px'],
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
@@ -178,27 +189,27 @@ $gridColumns = [
 
             //  'value' => Url::to(['order/custom-email', 'id' => $key])
               //'value' => Url::to(['order/custom-email'])
-              'value' => Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ])
+              'value' => Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'], 'off_detect'=>$model['off_detect']])
           //    'onclick'=>'myEmail('.$model['id'] .')'
             ]
           );
 
     },
     'complete'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-check fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Complete Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa-check fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0]);
     },
     'cancel'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-times fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa-times fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
     },
     'ship'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa fa-car fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Ship Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa fa-car fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0]);
     },
     'remarks'=>function($url,$model,$key){
-      if ($model['invoice_no'] != '0') {
+      if ($model['off_detect'] == '77') {
         return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0]);
 
       }else{
-        return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'] ], ['title'=>'Remarks','data-pjax'=>0]);
+        return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0]);
       }
     },
 
@@ -209,7 +220,7 @@ $gridColumns = [
   //    return $model['invoice_no'] !='0';
   //  },
     'update'=>function($model){
-        return $model['invoice_no'] !='0' && ($model['status'] != 5 && $model['status'] != 7);
+        return $model['off_detect'] =='77' && ($model['status'] != 5 && $model['status'] != 7);
     },
     'complete'=>function($model){
       return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
@@ -224,7 +235,7 @@ $gridColumns = [
   'urlCreator'=> function($action,$model,$key,$index){
     if ($action ==='view'){
       //$url = '?r=offline-order%2Fview&id='.$model['id'];
-      if ($model['invoice_no']!='0') {
+      if ($model['off_detect']=='77') {
         $url = Url::to(['offline-order/view', 'id'=>$model['id']]);
       }else{
         $url = Url::to(['order/view', 'id'=>$model['id']]);
