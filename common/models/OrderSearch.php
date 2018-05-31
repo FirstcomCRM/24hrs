@@ -114,28 +114,27 @@ class OrderSearch extends Order
                 ->leftJoin('offline_order_product b','b.off_order_id=a.id')
                 ->groupBy(['a.id'])
                 ->where(['a.status'=>1]);*/
+
             $query_off = (new \yii\db\Query())
-                ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
+                ->select("a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,a.delivery_time as del_time,b.item_code,a.remarks as offremarks,null_date as coldate, null_date as collect_text, a.off_detect")
                 ->from('offline_order a')
                 ->leftJoin('offline_order_product b','b.off_order_id=a.id')
-                ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
+            //    ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
                 ->groupBy(['a.id'])
                 ->where(['a.status'=>1]);
-
+  //die();
             $query_on = (new \yii\db\Query())
-                  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+                ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
                 ->from('order c')
                 ->leftJoin('order_product d','d.order_id=c.order_id')
                 ->groupBy(['c.order_id'])
                 ->where(['c.order_status_id'=>1])
                 ->andWhere(['!=','d.delivery_date','0000-00-00']);
+              //  ->orderBy(['d.delivery_date'=>SORT_ASC,'d.collection_date'=>SORT_ASC]);
 
             $query = (new \yii\db\Query())
                 ->from(['dummy_name' => $query_off->union($query_on)]);
-                //  ->orderBy(['del_date' => SORT_DESC]);
-
-              //  echo '<pre>';
-              //  print_r($query);
+                  //>orderBy(['delivery_date' => SORT_ASC]);
 
 
               $dataProvider = new ActiveDataProvider([
@@ -148,13 +147,15 @@ class OrderSearch extends Order
               ]);
 
               $dataProvider->setSort([
-                'defaultOrder' => ['del_date'=>SORT_ASC],
+                'defaultOrder' => ['delivery_date'=>SORT_ASC],
                 'attributes'=>[
                   'id',
                   'invoice_no',
                   'invoice_date',
-                  'del_date',
+                  'delivery_date',
                   'status',
+                  'del_time',
+                //  'coldate',
                 ],
               ]);
 
@@ -167,32 +168,33 @@ class OrderSearch extends Order
               }
 
 
-
-
                //print_r($this->start);die();
               // grid filtering conditions
-              $query->andFilterWhere([
+            /*  $query->andFilterWhere([
                   'id' => $this->order_id,
-                  'invoice_date' => $this->invoice_date,
+              //    'invoice_date' => $this->invoice_date,
               //    'del_date' => $this->delivery_date,
-              ]);
+            ]);*/
 
-              if (!empty($this->delivery_date)) {
+              if (!empty($this->delivery_date )) {
                 list($this->start,$this->end)= explode(' - ',$this->delivery_date);
                 $this->start =  date('Y-m-d', strtotime($this->start) );
                 $this->end =  date('Y-m-d', strtotime($this->end) );
-                $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
-
+                $query->andFilterWhere(['between', 'delivery_date', $this->start, $this->end])
+                    ->orFilterWhere(['between', 'coldate', $this->start, $this->end]);
               //  die($this->end);
+              }elseif (!empty($this->order_id) ) {
+                $query->andFilterWhere([
+                    'id' => $this->order_id,
+                ]);
               }else{
                 $ndef = '2018-05-01';
                 $this->start = date('Y-m-d');
                 $date = new \DateTime($this->start);
                 $this->end = $date->modify('+1 day')->format('Y-m-d');
-              //  $query->andFilterWhere(['<=','del_date',$this->end])
-                //    ->andFilterWhere(['>=','del_date',$ndef]);
-                $query->andWhere(['<=','del_date',$this->end])
-                    ->andWhere(['>=','del_date',$ndef]);
+                $query->andFilterWhere(['between', 'delivery_date', $ndef, $this->end])
+                    ->orFilterWhere(['between', 'coldate', $ndef, $this->end]);
+
               }
 
               $query->andFilterWhere(['like', 'invoice_no', $this->invoice_no]);
@@ -209,15 +211,17 @@ class OrderSearch extends Order
           ->groupBy(['a.id'])
           ->where(['a.status'=>1]);*/
       $query_off = (new \yii\db\Query())
-          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
+          //->select('a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks,a.delivery_date as coldate')
+          ->select("a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,a.delivery_time as del_time,b.item_code,a.remarks as offremarks,null_date as coldate, null_date as collect_text, a.off_detect")
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
-          ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
+      //    ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
           ->groupBy(['a.id'])
           ->where(['a.status'=>1]);
 
       $query_on = (new \yii\db\Query())
-          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+        //  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date')
+          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time, c.store_name')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
@@ -242,13 +246,15 @@ class OrderSearch extends Order
         ]);
 
         $dataProvider->setSort([
-          'defaultOrder' => ['del_date'=>SORT_ASC],
+          'defaultOrder' => ['delivery_date'=>SORT_ASC],
           'attributes'=>[
             'id',
             'invoice_no',
             'invoice_date',
-            'del_date',
-            'status',
+            'delivery_date',
+          //  'del_date',
+
+          //  'del_time',
           ],
         ]);
 
@@ -267,15 +273,16 @@ class OrderSearch extends Order
           list($this->start,$this->end)= explode(' - ',$this->delivery_date);
           $this->start =  date('Y-m-d', strtotime($this->start) );
           $this->end =  date('Y-m-d', strtotime($this->end) );
-          $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
-
+          $query->andFilterWhere(['between', 'delivery_date', $this->start, $this->end])
+              ->orFilterWhere(['between', 'coldate', $this->start, $this->end]);
         //  die($this->end);
         }else{
           $this->start = date('Y-m-d');
           $date = new \DateTime($this->start);
           $this->start = $date->modify('+2 day')->format('Y-m-d');
           $this->end = $date->modify('+2 years')->format('Y-m-d');
-          $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
+          $query->andFilterWhere(['between', 'delivery_date', $this->start, $this->end])
+              ->orFilterWhere(['between', 'coldate', $this->start, $this->end]);
         }
 
         $query->andFilterWhere(['like', 'invoice_no', $this->invoice_no]);
@@ -293,16 +300,18 @@ class OrderSearch extends Order
           ->where(['a.status'=>5])
           ->orWhere(['a.status'=>7]);*/
       $query_off = (new \yii\db\Query())
-          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
+        //  ->select('a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
+          ->select("a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,a.delivery_time as del_time,b.item_code,a.remarks as offremarks,null_date as coldate, null_date as collect_text,a.off_detect")
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
-          ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
+        //  ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
           ->groupBy(['a.id'])
           ->where(['a.status'=>5])
           ->orWhere(['a.status'=>3]);
 
       $query_on = (new \yii\db\Query())
-          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+        //  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
@@ -331,12 +340,12 @@ class OrderSearch extends Order
         ]);
 
         $dataProvider->setSort([
-          'defaultOrder' => ['del_date'=>SORT_DESC],
+          'defaultOrder' => ['delivery_date'=>SORT_ASC],
           'attributes'=>[
             'id',
             'invoice_no',
             'invoice_date',
-            'del_date',
+            'delivery_date',
           ],
         ]);
 
@@ -355,7 +364,7 @@ class OrderSearch extends Order
           list($this->start,$this->end)= explode(' - ',$this->delivery_date);
           $this->start =  date('Y-m-d', strtotime($this->start) );
           $this->end =  date('Y-m-d', strtotime($this->end ) );
-          $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
+          $query->andFilterWhere(['between', 'delivery_date', $this->start, $this->end]);
         //  die($this->end);
         }else{
           /*$this->start = date('Y-m-d');
@@ -380,15 +389,17 @@ class OrderSearch extends Order
           ->where(['a.status'=>5])
           ->orWhere(['a.status'=>7]);*/
       $query_off = (new \yii\db\Query())
-          ->select('a.id,a.invoice_no,a.status,a.invoice_date,b.del_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
+        //  ->select('a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
+          ->select("a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,a.delivery_time as del_time,b.item_code,a.remarks as offremarks,null_date as coldate, null_date as collect_text,a.off_detect")
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
-          ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
+          //->leftJoin('delivery_time fu','fu.id=a.delivery_time')
           ->groupBy(['a.id'])
           ->where(['a.status'=>7]);
 
       $query_on = (new \yii\db\Query())
-          ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+        //  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
+          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
@@ -417,12 +428,12 @@ class OrderSearch extends Order
         ]);
 
         $dataProvider->setSort([
-          'defaultOrder' => ['del_date'=>SORT_DESC],
+          'defaultOrder' => ['delivery_date'=>SORT_ASC],
           'attributes'=>[
             'id',
             'invoice_no',
             'invoice_date',
-            'del_date',
+            'delivery_date',
           ],
         ]);
 
@@ -441,7 +452,7 @@ class OrderSearch extends Order
           list($this->start,$this->end)= explode(' - ',$this->delivery_date);
           $this->start =  date('Y-m-d', strtotime($this->start) );
           $this->end =  date('Y-m-d', strtotime($this->end ) );
-          $query->andFilterWhere(['between', 'del_date', $this->start, $this->end]);
+          $query->andFilterWhere(['between', 'delivery_date', $this->start, $this->end]);
         //  die($this->end);
         }else{
           /*$this->start = date('Y-m-d');
