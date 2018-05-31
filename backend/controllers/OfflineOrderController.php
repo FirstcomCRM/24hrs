@@ -8,6 +8,7 @@ use common\models\OfflineOrder;
 use common\models\OfflineOrderSearch;
 use common\models\OfflineOrderProduct;
 use common\models\OfflineRunningTable;
+use common\models\Order;
 use common\models\Model;
 use common\models\Jgmg;
 use yii\data\ActiveDataProvider;
@@ -114,11 +115,18 @@ class OfflineOrderController extends Controller
                     $years = date('y');
                     //$model->invoice_no ='INV-'.sprintf("%005d",$run->value);
                     $model->invoice_no =$years.'-'.sprintf("%005d",$run->value);
+
                     $run->value++;
                     $run->save(false);
+
                     if ($flag = $model->save(false)) {
                         foreach ($modelLine as $line)
                         {
+
+                            if ($line->total_amount == 0 ) {
+                              break;
+                            }
+
                             $line->off_order_id = $model->id;
                             $line->del_date = $model->delivery_date;
                             $line->del_time = $model->delivery_time;
@@ -181,6 +189,8 @@ class OfflineOrderController extends Controller
             Model::loadMultiple($offline, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($offline, 'id', 'id')));
 
+              //  print_r($model->delivery_time_start);die();
+
             $valid = $model->validate();
           //  var_dump($valid);
           //  print_r($model->getErrors());
@@ -202,8 +212,10 @@ class OfflineOrderController extends Controller
                               OfflineOrderProduct::deleteAll(['ID' => $deletedIDs]);
                             }
                         foreach ($offline as $line) {
+
                             $line->off_order_id = $model->id;
                             $line->del_date = $model->delivery_date;
+
                               $line->del_time = $model->delivery_time;
                             if (! ($flag = $line->save(false))) {
                                 $transaction->rollBack();
