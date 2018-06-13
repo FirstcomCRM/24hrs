@@ -6,6 +6,9 @@ use yii\widgets\Pjax;
 use common\models\OfflineOrderProduct;
 use common\models\OrderProduct;
 use yii\helpers\Url;
+
+use common\models\Order;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\OfflineOrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -45,6 +48,18 @@ $this->title = 'Offline Order';
                       'format' => ['date', 'php:d M Y']
                     ],
                     'customer_name',
+                    'contact_number',
+                    [
+                      'attribute'=>'grand_total',
+                    //  'format'=>['decimal',2],
+                      'headerOptions' => ['style'=>'text-align:right'],
+                      'contentOptions' => ['style' => 'text-align:right'],
+                      'footerOptions'=>['style' => 'text-align:right'],
+                      'footer'=>'<strong>Total</strong>',
+                      'value'=>function($model){
+                          return '$'.number_format($model->grand_total,2);
+                      }
+                    ],
                     ['class' => 'yii\grid\ActionColumn'],
 
                 ],
