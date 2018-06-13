@@ -28,7 +28,7 @@ if (!empty($datum)) {
   table{
     width:100%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .test{
@@ -48,11 +48,10 @@ if (!empty($datum)) {
 
   .block-echo,
   .block-label,
+  .blocked,
   .pads{
     padding: 5px;
   }
-
-
 
   .centers{
     text-align: center;
@@ -253,25 +252,26 @@ $testc = count($modelLine);
 <hr>
 
 <div class="header-block">
-  <table class="block" border=0>
+  <table class="blocks" border=0>
     <tr>
-      <td class="block-label" style:"font-family:Arial"><strong>RECIPIENT'S NAME:</strong> </td>
-      <td class="block-echo"><?php echo $model->recipient_name ?></td>
-      <td class="block-label"><strong>DELIVERY DATE:</strong> </td>
-      <td class="block-echo"><?php echo $model->delivery_date ?></td>
+      <td class="blocked" style="font-family:Arial:width:21%"><strong>RECIPIENT'S NAME:</strong> </td>
+      <td class="blocked" style="width:29%"><?php echo $model->recipient_name ?></td>
+      <td class="blocked" style="width:16%"><strong>DELIVERY DATE:</strong> </td>
+      <td class="blocked" style="width:34%"><?php echo $model->delivery_date ?></td>
     </tr>
     <tr>
-      <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
-      <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
-      <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
-      <td class="block-echo"><?php echo $model->delivery_time ?></td>
+      <td class="blocked"><strong>RECIPIENT'S CONTACT:</strong> </td>
+      <td class="blocked"><?php echo $model->recipient_contact_num ?></td>
+      <td class="blocked"> <strong>DELIVERY TIME:</strong> </td>
+      <td class="blocked"><?php echo $model->delivery_time ?></td>
     </tr>
     <tr>
-      <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
-      <td class="block-echo" colspan="3">
+      <td class="blocked"><strong>DELIVERY ADDRESS:</strong> </td>
+      <td class="blocked" >
         <?php echo $model->recipient_address ?>
       </td>
     </tr>
+
   </table>
 </div>
 
@@ -372,25 +372,26 @@ Print Do+DO
 <hr>
 
 <div class="header-block">
-  <table class="block" border=0>
+  <table class="blocks" border=0>
     <tr>
-      <td class="block-label" style:"font-family:Arial"><strong>RECIPIENT'S NAME:</strong> </td>
-      <td class="block-echo"><?php echo $model->recipient_name ?></td>
-      <td class="block-label"><strong>DELIVERY DATE:</strong> </td>
-      <td class="block-echo"><?php echo $model->delivery_date ?></td>
+      <td class="blocked" style="font-family:Arial:width:21%"><strong>RECIPIENT'S NAME:</strong> </td>
+      <td class="blocked" style="width:29%"><?php echo $model->recipient_name ?></td>
+      <td class="blocked" style="width:16%"><strong>DELIVERY DATE:</strong> </td>
+      <td class="blocked" style="width:34%"><?php echo $model->delivery_date ?></td>
     </tr>
     <tr>
-      <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
-      <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
-      <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
-      <td class="block-echo"><?php echo $model->delivery_time ?></td>
+      <td class="blocked"><strong>RECIPIENT'S CONTACT:</strong> </td>
+      <td class="blocked"><?php echo $model->recipient_contact_num ?></td>
+      <td class="blocked"> <strong>DELIVERY TIME:</strong> </td>
+      <td class="blocked"><?php echo $model->delivery_time ?></td>
     </tr>
     <tr>
-      <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
-      <td class="block-echo" colspan="3">
+      <td class="blocked"><strong>DELIVERY ADDRESS:</strong> </td>
+      <td class="blocked" >
         <?php echo $model->recipient_address ?>
       </td>
     </tr>
+
   </table>
 </div>
 
@@ -483,25 +484,26 @@ Print Do+DO
 <hr>
 
 <div class="header-block">
-  <table class="block" border=0>
+  <table class="blocks" border=0>
     <tr>
-      <td class="block-label" style:"font-family:Arial"><strong>RECIPIENT'S NAME:</strong> </td>
-      <td class="block-echo"><?php echo $model->recipient_name ?></td>
-      <td class="block-label"><strong>DELIVERY DATE:</strong> </td>
-      <td class="block-echo"><?php echo $model->delivery_date ?></td>
+      <td class="blocked" style="font-family:Arial:width:21%"><strong>RECIPIENT'S NAME:</strong> </td>
+      <td class="blocked" style="width:29%"><?php echo $model->recipient_name ?></td>
+      <td class="blocked" style="width:16%"><strong>DELIVERY DATE:</strong> </td>
+      <td class="blocked" style="width:34%"><?php echo $model->delivery_date ?></td>
     </tr>
     <tr>
-      <td class="block-label"><strong>RECIPIENT'S CONTACT:</strong> </td>
-      <td class="block-echo"><?php echo $model->recipient_contact_num ?></td>
-      <td class="block-label"> <strong>DELIVERY TIME:</strong> </td>
-      <td class="block-echo"><?php echo $model->delivery_time ?></td>
+      <td class="blocked"><strong>RECIPIENT'S CONTACT:</strong> </td>
+      <td class="blocked"><?php echo $model->recipient_contact_num ?></td>
+      <td class="blocked"> <strong>DELIVERY TIME:</strong> </td>
+      <td class="blocked"><?php echo $model->delivery_time ?></td>
     </tr>
     <tr>
-      <td class="block-label"><strong>DELIVERY ADDRESS:</strong> </td>
-      <td class="block-echo" colspan="3">
+      <td class="blocked"><strong>DELIVERY ADDRESS:</strong> </td>
+      <td class="blocked" >
         <?php echo $model->recipient_address ?>
       </td>
     </tr>
+
   </table>
 </div>
 
