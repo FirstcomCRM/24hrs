@@ -37,10 +37,10 @@ class OfflineOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_date', 'delivery_date','payment', 'customer_name', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_email', 'recipient_postal_code','charge'], 'required'],
+            [['invoice_date', 'delivery_date','payment', 'customer_name', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_postal_code','charge'], 'required'],
             [['invoice_date', 'delivery_date','delivery_time_start','delivery_time_end'], 'safe'],
             [['email','recipient_email'],'email'],
-            [['status','payment','off_detect','contact_number', 'recipient_contact_num'],'integer'],
+            [['status','payment','off_detect','contact_number', 'recipient_contact_num','delivery_trigger'	],'integer'],
             [['charge'],'number'],
             [['subtotal', 'grand_total'],'number','numberPattern' => '/^\s*[-+]?[0-9\,]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
             [['recipient_address','remarks'], 'string'],
@@ -64,6 +64,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'invoice_date' => 'Invoice Date',
             'delivery_date' => 'Delivery Date',
             'customer_name' => 'Customer Name',
+            'Delivery Trigger'=> 'Delivery Trigger',
             'delivery_time'=>'Delivery Time',
             'delivery_time_start'=>'Delivery Time Start',
             'delivery_time_end'=>'Delivery Time End',
@@ -90,7 +91,17 @@ class OfflineOrder extends \yii\db\ActiveRecord
           //  $this->final_sales_price = str_replace(",", "", $this->final_sales_price);
             $this->subtotal = str_replace(",", "", $this->subtotal);
             $this->grand_total= str_replace(",", "", $this->grand_total);
-            $this->delivery_time = $this->delivery_time_start.' - '.$this->delivery_time_end;
+
+            if ($this->delivery_trigger == 1) {
+              $this->delivery_time = $this->delivery_time_start.' - '.$this->delivery_time_end;
+            }
+
+            $inv = new \DateTime($this->invoice_date);
+            $this->invoice_date = $inv->format('Y-m-d');
+
+            $del = new \DateTime($this->delivery_date);
+            $this->delivery_date = $del->format('Y-m-d');
+
             $this->delivery_time_start = date('H:i:s',strtotime($this->delivery_time_start) );
             $this->delivery_time_end = date('H:i:s',strtotime($this->delivery_time_end) );
             return true;
