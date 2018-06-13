@@ -69,7 +69,7 @@ class OfflineOrderSearch extends OfflineOrder
 
         $dataProvider = new ActiveDataProvider([
               'query' => $query,
-          //    'sort'=> ['defaultOrder' => ['dadst'=>SORT_DESC]]
+              'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
 
         ]);
 
