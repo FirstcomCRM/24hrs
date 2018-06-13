@@ -3,9 +3,33 @@
 */
 
 $(document).ready(function(){
+  timeCheck();
+  $('#offlineorder-delivery_trigger').click(function() {
+    timeCheck();
+  });
 
+
+// field-offlineorder-delivery_time_start
+//field-offlineorder-delivery_time
+//field-offlineorder-delivery_time_end
 
 });
+
+function timeCheck(){
+  if($("#offlineorder-delivery_trigger").is(':checked')){
+    // checked
+    $(".field-offlineorder-delivery_time_start").show();
+    $(".field-offlineorder-delivery_time_end").show();
+    $(".field-offlineorder-delivery_time").hide();
+    console.log('checkied');
+  }else{
+      // unchecked
+    $(".field-offlineorder-delivery_time").show();
+    $(".field-offlineorder-delivery_time_start").hide();
+    $(".field-offlineorder-delivery_time_end").hide();
+
+  }
+}
 
 //at views/offline-order/gift.php, trigger mechaniasm for Select Occassion dropdownlist
 function mocc(){
