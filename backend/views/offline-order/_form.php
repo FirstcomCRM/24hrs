@@ -17,7 +17,7 @@ use common\models\OfflineCategory;
 
 
 $data = DeliveryTime::find()->all();
-$del = ArrayHelper::map($data,'id','delivery_time');
+$del = ArrayHelper::map($data,'delivery_time','delivery_time');
 
 $data = OfflinePayment::find()->all();
 $payments = ArrayHelper::map($data,'id','payment_method');
@@ -48,7 +48,15 @@ $cat = ArrayHelper::map($data,'id','off_category');
     <!----Customer Panel Box--->
     <div class="panel panel-default">
       <div class="panel-heading" style="padding-bottom: 2px;">
-        <h3 class="panel-title">Customer Information (Sender's Information)</h3>
+        <div class="row">
+          <div class="col-md-6">
+              <h3 class="panel-title">Customer Information (Sender's Information)</h3>
+          </div>
+          <div class="col-md-6 text-right">
+             <?= Html::activeCheckbox($model, 'delivery_trigger', ['label' => ''])?>
+          </div>
+        </div>
+
       </div>
       <div class="panel-body">
 
@@ -81,11 +89,11 @@ $cat = ArrayHelper::map($data,'id','off_category');
             ]); ?>
           </div>
           <div class="col-md-3">
-            <?php $form->field($model, 'delivery_time')->dropDownList($del) ?>
-            <?= $form->field($model, 'delivery_time_start')->widget(TimePicker::classname(), []); ?>
+            <?php echo $form->field($model, 'delivery_time')->dropDownList($del,['class'=>'del-time form-control']) ?>
+            <?= $form->field($model, 'delivery_time_start')->widget(TimePicker::classname(), ['options'=>['class'=>'timer'] ]); ?>
           </div>
           <div class="col-md-3">
-            <?= $form->field($model, 'delivery_time_end')->widget(TimePicker::classname(), []); ?>
+            <?= $form->field($model, 'delivery_time_end')->widget(TimePicker::classname(), ['options'=>['class'=>'timer'] ]); ?>
           </div>
         </div>
 
