@@ -63,15 +63,12 @@ class OfflineOrderController extends Controller
      */
     public function actionView($id)
     {
-        $modelLine  = OfflineOrderProduct::find()->where(['off_order_id'=>$id]);
-        $dataProvider = new ActiveDataProvider([
-            'query' => $modelLine,
-        ]);
+        $modelLine = OfflineOrderProduct::getOffline($id);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            //'modelLine'=>$modelLine,
-            'dataProvider'=>$dataProvider,
+            'modelLine'=>$modelLine,
+          //  'dataProvider'=>$dataProvider,
         ]);
     }
 
@@ -92,14 +89,6 @@ class OfflineOrderController extends Controller
         $model->delivery_date = date('d M Y');
 
         if ($model->load(Yii::$app->request->post())  ) {
-
-            $inv = new \DateTime($model->invoice_date);
-            $model->invoice_date = $inv->format('Y-m-d');
-
-            $del = new \DateTime($model->delivery_date);
-            $model->delivery_date = $del->format('Y-m-d');
-
-          //  print_r($model->delivery_time_start);die();
 
             $modelLine = Model::createMultiple(OfflineOrderProduct::classname());
             Model::loadMultiple($modelLine, Yii::$app->request->post());
