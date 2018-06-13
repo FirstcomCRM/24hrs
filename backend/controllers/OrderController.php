@@ -47,7 +47,10 @@ class OrderController extends Controller
         $dataProvider_done = $searchModel_done->completed_search(Yii::$app->request->queryParams); //get all orders that are  completed
 
         $searchModel_cancel = new OrderSearch();
-        $dataProvider_cancel = $searchModel_done->canceled_search(Yii::$app->request->queryParams); //get all orders that are  completed
+        $dataProvider_cancel = $searchModel_cancel->canceled_search(Yii::$app->request->queryParams); //get all orders that are  completed
+
+        $searchModel_shipped = new OrderSearch();
+        $dataProvider_shipped = $searchModel_shipped->shipped_search(Yii::$app->request->queryParams); //get all orders that are  completed
 
         //  $searchModel_done->order_status_id = 5; //completed order
       //  $time = date('Y-m-d H:i:s');
@@ -59,6 +62,7 @@ class OrderController extends Controller
             'dataProvider_done'=> $dataProvider_done,
             'dataProvider_future'=>$dataProvider_future,
             'dataProvider_cancel'=>$dataProvider_cancel,
+            'dataProvider_shipped'=>$dataProvider_shipped,
         //    'time'=>$time,
       ]);
 
