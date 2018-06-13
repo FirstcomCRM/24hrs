@@ -13,9 +13,7 @@ $this->title = $model->invoice_no;
 //$this->params['breadcrumbs'][] = ['label' => 'Offline Order', 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
 $total = 0;
-foreach ($dataProvider->getModels() as $key => $value) {
-  $total += $value->total_amount;
-}
+
 
 
 ?>
@@ -51,7 +49,7 @@ foreach ($dataProvider->getModels() as $key => $value) {
                   'attribute'=>'delivery_date',
                   'format' => ['date', 'php:d M Y']
                 ],
-
+                'delivery_time',
                 /*[
                   'attribute'=>'delivery_time',
                   'value'=>function($model){
@@ -63,18 +61,18 @@ foreach ($dataProvider->getModels() as $key => $value) {
                     }
                   }
                 ],*/
-                [
+              /*  [
                   'attribute'=>'delivery_time_start',
                   'value'=>function($model){
                     return date('h:i A', strtotime($model->delivery_time_start) );
                   }
-                ],
-                [
+                ],*/
+              /*  [
                   'attribute'=>'delivery_time_end',
                   'value'=>function($model){
                     return date('h:i A', strtotime($model->delivery_time_end) );
                   }
-                ],
+                ],*/
                 'customer_name',
                 'email:email',
                 'contact_number',
@@ -124,60 +122,50 @@ foreach ($dataProvider->getModels() as $key => $value) {
         <h3 class="panel-title">Order Details</h3>
       </div>
       <div class="panel-body">
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'showFooter'=>TRUE,
-          //  'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+          <table class="table table-bordered">
+            <thead>
+              <th style="width:20%">Category</th>
+              <th style="width:20%">Product Code</th>
+              <th style="width:30%">Description</th>
+              <th style="width:10%">Quantity</th>
+              <th style="width:10%">Unit Price</th>
+              <th style="width:10%">Total Amount</th>
+            </thead>
+            <?php foreach ($modelLine as $key => $value): ?>
+                <tr>
+                  <td><?php echo $value['off_category'] ?></td>
+                  <td><?php echo $value['item_code'] ?></td>
+                  <td><?php echo $value['description'] ?></td>
+                  <td style="text-align:right"><?php echo $value['quantity'] ?></td>
+                  <td style="text-align:right"><?php echo '$'.number_format($value['unit_price'],2) ?></td>
+                  <td style="text-align:right"><?php echo '$'.number_format($value['total_amount'],2) ?></td>
+                </tr>
+            <?php endforeach; ?>
+          </table>
+          <table class="table">
+            <tr>
+              <td style="width:20%;border-top:0px"></td>
+              <td style="width:20%;border-top:0px"></td>
+              <td style="width:30%;border-top:0px"></td>
+              <td style="width:20%;text-align:right;border-top:0px" colspan=2><label>SubTotal</label></td>
+              <td style="width:10%;text-align:right;border-top:0px"><?php echo '$'.number_format($model->subtotal,2) ?></td>
+            </tr>
+            <tr>
+              <td style="width:20%;border-top:0px"></td>
+              <td style="width:20%;border-top:0px"></td>
+              <td style="width:30%;border-top:0px"></td>
+              <td style="width:20%;text-align:right;border-top:0px" colspan=2><label>Delivery Chrarge</label></td>
+              <td style="width:10%;text-align:right;border-top:0px"><?php echo '$'.number_format($model->charge,2) ?></td>
+            </tr>
+            <tr>
+              <td style="width:20%;border-top:0px"></td>
+              <td style="width:20%;border-top:0px"></td>
+              <td style="width:30%;border-top:0px"></td>
+              <td style="width:20%;text-align:right;border-top:0px" colspan=2><label>Grand Total</label></td>
+              <td style="width:10%;text-align:right;border-top:0px"><?php echo '$'.number_format($model->grand_total,2) ?></td>
+            </tr>
 
-                [
-                  'attribute'=>'category',
-                  'value'=>function($model){
-                    $data = OfflineCategory::find()->where(['id'=>$model->category])->one();
-                    if (!empty($data)) {
-                      return $data->off_category;
-                    }else{
-                      return $data = null;
-                    }
-
-                  }
-                ],
-                'item_code',
-                //'quantity:decimal',
-                [
-                  'attribute'=>'quantity',
-                   'format'=>['decimal',2],
-                   'headerOptions' => ['style'=>'text-align:right'],
-                   'contentOptions' => ['style' => 'text-align:right'],
-                   'footerOptions'=>['style' => 'text-align:right'],
-                ],
-                [
-                  'attribute'=>'unit_price',
-                //  'format'=>['decimal',2],
-                  'headerOptions' => ['style'=>'text-align:right'],
-                  'contentOptions' => ['style' => 'text-align:right'],
-                  'footerOptions'=>['style' => 'text-align:right'],
-                  'footer'=>'<strong>Total</strong>',
-                  'value'=>function($model){
-                      return '$'.number_format($model->unit_price,2);
-                  }
-                ],
-                [
-                  'attribute'=>'total_amount',
-                  'headerOptions' => ['style'=>'text-align:right'],
-                  'contentOptions' => ['style' => 'text-align:right'],
-                  'footerOptions'=>['style' => 'text-align:right'],
-                //  'format'=>['decimal',2],
-                  'footer' => '$'.number_format($total,2),
-                  'value'=>function($model){
-                    return '$'.number_format($model->total_amount,2);
-                  }
-                ]
-
-            //    ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]); ?>
+          </table>
       </div>
     </div>
 
