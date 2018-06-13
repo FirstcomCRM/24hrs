@@ -23,7 +23,6 @@ use common\models\DeliveryTime;
 $gridColumns = [
   ['class' => 'yii\grid\SerialColumn'],
 
-// /    'id',
 [
   'attribute'=>'id',
   'label'=>'Order ID',
@@ -47,8 +46,6 @@ $gridColumns = [
   }
 ],
 
-//'offremarks',
-//'collect_text',
 [
   'attribute'=>'del_time',
   'label'=>'Delivery Time',
@@ -57,9 +54,10 @@ $gridColumns = [
             if ($model['del_time'] == '') {
                return $model['collect_text'];
             }else{
-
               return $model['del_time'];
             }
+        }else{
+            return $model['del_time'];
         }
   }
 
@@ -138,7 +136,6 @@ $gridColumns = [
         }
 
         if (!empty($pdata) ) {
-        //  $path = Yii::getAlias('@image').'/'.$pdata->image;
            $path = Yii::getAlias('@roots').'/image/'.$pdata->image;
           if (file_exists($path) ) {
             //  return 'exist';
@@ -148,7 +145,6 @@ $gridColumns = [
             $path = '../web/logo/defaults.jpg';
             //$path = Yii::getAlias('@image').'/'.$pdata->image;
             return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
-            //return $path;
 
           }
         }else{
@@ -162,8 +158,8 @@ $gridColumns = [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-//  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
-  'template'=>'{view}  {update}   {remarks}  ',
+  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
+//  'template'=>'{view}  {update}   {remarks}  ',
 //  'options'=>['style'=>'padding:20px'],
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
@@ -175,11 +171,6 @@ $gridColumns = [
       return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
-  /*  'email'=>function($url,$model,$key){
-          return Html::a('<i class="fa fa-envelope-open-o " aria-hidden="true"></i>', '#', ['title'=>'Email to customer','data-pjax'=>0,'class'=>'email-button',
-          'onclick'=>'myEmail('.$model['id'] .')']);
-
-    },*/
     'email'=>function($url,$model,$key){
           return Html::a('<i class="fa fa-envelope-open-o  fa-2x" aria-hidden="true"></i>', $url,
             [
@@ -215,12 +206,8 @@ $gridColumns = [
 
   ],
   'visibleButtons'=>[
-    //'view'=> function($model){
-    //  return $model['invoice_no'] !='0'&& ($model['status'] != 5 );
-  //    return $model['invoice_no'] !='0';
-  //  },
     'update'=>function($model){
-        return $model['off_detect'] =='77' && ($model['status'] != 5 && $model['status'] != 7);
+        return $model['off_detect'] =='77' && ($model['status'] != 5 && $model['status'] != 7  && $model['status'] != 3);
     },
     'complete'=>function($model){
       return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
@@ -229,29 +216,24 @@ $gridColumns = [
       return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
     },
     'ship'=>function($model){
-      return $model['status'] != 1 && $model['status'] != 7;
+      return $model['status'] != 1 && $model['status'] != 7 && $model['status'] != 3;
     },
   ],
   'urlCreator'=> function($action,$model,$key,$index){
     if ($action ==='view'){
-      //$url = '?r=offline-order%2Fview&id='.$model['id'];
       if ($model['off_detect']=='77') {
         $url = Url::to(['offline-order/view', 'id'=>$model['id']]);
       }else{
         $url = Url::to(['order/view', 'id'=>$model['id']]);
       }
-
       return $url;
     }
     if ($action==='update') {
-      //$url = '?r=offline-order%2Fupdate&id='.$model['id'];
       $url = Url::to(['offline-order/update', 'id'=>$model['id']]);
       return $url;
     }
     if ($action=='email') {
       $url = Url::to(['order/custom-email', 'id'=>$model['id'] ]);
-    //  $url = Url::to(['order/test', 'id'=>$model['id'] ]);
-    //  $url = Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=> $model['invoice_no'] ]);
       return $url;
     }
 
@@ -308,6 +290,7 @@ $this->title = 'Order Management System';
           <li> <a href="#future" data-toggle="tab"> Pending Future Orders</a></li>
           <li> <a href="#completed" data-toggle="tab"> Orders Done</a></li>
           <li> <a href="#canceled" data-toggle="tab"> Orders Canceled</a></li>
+          <li> <a href="#history" data-toggle="tab"> Order History</a></li>
         </ul>
 
         <br>
@@ -352,6 +335,17 @@ $this->title = 'Order Management System';
             <?php Pjax::begin(['timeout' => 18000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_cancel,
+                     'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
+                  //  'filterModel' => $searchModel,
+                    'columns' => $gridColumns,
+                ]); ?>
+            <?php Pjax::end(); ?>
+          </div><!--End of Orders Cancel-->
+
+          <div class="tab-pane fade" id="history"><!--Start of Orders Cancel-->
+            <?php Pjax::begin(['timeout' => 18000 ]); ?>
+              <?= GridView::widget([
+                    'dataProvider' => $dataProvider_shipped,
                      'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
                   //  'filterModel' => $searchModel,
                     'columns' => $gridColumns,
