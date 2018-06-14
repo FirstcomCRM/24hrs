@@ -29,6 +29,7 @@ $total = 0;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Print Inv-DO', ['offline-order/print-dinv', 'id'=>$model->id], ['class' => 'btn btn-info','target'=>'_blanks']) ?>
     </p>
 
     <div class="panel panel-info">
@@ -50,29 +51,7 @@ $total = 0;
                   'format' => ['date', 'php:d M Y']
                 ],
                 'delivery_time',
-                /*[
-                  'attribute'=>'delivery_time',
-                  'value'=>function($model){
-                    $data = DeliveryTime::find()->where(['id'=>$model->delivery_time])->one();
-                    if (!empty($data)) {
-                       return $data->delivery_time;
-                    }else {
-                      return $data = null;
-                    }
-                  }
-                ],*/
-              /*  [
-                  'attribute'=>'delivery_time_start',
-                  'value'=>function($model){
-                    return date('h:i A', strtotime($model->delivery_time_start) );
-                  }
-                ],*/
-              /*  [
-                  'attribute'=>'delivery_time_end',
-                  'value'=>function($model){
-                    return date('h:i A', strtotime($model->delivery_time_end) );
-                  }
-                ],*/
+
                 'customer_name',
                 'email:email',
                 'contact_number',
