@@ -48,6 +48,14 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Offline Order', 'url' => ['/offline-order/index']] ;
       //  $menuItems[] = ['label' => 'Delivery Time', 'url' => ['/delivery-time/index']] ;
         $menuItems[] = ['label' => 'Order', 'url' => ['/order/index']] ;
+        $menuItems[] =[
+          'label'=>'Settings', 'class'=>'navbars',
+          'items'=>[
+            ['label'=>'Delivery Time', 'url'=>['/delivery-time/index']],
+            ['label'=>'Product Category', 'url'=>['/offline-category/index']],
+            ['label'=>'Payment Method', 'url'=>['/offline-payment/index']],
+          ],
+        ];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
