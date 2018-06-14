@@ -36,6 +36,7 @@ AppAsset::register($this);
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
+        'innerContainerOptions' => ['class' => 'container-fluid'],
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
@@ -63,7 +64,7 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container-fluid">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
