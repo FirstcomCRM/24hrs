@@ -45,6 +45,11 @@ $pone = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
     font-family: Arial;
     font-size: 16px;
   }
+
+  .table > tbody > tr > td{
+    padding: 1px;
+  }
+
   hr{
     border: 1px dotted black;
     border-style: none none dotted;
@@ -52,36 +57,43 @@ $pone = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
     background-color: #fff;
   }
 
+  .adjust-margs{
+    margin-bottom:10px;
+    margin-top: -10px;
+  }
+
+  .hr-margs{
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
+  .table-margs{
+    margin-bottom: 1px;
+  }
+
 
 </style>
 
 <div class="order-view">
 
-  <div class="img-responsive">
-    <img src="<?php echo $path ?>" alt="">
-  </div>
-
-  <br>
-  <div class="panel panel-default">
-    <div class="panel-body panel-red">
+  <div class="panel panel-default adjust-margs">
+    <div class="panel-body panel-red" style="padding:8px 10px">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-xs-6">
           Thank you <?php echo $model->firstname ?> for your order.
         </div>
-        <div class="col-md-6 text-right">
+        <div class="col-xs-6 text-right">
           Order No: #<?php echo $model->order_id ?>
         </div>
       </div>
     </div>
   </div>
 
-
   <span class="pheader"> Products:</span>
 
 
-  <hr>
+  <hr class="hr-margs">
 
-  <table class="table">
+  <table class="table table-margs">
     <?php foreach ($parrs as $k => $v): ?>
       <tr>
         <td style="width:50%;border-top:0px">[Product code : <span class="products"> <?php echo $v['product_id'] ?></span>] <?php echo $v['quantity'] ?>x
@@ -107,9 +119,9 @@ $pone = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
 
   </table>
 
-  <hr>
+  <hr style="margin-bottom:10px">
 
-  <table class="table">
+  <table class="table table-margs">
     <tr>
       <td style="width:50%;border-top:0px" class="rborder">SubTotal</td>
       <td style="width:25%;border-top:0px" class="rborder"><?php echo '$'.number_format(array_sum($sums),2) ?></td>
@@ -128,27 +140,41 @@ $pone = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
 
   </table>
 
-  <br>
+
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-xs-6">
       <span class="pheader">Recipient's Info :</span>
     </div>
-    <div class="col-md-6">
+    <div class="col-xs-6">
       <span class="pheader">Delivery Date & Time :</span>
     </div>
   </div>
-  <hr>
+
+  <hr class="hr-margs">
+
   <div class="row">
-    <div class="col-md-6">
-      <p><?php echo $model->shipping_firstname ?></p>
-      <p><?php echo $model->shipping_company ?></p>
-      <p><?php echo $model->shipping_address_1 ?></p>
-      <p><?php echo $model->shipping_postcode ?></p>
-      <p><?php echo $model->shipping_country ?></p>
-      <p>Tel: <?php echo $model->shipping_telephone ?></p>
+    <div class="col-xs-6">
+      <?php if (!empty($model->shipping_firstname)): ?>
+          <?php echo $model->shipping_firstname ?><br>
+      <?php endif; ?>
+      <?php if (!empty($model->shipping_company)): ?>
+        <?php echo $model->shipping_company ?><br>
+      <?php endif; ?>
+      <?php if (!empty($model->shipping_address_1)): ?>
+        <?php echo $model->shipping_address_1 ?><br>
+      <?php endif; ?>
+      <?php if (!empty($model->shipping_postcode)): ?>
+        <?php echo $model->shipping_postcode ?><br>
+      <?php endif; ?>
+      <?php if (!empty($model->shipping_country)): ?>
+        <?php echo $model->shipping_country ?><br>
+      <?php endif; ?>
+      <?php if (!empty($model->shipping_telephone)): ?>
+        <?php echo $model->shipping_telephone ?>
+      <?php endif; ?>
 
     </div>
-    <div class="col-md-6">
+    <div class="col-xs-6">
       <strong>Delivery Date:</strong>
         <?php
           if ($pone->delivery_date == '1970-01-01') {
@@ -159,37 +185,36 @@ $pone = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
 
         ?>
       <br>
-      <strong>Delivery time:</strong>   <?php echo $pone->delivery_text_time ?>
+      <strong>Delivery Time:</strong>   <?php echo $pone->delivery_text_time ?>
     </div>
   </div>
 
-
-  <br><br>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-xs-6">
       <span class="pheader">Sender's Info :</span>
     </div>
-    <div class="col-md-6">
+    <div class="col-xs-6">
       <span class="pheader">Gift Message :</span>
     </div>
   </div>
-  <hr>
+
+  <hr class="hr-margs">
+
   <div class="row">
-    <div class="col-md-6">
-      <p><strong><?php echo $model->firstname ?></strong> </p>
-      <p><?php echo $model->payment_country ?></p>
-      <p>Email: <?= Html::mailto($model->email, $model->email) ?></p>
-      <p>Tel: <?php echo $model->telephone ?></p>
-      <p><strong><?php echo $model->order_source ?></strong> </p>
+    <div class="col-xs-6">
+      <strong><?php echo $model->firstname ?></strong> <br>
+      <?php echo $model->payment_country ?><br>
+      Email: <?= Html::mailto($model->email, $model->email) ?><br>
+      Tel: <?php echo $model->telephone ?><br>
+      <strong><?php echo $model->order_source ?></strong> <br>
     </div>
-    <div class="col-md-6">
+    <div class="col-xs-6">
       <strong>To :</strong><?php echo $pone->gift_to ?>
       <br>
       <strong>Message :</strong> <?php echo  nl2br($pone->gift_message_comment) ?>
       <strong>From:</strong> <?php echo $pone->gift_from ?>
     </div>
   </div>
-
 
 
 </div>
