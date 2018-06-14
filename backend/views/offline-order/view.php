@@ -15,12 +15,13 @@ $this->title = $model->invoice_no;
 $total = 0;
 
 
-
+//Yii::$app->request->referrer
 ?>
 <div class="offline-order-view">
 
     <p class="text-right">
-        <?= Html::a('Back', ['order/index'], ['class' => 'btn btn-default']) ?>
+        
+        <?= Html::a('Back', Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
