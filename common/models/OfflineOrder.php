@@ -39,7 +39,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
         return [
             [['invoice_date', 'delivery_date','payment', 'customer_name', 'contact_number', 'recipient_name','recipient_contact_num', 'recipient_address', 'recipient_postal_code','charge'], 'required'],
             [['invoice_date', 'delivery_date','delivery_time_start','delivery_time_end'], 'safe'],
-            [['email','recipient_email'],'email'],
+            [['email'],'email'],
             [['status','payment','off_detect','contact_number', 'recipient_contact_num','delivery_trigger'	],'integer'],
             [['charge'],'number'],
             [['subtotal', 'grand_total'],'number','numberPattern' => '/^\s*[-+]?[0-9\,]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
@@ -47,9 +47,9 @@ class OfflineOrder extends \yii\db\ActiveRecord
             [['gift_message'],'string','max'=>150],
             [['invoice_no', 'recipient_postal_code','delivery_time'], 'string', 'max' => 25],
             [['customer_name'], 'string', 'max' => 100],
-            [['email', 'recipient_name', 'recipient_email'], 'string', 'max' => 75],
+            [['email', 'recipient_name'], 'string', 'max' => 75],
             [['recipient_country'], 'string', 'max' => 50],
-            [['gift_to','gift_from'], 'string', 'max' => 75],
+            [['gift_to','gift_from','taken_by','recipient_email'], 'string', 'max' => 75],
         ];
     }
 
@@ -65,9 +65,9 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'delivery_date' => 'Delivery Date',
             'customer_name' => 'Customer Name',
             'Delivery Trigger'=> 'Delivery Trigger',
-            'delivery_time'=>'Delivery Time',
-            'delivery_time_start'=>'Delivery Time Start',
-            'delivery_time_end'=>'Delivery Time End',
+            'delivery_time'=>'Standard Delivery Time',
+            'delivery_time_start'=>'Special Time Start',
+            'delivery_time_end'=>'Special Time End',
             'email' => 'Email',
             'contact_number' => 'Contact Number',
             'remarks'=>'Remarks',
@@ -83,6 +83,7 @@ class OfflineOrder extends \yii\db\ActiveRecord
             'gift_to'=>'Gift To',
             'gift_from'=>'Gift From',
             'gift_message'=>'Gift Message',
+            'taken_by'=>'Taken By',
         ];
     }
 
@@ -104,6 +105,8 @@ class OfflineOrder extends \yii\db\ActiveRecord
 
             $this->delivery_time_start = date('H:i:s',strtotime($this->delivery_time_start) );
             $this->delivery_time_end = date('H:i:s',strtotime($this->delivery_time_end) );
+            $this->recipient_email = 'blank@blank.test';
+          
             return true;
         } else {
             return false;
