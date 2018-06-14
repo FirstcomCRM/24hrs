@@ -179,15 +179,15 @@ $gridColumns = [
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
-      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+      return Html::a(' <i class="fa fa-eye fa-lg fa-3x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
       ]);
     },
     'update'=>function($url,$model){
-      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
     'email'=>function($url,$model,$key){
-          return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-2x" aria-hidden="true"></i>', $url,
+          return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-3x" aria-hidden="true"></i>', $url,
             [
               'title'=>'Email to customer',
               'data-pjax'=>0,
@@ -202,7 +202,7 @@ $gridColumns = [
 
     },
     'complete'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-check fa-lg fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0,
+      return Html::a('<i class="fa fa-check fa-lg fa-3x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0,
         'data' => [
             'confirm' => 'Are you sure you want to complete this item?',
             'method' => 'post',
@@ -211,7 +211,7 @@ $gridColumns = [
       ]);
     },
     'cancel'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-times fa-lg fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0,
+      return Html::a('<i class="fa fa-times fa-lg fa-3x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0,
         'data' => [
             'confirm' => 'Are you sure you want to cancel this item?',
             'method' => 'post',
@@ -220,7 +220,7 @@ $gridColumns = [
       ]);
     },
     'ship'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa fa-car fa-lg fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0,
+      return Html::a('<i class="fa fa fa-car fa-lg fa-3x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0,
         'data' => [
             'confirm' => 'Are you sure you want to ship this item?',
             'method' => 'post',
@@ -230,9 +230,9 @@ $gridColumns = [
     },
     'remarks'=>function($url,$model,$key){
       if ($model['off_detect'] == '77') {
-        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0, 'class'=>'ipads btn btn-primary btn-s']);
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-3x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0, 'class'=>'ipads btn btn-primary btn-s']);
       }else{
-        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0,'class'=>'ipads btn btn-primary btn-s']);
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-3x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0,'class'=>'ipads btn btn-primary btn-s']);
       }
     },
 
@@ -420,15 +420,15 @@ $doneGrid = [
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
-      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+      return Html::a(' <i class="fa fa-eye fa-lg fa-4x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
       ]);
     },
     'update'=>function($url,$model){
-      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
     'email'=>function($url,$model,$key){
-          return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-2x" aria-hidden="true"></i>', $url,
+          return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-3x" aria-hidden="true"></i>', $url,
             [
               'title'=>'Email to customer',
               'data-pjax'=>0,
@@ -443,7 +443,7 @@ $doneGrid = [
 
     },
     'complete'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-check fa-lg fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0,
+      return Html::a('<i class="fa fa-check fa-lg fa-3x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0,
         'data' => [
             'confirm' => 'Are you sure you want to complete this item?',
             'method' => 'post',
@@ -452,7 +452,7 @@ $doneGrid = [
       ]);
     },
     'cancel'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-times fa-lg fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0,
+      return Html::a('<i class="fa fa-times fa-lg fa-3x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0,
         'data' => [
             'confirm' => 'Are you sure you want to cancel this item?',
             'method' => 'post',
@@ -461,7 +461,7 @@ $doneGrid = [
       ]);
     },
     'ship'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa fa-car fa-lg fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0,
+      return Html::a('<i class="fa fa fa-car fa-lg fa-3x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0,
         'data' => [
             'confirm' => 'Are you sure you want to ship this item?',
             'method' => 'post',
@@ -471,9 +471,9 @@ $doneGrid = [
     },
     'remarks'=>function($url,$model,$key){
       if ($model['off_detect'] == '77') {
-        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0, 'class'=>'ipads btn btn-primary btn-s']);
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-3x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0, 'class'=>'ipads btn btn-primary btn-s']);
       }else{
-        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0,'class'=>'ipads btn btn-primary btn-s']);
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-3x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0,'class'=>'ipads btn btn-primary btn-s']);
       }
     },
 
