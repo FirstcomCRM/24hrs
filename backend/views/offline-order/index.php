@@ -26,7 +26,7 @@ $this->title = 'Offline Order';
       <div class="panel-heading">
         <h3 class="panel-title"></h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body table-responsive">
         <p class="text-right">
             <?= Html::a('Add', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
@@ -51,7 +51,7 @@ $this->title = 'Offline Order';
                       'attribute'=>'delivery_time',
                       'label'=>'Delivery Time',
                     ],
-                    
+
                     'customer_name',
                     'contact_number',
                     [
@@ -72,17 +72,17 @@ $this->title = 'Offline Order';
                       'template'=>'{view}  {update}  {delete} {print}',
                       'buttons'=>[
                         'view'=>function($url,$model, $key){
-                          return Html::a(' <i class="fa fa-eye fa-lg fa-4x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+                          return Html::a(' <i class="fa fa-eye fa-lg fa-3x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
                           ]);
                         },
 
                         'update'=>function($url,$model){
-                          return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-4x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+                          return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
                           ]);
                         },
 
                         'delete'=>function($url,$model){
-                          return Html::a(' <i class="fa fa-trash fa-lg fa-4x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-danger btn-s', 'title'=>Yii::t('app','Delete'),'data-pjax'=>0,
+                          return Html::a(' <i class="fa fa-trash fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-danger btn-s', 'title'=>Yii::t('app','Delete'),'data-pjax'=>0,
                             'data' => [
                                 'confirm' => 'Are you sure you want to delete this item?',
                                 'method' => 'post',
@@ -91,7 +91,7 @@ $this->title = 'Offline Order';
                         },
 
                         'print'=>function($url,$model){
-                          return Html::a(' <i class="fa fa-print fa-lg fa-4x" aria-hidden="true"></i>',['offline-order/print-dinv', 'id'=>$model['id'] ],['class'=>'ipads btn btn-info btn-s','target'=>'_blanks', 'title'=>Yii::t('app','Print'),'data-pjax'=>0,
+                          return Html::a(' <i class="fa fa-print fa-lg fa-3x" aria-hidden="true"></i>',['offline-order/print-dinv', 'id'=>$model['id'] ],['class'=>'ipads btn btn-info btn-s','target'=>'_blanks', 'title'=>Yii::t('app','Print'),'data-pjax'=>0,
                           ]);
                         }
 
