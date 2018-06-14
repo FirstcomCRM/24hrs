@@ -14,7 +14,7 @@ class CronController extends Controller
 
     public function actionSetCompleted(){
       $dates = new \DateTime();
-      $ndate = $dates->modify('-1 day')->format('Y-m-d H:i:s');
+      $ndate = $dates->modify('-1 day')->format('Y-m-d');
   //    Yii::$app->db->createCommand()->update('offline_order',['status'=>5],'status=1' )->execute();
       Yii::$app->db->createCommand()->update('offline_order',['status'=>5],['status'=>1,'delivery_date'=>$ndate] )->execute();
       //Yii::$app->db->createCommand()->update('order',['order_status_id'=>5],'order_status_id=1' )->execute();
