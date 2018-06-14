@@ -16,13 +16,13 @@ use kartik\daterange\DateRangePicker;
     ]); ?>
 
     <div class="row">
-      <div class="col-md-3" style="margin-bottom:-10px">
+      <div class="col-xs-3" style="margin-bottom:-10px">
           <?= $form->field($model, 'order_id')->textInput(['placeholder'=>'Order ID'])->label(false) ?>
       </div>
-      <div class="col-md-3" style="margin-bottom:-10px">
+      <div class="col-xs-3" style="margin-bottom:-10px">
         <?= $form->field($model, 'invoice_no')->textInput(['placeholder'=>'Invoice No'])->label(false) ?>
       </div>
-      <div class="col-md-3" style="margin-bottom: -10px">
+      <div class="col-xs-3" style="margin-bottom: -10px">
 
         <?php echo $form->field($model,'delivery_date')->label(false)->widget(DateRangePicker::classname(), [
           'useWithAddon'=>false,
@@ -39,12 +39,12 @@ use kartik\daterange\DateRangePicker;
           ],
         ]); ?>
       </div>
-      <div class="col-md-3" style="margin-bottom: -10px">
+      <div class="col-xs-3" style="margin-bottom: -10px">
         <!---
           <?php  $form->field($model, 'product_code') ?>
           ---->
       </div>
-      <div class="col-md-3" style="margin-bottom: -10px"  >
+      <div class="col-xs-3" style="margin-bottom: -10px"  >
         <div class="form-group">
             <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
             <?php echo Html::a('<i class="fa fa-undo" aria-hidden="true"></i> Reset',['index'],['class'=>'btn btn-default']) ?>
