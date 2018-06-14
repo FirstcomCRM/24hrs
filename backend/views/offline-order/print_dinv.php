@@ -120,7 +120,7 @@ $testc = count($modelLine);
       <td style="width:19%;" class="pads"><strong>CUSTOMER NAME:</strong></td>
       <td style="width:31%" class="pads"><?php echo $model->customer_name ?></td>
       <td style="width:38%;text-align:right" class="pads"><strong>CONTACT NUMBER:</strong></td>
-      <td style="width:12%;" class="pads"><?php echo $model->contact_number ?> </td>
+      <td style="width:12%;text-align:right " class="pads"><?php echo $model->contact_number ?> </td>
     </tr>
     <tr>
       <td class="pads"><strong>CUSTOMER EMAIL:</strong></td>
@@ -136,10 +136,10 @@ $testc = count($modelLine);
   <table class="table-order" border=1>
     <thead>
       <tr>
-        <th style="width:10%">SN</th>
-        <th style="width:25%">Category</th>
-        <th style="width:50%">ITEM CODE</th>
-        <th style="width:15%">UNIT PRICE</th>
+        <th style="width:5%">SN</th>
+        <th style="width:20%">Category</th>
+        <th style="width:65%">ITEM CODE</th>
+        <th style="width:10%">UNIT PRICE</th>
       </tr>
     </thead>
       <tbody>
@@ -213,7 +213,7 @@ $testc = count($modelLine);
     </tr>
     <tr>
       <td class="pads" style="width:15%"><strong>TAKEN BY:</strong> </td>
-      <td class="pads" style="width:25%">Jerry</td>
+      <td class="pads" style="width:25%"><?php echo $model->taken_by ?></td>
       <td class="pads" style="width:35%;text-align:right"><strong>CUSTOMER SIGNATURE</strong></td>
       <td class="pads" style="width:20%">____________________________</td>
     </tr>
@@ -282,37 +282,37 @@ $testc = count($modelLine);
   <table class="table-order" border=1>
     <thead>
       <tr>
-        <th>SN</th>
-        <th>Description</th>
-        <th>Quantity</th>
+        <th style="width:5%">SN</th>
+        <th style="width:85%">Description</th>
+        <th style="width:10%">Quantity</th>
       </tr>
     </thead>
       <tbody>
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['off_category'] ?></td>
-            <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"><?php echo $value['off_category'] ?></td>
+            <td class="pads" style="text-align:right"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
         <?php endforeach; ?>
         <?php if ($testc == 1): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"></td>
-            <td class="pads"></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
           </tr>
           <?php $i++ ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"></td>
-            <td class="pads"></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
           </tr>
         <?php elseif($testc == 2): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"></td>
-            <td class="pads"></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
           </tr>
         <?php endif; ?>
       </tbody>
@@ -401,39 +401,39 @@ Print Do+DO
   <table class="table-order" border=1>
     <thead>
       <tr>
-        <th>SN</th>
-        <th>Description</th>
-        <th>Quantity</th>
+        <th style="width:5%">SN</th>
+        <th style="width:85%">Description</th>
+        <th style="width:10%">Quantity</th>
       </tr>
     </thead>
       <tbody>
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['off_category'] ?></td>
-            <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"><?php echo $value['off_category'] ?></td>
+            <td class="pads" style="text-align:right"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
         <?php endforeach; ?>
-          <?php if ($testc == 1): ?>
-            <tr>
-              <td class="pads"><?php echo $i ?></td>
-              <td class="pads"></td>
-              <td class="pads"></td>
-            </tr>
-            <?php $i++ ?>
-            <tr>
-              <td class="pads"> <?php echo $i ?></td>
-              <td class="pads"></td>
-              <td class="pads"></td>
-            </tr>
-          <?php elseif($testc == 2): ?>
-            <tr>
-              <td class="pads"> <?php echo $i ?></td>
-              <td class="pads"></td>
-              <td class="pads"></td>
-            </tr>
-          <?php endif; ?>
+        <?php if ($testc == 1): ?>
+          <tr>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
+          </tr>
+          <?php $i++ ?>
+          <tr>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
+          </tr>
+        <?php elseif($testc == 2): ?>
+          <tr>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
+          </tr>
+        <?php endif; ?>
       </tbody>
   </table>
 </div>
@@ -513,37 +513,37 @@ Print Do+DO
   <table class="table-order" border=1>
     <thead>
       <tr>
-        <th>SN</th>
-        <th>Description</th>
-        <th>Quantity</th>
+        <th style="width:5%">SN</th>
+        <th style="width:85%">Description</th>
+        <th style="width:10%">Quantity</th>
       </tr>
     </thead>
       <tbody>
         <?php foreach ($modelLine as $key => $value): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"><?php echo $value['off_category'] ?></td>
-            <td class="pads" style="text-align:left"><?php echo number_format($value['quantity']) ?></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"><?php echo $value['off_category'] ?></td>
+            <td class="pads" style="text-align:right"><?php echo number_format($value['quantity']) ?></td>
           </tr>
           <?php $i++ ?>
         <?php endforeach; ?>
         <?php if ($testc == 1): ?>
           <tr>
-            <td class="pads"><?php echo $i ?></td>
-            <td class="pads"></td>
-            <td class="pads"></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
           </tr>
           <?php $i++ ?>
           <tr>
-            <td class="pads"> <?php echo $i ?></td>
-            <td class="pads"></td>
-            <td class="pads"></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
           </tr>
         <?php elseif($testc == 2): ?>
           <tr>
-            <td class="pads"> <?php echo $i ?></td>
-            <td class="pads"></td>
-            <td class="pads"></td>
+            <td class="pads centers"><?php echo $i ?></td>
+            <td class="pads centers"></td>
+            <td class="pads centers"></td>
           </tr>
         <?php endif; ?>
       </tbody>
