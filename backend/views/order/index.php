@@ -21,22 +21,24 @@ use common\models\DeliveryTime;
 //die();
 
 $gridColumns = [
-  ['class' => 'yii\grid\SerialColumn'],
+
+[
+    'header'=>'#',
+    'class' => 'yii\grid\SerialColumn',
+    'contentOptions' => ['style' => 'width:1%;'],
+],
 
 [
   'attribute'=>'id',
   'label'=>'Order ID',
+  'contentOptions' => ['style' => 'width:5%;'],
 ],
 
-/*[
-  'attribute'=>'del_date',
-  'label'=>'Delivery Date',
-    'format' => ['date', 'php:d M Y']
-],*/
-//'coldate',
+
 [
   'attribute'=>'delivery_date',
   'label'=>'Delivery Date',
+  'contentOptions' => ['style' => 'width:9%;'],
   'value'=>function($model){
     if ($model['delivery_date'] == '1970-01-01') {
       return date('d M Y', strtotime($model['coldate']) );
@@ -49,6 +51,7 @@ $gridColumns = [
 [
   'attribute'=>'del_time',
   'label'=>'Delivery Time',
+  'contentOptions' => ['style' => 'width:10%;'],
   'value'=>function($model){
         if ($model['off_detect']!='77') {
             if ($model['del_time'] == '') {
@@ -63,10 +66,15 @@ $gridColumns = [
 
 ],
 
-'invoice_no',
+
+[
+  'attribute'=>'invoice_no',
+  'contentOptions' => ['style' => 'width:10%;'],
+],
 //'invoice_date',
 [
   'attribute'=>'invoice_date',
+  'contentOptions' => ['style' => 'width:10%;'],
   //'format' => ['date', 'php:Y-m-d'],
   'value'=>function($model){
     if ($model['invoice_date']== '0000-00-00 00:00:00' || is_null($model['invoice_date'])) {
@@ -76,10 +84,15 @@ $gridColumns = [
     }
   },
 ],
-'item_code',
+
+[
+  'attribute'=>'item_code',
+  'contentOptions' => ['style' => 'width:10%;'],
+],
 //'off_detect',
 [
   'attribute'=>'offremarks',
+  'contentOptions' => ['style' => 'width:15%;'],
   'label'=>'Remarks',
   'format'=>'html',
   'value'=>function($model){
@@ -110,6 +123,7 @@ $gridColumns = [
 [
   'attribute'=>'status',
   'label'=>'Status',
+  'contentOptions' => ['style' => 'width:5%;'],
   'value'=>function($model){
     $data = OrderStatus::findOne($model['status']);
     if ($model['status'] == '3') {
@@ -125,6 +139,7 @@ $gridColumns = [
  [
     'attribute'=>'image',
     'label'=>'Image',
+    'contentOptions' => ['style' => 'width:5%;'],
     'format'=>'raw',
     'value'=>function($model){
         //$data = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
@@ -164,19 +179,19 @@ $gridColumns = [
   //'contentOptions' => ['style' => 'padding:20px;'],
   'buttons'=>[
     'view'=>function($url,$model, $key){
-      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'pads', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
       ]);
     },
     'update'=>function($url,$model){
-      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
     'email'=>function($url,$model,$key){
-          return Html::a('<i class="fa fa-envelope-open-o  fa-2x" aria-hidden="true"></i>', $url,
+          return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-2x" aria-hidden="true"></i>', $url,
             [
               'title'=>'Email to customer',
               'data-pjax'=>0,
-              'class'=>'modalButton',
+              'class'=>'modalButton ipads btn btn-primary btn-s',
 
             //  'value' => Url::to(['order/custom-email', 'id' => $key])
               //'value' => Url::to(['order/custom-email'])
@@ -187,20 +202,37 @@ $gridColumns = [
 
     },
     'complete'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-check fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa-check fa-lg fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0,
+        'data' => [
+            'confirm' => 'Are you sure you want to complete this item?',
+            'method' => 'post',
+        ],
+        'class'=>'ipads btn btn-success btn-s',
+      ]);
     },
     'cancel'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa-times fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa-times fa-lg fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0,
+        'data' => [
+            'confirm' => 'Are you sure you want to cancel this item?',
+            'method' => 'post',
+        ],
+        'class'=>'ipads btn btn-success btn-s',
+      ]);
     },
     'ship'=>function($url,$model,$key){
-      return Html::a('<i class="fa fa fa-car fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0]);
+      return Html::a('<i class="fa fa fa-car fa-lg fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0,
+        'data' => [
+            'confirm' => 'Are you sure you want to ship this item?',
+            'method' => 'post',
+        ],
+        'class'=>'ipads btn btn-success btn-s',
+      ]);
     },
     'remarks'=>function($url,$model,$key){
       if ($model['off_detect'] == '77') {
-        return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0]);
-
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0, 'class'=>'ipads btn btn-primary btn-s']);
       }else{
-        return Html::a('<i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0]);
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0,'class'=>'ipads btn btn-primary btn-s']);
       }
     },
 
@@ -242,6 +274,249 @@ $gridColumns = [
 
 ],
 ];
+
+$doneGrid = [
+
+[
+    'header'=>'#',
+    'class' => 'yii\grid\SerialColumn',
+    'contentOptions' => ['style' => 'width:1%;'],
+],
+
+[
+  'attribute'=>'id',
+  'label'=>'Order ID',
+  'contentOptions' => ['style' => 'width:5%;'],
+],
+
+
+[
+  'attribute'=>'delivery_date',
+  'label'=>'Delivery Date',
+  'contentOptions' => ['style' => 'width:9%;'],
+  'value'=>function($model){
+    if ($model['delivery_date'] == '1970-01-01') {
+      return date('d M Y', strtotime($model['coldate']) );
+    }else{
+      return date('d M Y', strtotime($model['delivery_date']) );
+    }
+  }
+],
+
+[
+  'attribute'=>'del_time',
+  'label'=>'Delivery Time',
+  'contentOptions' => ['style' => 'width:10%;'],
+  'value'=>function($model){
+        if ($model['off_detect']!='77') {
+            if ($model['del_time'] == '') {
+               return $model['collect_text'];
+            }else{
+              return $model['del_time'];
+            }
+        }else{
+            return $model['del_time'];
+        }
+  }
+
+],
+
+
+[
+  'attribute'=>'invoice_no',
+  'contentOptions' => ['style' => 'width:10%;'],
+],
+//'invoice_date',
+[
+  'attribute'=>'invoice_date',
+  'contentOptions' => ['style' => 'width:10%;'],
+  //'format' => ['date', 'php:Y-m-d'],
+  'value'=>function($model){
+    if ($model['invoice_date']== '0000-00-00 00:00:00' || is_null($model['invoice_date'])) {
+      return '';
+    }else{
+      return date('d M Y',strtotime($model['invoice_date']));
+    }
+  },
+],
+
+[
+  'attribute'=>'item_code',
+  'contentOptions' => ['style' => 'width:10%;'],
+],
+//'off_detect',
+[
+  'attribute'=>'offremarks',
+  'contentOptions' => ['style' => 'width:15%;'],
+  'label'=>'Remarks',
+  'format'=>'html',
+  'value'=>function($model){
+    return nl2br($model['offremarks']);
+  }
+],
+
+[
+  'attribute'=>'status',
+  'label'=>'Status',
+  'contentOptions' => ['style' => 'width:5%;'],
+  'value'=>function($model){
+    $data = OrderStatus::findOne($model['status']);
+    if ($model['status'] == '3') {
+      $data->name = 'Delivered';
+      return $data->name;
+    }else{
+        return $data->name;
+    }
+
+  },
+],
+
+ [
+    'attribute'=>'image',
+    'label'=>'Image',
+    'contentOptions' => ['style' => 'width:5%;'],
+    'format'=>'raw',
+    'value'=>function($model){
+        //$data = OrderProduct::find()->where(['order_id'=>$model->order_id])->one();
+        $data = OrderProduct::find()->where(['order_id'=>$model['id'] ])->one();
+        if (!empty($data)) {
+            $pdata = Product::find()->where(['product_id'=>$data->product_id])->one();
+        }else{
+          return $data = null;
+        }
+
+        if (!empty($pdata) ) {
+           $path = Yii::getAlias('@roots').'/image/'.$pdata->image;
+          if (file_exists($path) ) {
+            //  return 'exist';
+            $path = Yii::getAlias('@image').'/'.$pdata->image;
+            return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
+          }else{
+            $path = '../web/logo/defaults.jpg';
+            //$path = Yii::getAlias('@image').'/'.$pdata->image;
+            return '<a href="'.$path.'" data-pjax=0 "><img style="width:50px;" src="'.$path.'"></a>';
+
+          }
+        }else{
+          return $pdata = null;
+        }
+
+    },
+  ],
+
+
+  [
+    'attribute'=>'del_address',
+    'label'=>'Delivery Address',
+  ],
+
+[
+  'header'=>'Action',
+  'class'=>'yii\grid\ActionColumn',
+//  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
+  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
+//  'template'=>'{view}  {update}   {remarks}  ',
+//  'options'=>['style'=>'padding:20px'],
+  //'contentOptions' => ['style' => 'padding:20px;'],
+  'buttons'=>[
+    'view'=>function($url,$model, $key){
+      return Html::a(' <i class="fa fa-eye fa-lg fa-2x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+      ]);
+    },
+    'update'=>function($url,$model){
+      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-2x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+      ]);
+    },
+    'email'=>function($url,$model,$key){
+          return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-2x" aria-hidden="true"></i>', $url,
+            [
+              'title'=>'Email to customer',
+              'data-pjax'=>0,
+              'class'=>'modalButton ipads btn btn-primary btn-s',
+
+            //  'value' => Url::to(['order/custom-email', 'id' => $key])
+              //'value' => Url::to(['order/custom-email'])
+              'value' => Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'], 'off_detect'=>$model['off_detect']])
+          //    'onclick'=>'myEmail('.$model['id'] .')'
+            ]
+          );
+
+    },
+    'complete'=>function($url,$model,$key){
+      return Html::a('<i class="fa fa-check fa-lg fa-2x" aria-hidden="true"></i>', ['complete', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Complete Order','data-pjax'=>0,
+        'data' => [
+            'confirm' => 'Are you sure you want to complete this item?',
+            'method' => 'post',
+        ],
+        'class'=>'ipads btn btn-success btn-s',
+      ]);
+    },
+    'cancel'=>function($url,$model,$key){
+      return Html::a('<i class="fa fa-times fa-lg fa-2x" aria-hidden="true"></i>', ['cancel', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Cancel Order','data-pjax'=>0,
+        'data' => [
+            'confirm' => 'Are you sure you want to cancel this item?',
+            'method' => 'post',
+        ],
+        'class'=>'ipads btn btn-success btn-s',
+      ]);
+    },
+    'ship'=>function($url,$model,$key){
+      return Html::a('<i class="fa fa fa-car fa-lg fa-2x" aria-hidden="true"></i>', ['ship', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Ship Order','data-pjax'=>0,
+        'data' => [
+            'confirm' => 'Are you sure you want to ship this item?',
+            'method' => 'post',
+        ],
+        'class'=>'ipads btn btn-success btn-s',
+      ]);
+    },
+    'remarks'=>function($url,$model,$key){
+      if ($model['off_detect'] == '77') {
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['offline-order/update-remark', 'id'=>$model['id'] ], ['title'=>'Remarks','data-pjax'=>0, 'class'=>'ipads btn btn-primary btn-s']);
+      }else{
+        return Html::a('<i class="fa fa-bookmark fa-lg fa-2x" aria-hidden="true"></i>', ['update-remark', 'id'=>$model['id'], 'off_detect'=>$model['off_detect'] ], ['title'=>'Remarks','data-pjax'=>0,'class'=>'ipads btn btn-primary btn-s']);
+      }
+    },
+
+  ],
+  'visibleButtons'=>[
+    'update'=>function($model){
+        return $model['off_detect'] =='77' && ($model['status'] != 5 && $model['status'] != 7  && $model['status'] != 3);
+    },
+    'complete'=>function($model){
+      return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
+    },
+    'cancel'=>function($model){
+      return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
+    },
+    'ship'=>function($model){
+      return $model['status'] != 1 && $model['status'] != 7 && $model['status'] != 3;
+    },
+  ],
+  'urlCreator'=> function($action,$model,$key,$index){
+    if ($action ==='view'){
+      if ($model['off_detect']=='77') {
+        $url = Url::to(['offline-order/view', 'id'=>$model['id']]);
+      }else{
+        $url = Url::to(['order/view', 'id'=>$model['id']]);
+      }
+      return $url;
+    }
+    if ($action==='update') {
+      $url = Url::to(['offline-order/update', 'id'=>$model['id']]);
+      return $url;
+    }
+    if ($action=='email') {
+      $url = Url::to(['order/custom-email', 'id'=>$model['id'] ]);
+      return $url;
+    }
+
+  }
+
+
+],
+];
+
+
 
 $this->title = 'Order Management System';
 //$this->params['breadcrumbs'][] = $this->title;
@@ -309,7 +584,7 @@ $this->title = 'Order Management System';
             </div>
           </div><!--End of Pending Orders for Today-->
 
-          <div class="tab-pane fade" id="future"><!--Start of Pending Future Order-->
+          <div class="tab-pane fade table-responsive" id="future"><!--Start of Pending Future Order-->
             <?php Pjax::begin(['timeout' => 10000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_future,
@@ -320,18 +595,19 @@ $this->title = 'Order Management System';
             <?php Pjax::end(); ?>
           </div><!--End of Pending Future Order-->
 
-          <div class="tab-pane fade" id="completed"><!--Start of Orders Done-->
+          <div class="tab-pane fade table-responsive" id="completed"><!--Start of Orders Done-->
             <?php Pjax::begin(['timeout' => 18000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_done,
                      'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
                   //  'filterModel' => $searchModel,
-                    'columns' => $gridColumns,
+                  //  'columns' => $gridColumns,
+                    'columns' => $doneGrid,
                 ]); ?>
             <?php Pjax::end(); ?>
           </div><!--End of Orders Done-->
 
-          <div class="tab-pane fade" id="canceled"><!--Start of Orders Cancel-->
+          <div class="tab-pane fade table-responsive" id="canceled"><!--Start of Orders Cancel-->
             <?php Pjax::begin(['timeout' => 18000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_cancel,
@@ -342,7 +618,7 @@ $this->title = 'Order Management System';
             <?php Pjax::end(); ?>
           </div><!--End of Orders Cancel-->
 
-          <div class="tab-pane fade" id="history"><!--Start of Orders Cancel-->
+          <div class="tab-pane fade table-responsive" id="history"><!--Start of Orders Cancel-->
             <?php Pjax::begin(['timeout' => 18000 ]); ?>
               <?= GridView::widget([
                     'dataProvider' => $dataProvider_shipped,
