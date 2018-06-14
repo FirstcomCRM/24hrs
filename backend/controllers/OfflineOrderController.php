@@ -87,6 +87,7 @@ class OfflineOrderController extends Controller
       //  $date->modify('+1 day');
       //  $model->delivery_date = $date->format('d M Y');
         $model->delivery_date = date('d M Y');
+        $model->taken_by = 'Jerry';
 
         if ($model->load(Yii::$app->request->post())  ) {
 
