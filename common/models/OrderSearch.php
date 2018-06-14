@@ -301,7 +301,7 @@ class OrderSearch extends Order
           ->orWhere(['a.status'=>7]);*/
       $query_off = (new \yii\db\Query())
         //  ->select('a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,fu.delivery_time as del_time,b.item_code,a.remarks as offremarks')
-          ->select("a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,a.delivery_time as del_time,b.item_code,a.remarks as offremarks,null_date as coldate, null_date as collect_text,a.off_detect")
+          ->select("a.id,a.invoice_no,a.status,a.invoice_date,a.delivery_date,a.delivery_time as del_time,b.item_code,a.remarks as offremarks,null_date as coldate, null_date as collect_text,a.off_detect,.a.recipient_address as del_address")
           ->from('offline_order a')
           ->leftJoin('offline_order_product b','b.off_order_id=a.id')
         //  ->leftJoin('delivery_time fu','fu.id=a.delivery_time')
@@ -311,7 +311,7 @@ class OrderSearch extends Order
 
       $query_on = (new \yii\db\Query())
         //  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks')
-          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
+          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name,c.shipping_address_1')
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
