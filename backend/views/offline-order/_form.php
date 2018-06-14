@@ -52,12 +52,16 @@ $cat = ArrayHelper::map($data,'id','off_category');
           <div class="col-md-6">
               <h3 class="panel-title">Customer Information (Sender's Information)</h3>
           </div>
-          <div class="col-md-6 text-right">
-             <?= Html::activeCheckbox($model, 'delivery_trigger', ['label' => ''])?>
+          <div class="col-md-5 text-right">
+            <label>Special Delivery Time:</label>
+          </div>
+          <div class="col-md-1 text-right">
+              <?= Html::activeCheckbox($model, 'delivery_trigger', ['label' => ''])?>
           </div>
         </div>
 
       </div>
+
       <div class="panel-body">
 
         <div class="row">
@@ -100,6 +104,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
         <div class="row">
           <div class="col-md-3">
               <?= $form->field($model, 'customer_name')->textInput(['maxlength' => true]) ?>
+              <?= $form->field($model, 'taken_by')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-3">
               <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
@@ -143,11 +148,11 @@ $cat = ArrayHelper::map($data,'id','off_category');
         <div class="row">
           <div class="col-md-3" style="margin-bottom: -10px;">
               <?= $form->field($model, 'recipient_name')->textInput(['maxlength' => true]) ?>
-              <?= $form->field($model, 'recipient_email')->textInput(['maxlength' => true]) ?>
+              <?= $form->field($model, 'recipient_postal_code')->textInput(['maxlength' => true]) ?>
           </div>
           <div class="col-md-3" style="margin-bottom: -10px;">
               <?= $form->field($model, 'recipient_contact_num')->textInput(['maxlength' => true,'type'=>'number','style'=>'text-align:right']) ?>
-              <?= $form->field($model, 'recipient_postal_code')->textInput(['maxlength' => true]) ?>
+
           </div>
           <div class="col-md-3" style="margin-bottom: -10px;">
               <?= $form->field($model, 'recipient_address')->textarea(['rows' => 4]) ?>
@@ -380,8 +385,7 @@ $cat = ArrayHelper::map($data,'id','off_category');
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         <?php if (!$model->isNewRecord): ?>
-            <?= Html::a(' Print DO', ['offline-order/print-do', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
-            <?= Html::a(' Print Invoice', ['offline-order/print-inv', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
+
             <?= Html::a('Print DO+Inv', ['offline-order/print-dinv', 'id'=>$model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
 
         <?php endif; ?>
