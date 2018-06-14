@@ -26,8 +26,6 @@ class CronController extends Controller
           }
       }
 
-
-
     }
 
 }
