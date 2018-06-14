@@ -56,6 +56,10 @@ class OrderController extends Controller
       //  $time = date('Y-m-d H:i:s');
         //echo "<pre>";var_dump($dataProvider_done);echo "</br>";die();
 
+      //  echo '<pre>';
+      //  print_r($dataProvider_done->getModels());
+      //  die();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -118,6 +122,7 @@ class OrderController extends Controller
      */
     public function actionView($id)
     {
+      $this->layout='print.php';
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
