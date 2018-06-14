@@ -47,6 +47,11 @@ $this->title = 'Offline Order';
                       'attribute'=>'delivery_date',
                       'format' => ['date', 'php:d M Y']
                     ],
+                    [
+                      'attribute'=>'delivery_time',
+                      'label'=>'Delivery Time',
+                    ],
+                    
                     'customer_name',
                     'contact_number',
                     [
@@ -60,7 +65,38 @@ $this->title = 'Offline Order';
                           return '$'.number_format($model->grand_total,2);
                       }
                     ],
-                    ['class' => 'yii\grid\ActionColumn'],
+
+                    [
+                      'header'=>'Action',
+                      'class'=>'yii\grid\ActionColumn',
+                      'template'=>'{view}  {update}  {delete} {print}',
+                      'buttons'=>[
+                        'view'=>function($url,$model, $key){
+                          return Html::a(' <i class="fa fa-eye fa-lg fa-4x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+                          ]);
+                        },
+
+                        'update'=>function($url,$model){
+                          return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-4x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+                          ]);
+                        },
+
+                        'delete'=>function($url,$model){
+                          return Html::a(' <i class="fa fa-trash fa-lg fa-4x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-danger btn-s', 'title'=>Yii::t('app','Delete'),'data-pjax'=>0,
+                            'data' => [
+                                'confirm' => 'Are you sure you want to delete this item?',
+                                'method' => 'post',
+                            ],
+                          ]);
+                        },
+
+                        'print'=>function($url,$model){
+                          return Html::a(' <i class="fa fa-print fa-lg fa-4x" aria-hidden="true"></i>',['offline-order/print-dinv', 'id'=>$model['id'] ],['class'=>'ipads btn btn-info btn-s','target'=>'_blanks', 'title'=>Yii::t('app','Print'),'data-pjax'=>0,
+                          ]);
+                        }
+
+                      ],
+                    ],
 
                 ],
             ]); ?>
