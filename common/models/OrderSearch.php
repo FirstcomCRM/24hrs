@@ -123,8 +123,13 @@ class OrderSearch extends Order
                 ->groupBy(['a.id'])
                 ->where(['a.status'=>1]);
   //die();
+  //(case when c.fullname IS NULL || c.fullname="" THEN c.company_name ELSE c.fullname END) as name
             $query_on = (new \yii\db\Query())
-                ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
+            //    ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
+                ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,
+                  (case when d.delivery_date="1970-01-01" THEN d.collection_date ELSE d.delivery_date END),
+                  d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
+
                 ->from('order c')
                 ->leftJoin('order_product d','d.order_id=c.order_id')
                 ->groupBy(['c.order_id'])
@@ -134,7 +139,13 @@ class OrderSearch extends Order
 
             $query = (new \yii\db\Query())
                 ->from(['dummy_name' => $query_off->union($query_on)]);
-                  //>orderBy(['delivery_date' => SORT_ASC]);
+                // ->orderBy(['delivery_date' => SORT_ASC]);
+
+              /*  $query =  (new yii\db\Query())
+                  ->select('*')
+                //  ->from($query_off->union($query_on))
+                ->from(['dummy_name' => $query_off->union($query_on)])
+                 ->orderBy(['delivery_date' => SORT_ASC]);*/
 
 
               $dataProvider = new ActiveDataProvider([
@@ -188,7 +199,8 @@ class OrderSearch extends Order
                     'id' => $this->order_id,
                 ]);
               }else{
-                $ndef = '2018-05-01';
+              //  $ndef = '2018-05-01';
+                  $ndef = '2018-06-06';
                 $this->start = date('Y-m-d');
                 $date = new \DateTime($this->start);
                 $this->end = $date->modify('+1 day')->format('Y-m-d');
@@ -221,7 +233,11 @@ class OrderSearch extends Order
 
       $query_on = (new \yii\db\Query())
         //  ->select('c.order_id,c.invoice_no,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date')
-          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time, c.store_name')
+      //    ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,d.delivery_date,d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time, c.store_name')
+          ->select('c.order_id,c.invoice_no_jason,c.order_status_id,c.date_invoice,
+            (case when d.delivery_date="1970-01-01" THEN d.collection_date ELSE d.delivery_date END),
+            d.delivery_text_time,d.product_id,c.remarks as onremarks,d.collection_date,d.collection_text_time,c.store_name')
+
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
