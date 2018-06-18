@@ -6,7 +6,6 @@ use yii\widgets\Pjax;
 use common\models\OfflineOrderProduct;
 use common\models\OrderProduct;
 use yii\helpers\Url;
-
 use common\models\Order;
 
 /* @var $this yii\web\View */
