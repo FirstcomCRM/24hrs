@@ -38,7 +38,7 @@ class OfflineCategory extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'off_category' => 'Off Category',
+            'off_category' => 'Category',
         ];
     }
 }
