@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\OfflinePayment */
 
-$this->title = 'Create Offline Payment';
-$this->params['breadcrumbs'][] = ['label' => 'Offline Payments', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Create Payment';
+//$this->params['breadcrumbs'][] = ['label' => 'Offline Payments', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="offline-payment-create">
 

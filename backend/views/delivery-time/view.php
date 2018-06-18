@@ -7,8 +7,8 @@ use yii\widgets\DetailView;
 /* @var $model common\models\DeliveryTime */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Delivery Times', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = ['label' => 'Delivery Times', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="delivery-time-view">
 

@@ -8,14 +8,12 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Delivery Time';
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="delivery-time-index">
 
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
 
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -31,14 +29,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-
                 'delivery_time:ntext',
-              /*  [
-                  'attribute'=>'delivery_time',
-                  'contentOptions' => ['style' => 'padding:20px;'],
-                ],*/
 
-                ['class' => 'yii\grid\ActionColumn'],
+
+                [
+                  'header'=>'Action',
+                  'class'=>'yii\grid\ActionColumn',
+                  'template'=>'{view}  {update}  {delete}',
+                  'contentOptions'=>['style'=>'width:20%'],
+                  'buttons'=>[
+                    'view'=>function($url,$model, $key){
+                      return Html::a(' <i class="fa fa-eye fa-lg fa-3x" aria-hidden="true"></i>', $url, ['id' => $model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title' => Yii::t('app', 'View'),'data-pjax'=>0, 'target'=>'_blank',
+                      ]);
+                    },
+
+                    'update'=>function($url,$model){
+                      return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
+                      ]);
+                    },
+
+                    'delete'=>function($url,$model){
+                      return Html::a(' <i class="fa fa-trash fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-danger btn-s', 'title'=>Yii::t('app','Delete'),'data-pjax'=>0,
+                        'data' => [
+                            'confirm' => 'Are you sure you want to delete this item?',
+                            'method' => 'post',
+                        ],
+                      ]);
+                    },
+
+                  ],
+                ],
+
             ],
         ]); ?>
       </div>
