@@ -6,6 +6,7 @@ use Yii;
 use common\models\Order;
 use common\models\OrderSearch;
 use common\models\OfflineOrder;
+use common\models\OrderProduct;
 use common\models\EmailForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -259,7 +260,7 @@ class OrderController extends Controller
     public function actionCustomEmail($id,$invoice_no, $off_detect){
         $model = new EmailForm();
 
-        if ($off_detct != '0') {
+        if ($off_detect != '0') {
           $data = Order::find()->where(['order_id'=>$id])->one();
           $model->email = $data->email;
         }else{
@@ -309,6 +310,41 @@ class OrderController extends Controller
       }else{
         return $this->render('_remarks', [
             'model' => $model,
+            //'modelLine'=>$modelLine,
+            //'dataProvider'=>$dataProvider,
+        ]);
+      }
+
+    }
+
+    public function actionUpdateDelivery($id){
+      $ntime = '';
+      $model = $this->findModel($id);
+      $modelLine = OrderProduct::find()->where(['order_id'=>$id])->one();
+      $modelLine->delivery_date = date('d M Y', strtotime($modelLine->delivery_date) );
+      if ($model->load(Yii::$app->request->post()) && $modelLine->load(Yii::$app->request->post())   ) {
+        $modelLine->delivery_date = date('Y-m-d', strtotime($modelLine->delivery_date) );
+        if ($modelLine->delivery_trigger == '1') {
+          $ntime = $modelLine->sp_start. ' - ' .$modelLine->sp_end;
+          Yii::$app->db->createCommand()->update('order_product',['delivery_date'=>$modelLine->delivery_date,'delivery_text_time'=>$ntime],['order_id'=>$id ] )->execute();
+        }else{
+          $ntime = $modelLine->standard_time;
+          Yii::$app->db->createCommand()->update('order_product',['delivery_date'=>$modelLine->delivery_date,'delivery_text_time'=>$ntime],['order_id'=>$id ] )->execute();
+
+        }
+
+    //  print_r($ntime);
+    //  print_r($modelLine->delivery_trigger);
+    //  print_r($modelLine->delivery_date);
+    //  die();
+
+        $model->save(false);
+        Yii::$app->session->setFlash('success', "Online order delivery setting updated");
+        return $this->redirect(['order/index']);
+      }else{
+        return $this->renderAjax('_del_form', [
+            'model' => $model,
+            'modelLine'=>$modelLine,
             //'modelLine'=>$modelLine,
             //'dataProvider'=>$dataProvider,
         ]);
