@@ -173,7 +173,7 @@ $gridColumns = [
   'header'=>'Action',
   'class'=>'yii\grid\ActionColumn',
 //  'template'=>'{view} {update}{email}{mod_email}{complete}{cancel}',
-  'template'=>'{view}  {update}  {email}  {remarks}   {complete}   {cancel}  {ship}',
+  'template'=>'{view}  {update}  {delup}  {email}  {remarks}   {complete}   {cancel}  {ship}',
 //  'template'=>'{view}  {update}   {remarks}  ',
 //  'options'=>['style'=>'padding:20px'],
   //'contentOptions' => ['style' => 'padding:20px;'],
@@ -186,13 +186,23 @@ $gridColumns = [
       return Html::a(' <i class="fa fa-pencil-square-o fa-lg fa-3x" aria-hidden="true"></i>',$url,['id'=>$model['id'], 'class'=>'ipads btn btn-primary btn-s', 'title'=>Yii::t('app','Update'),'data-pjax'=>0,
       ]);
     },
+    'delup'=>function($url,$model){
+      return Html::a(' <i class="fa fa-pencil fa-lg fa-3x" aria-hidden="true"></i>',$url,
+        [
+          'id'=>$model['id'],
+          'class'=>'ipads btn btn-warning btn-s modalDelUp',
+           'title'=>Yii::t('app','Edit'),
+           'data-pjax'=>0,
+           'value' => Url::to(['order/update-delivery', 'id'=>$model['id'] ])
+
+      ]);
+    },
     'email'=>function($url,$model,$key){
           return Html::a('<i class="fa fa-envelope-open-o fa-lg fa-3x" aria-hidden="true"></i>', $url,
             [
               'title'=>'Email to customer',
               'data-pjax'=>0,
               'class'=>'modalButton ipads btn btn-primary btn-s',
-
             //  'value' => Url::to(['order/custom-email', 'id' => $key])
               //'value' => Url::to(['order/custom-email'])
               'value' => Url::to(['order/custom-email', 'id'=>$model['id'], 'invoice_no'=>$model['invoice_no'], 'off_detect'=>$model['off_detect']])
@@ -241,6 +251,9 @@ $gridColumns = [
     'update'=>function($model){
         return $model['off_detect'] =='77' && ($model['status'] != 5 && $model['status'] != 7  && $model['status'] != 3);
     },
+    'delup'=>function($model){
+        return $model['off_detect'] !='77' && ($model['status'] != 5 && $model['status'] != 7  && $model['status'] != 3);
+    },
     'complete'=>function($model){
       return $model['status'] != 5 && $model['status'] != 7 && $model['status']!=3;
     },
@@ -266,6 +279,10 @@ $gridColumns = [
     }
     if ($action=='email') {
       $url = Url::to(['order/custom-email', 'id'=>$model['id'] ]);
+      return $url;
+    }
+    if ($action=='delup') {
+      $url = Url::to(['order/update-delivery', 'id'=>$model['id'] ]);
       return $url;
     }
 
@@ -650,12 +667,31 @@ $this->title = 'Order Management System';
 
  ?>
 
+
 <div class="" id="modalContent">
 
 </div>
 
 <?php Modal::end() ?>
 
+
+<?php
+  Modal::begin([
+    'header'=>'Update Delivery',
+    'id'=>'modalsDelUp',
+    'size'=>'modal-lg',
+    //'clientOptions' => ['backdrop' => false],
+    'footer' => '<a href="#" class="btn btn-info" data-dismiss="modal">Close</a>',
+  //  'closeButton'=>'tag',
+  ]);
+
+
+ ?>
+
+ <div class="" id="modalContentDel">
+
+ </div>
+<?php Modal::end() ?>
 
 
 <?php
