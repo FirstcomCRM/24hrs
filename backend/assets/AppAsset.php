@@ -16,9 +16,9 @@ class AppAsset extends AssetBundle
       'css/site.css',
     ];
     public $js = [
+      'js/modal.js',
       'js/order.js',
       'js/offline-order.js',
-      'js/modal.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
