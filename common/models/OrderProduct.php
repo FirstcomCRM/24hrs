@@ -34,6 +34,12 @@ class OrderProduct extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $sp_start;
+    public $sp_end;
+    public $standard_time;
+    public $delivery_trigger;
+
     public static function tableName()
     {
         return 'order_product';
@@ -48,7 +54,7 @@ class OrderProduct extends \yii\db\ActiveRecord
         //    [['order_id', 'product_id', 'name', 'model', 'quantity', 'reward', 'gift_to', 'gift_message_comment', 'gift_from', 'delivery_date', 'delivery_time', 'delivery_text_time', 'delivery_amount', 'collection_date', //'collection_time', 'collection_text_time', 'collection_amount'], 'required'],
             [['order_id', 'product_id', 'quantity', 'reward'], 'integer'],
             [['price', 'total', 'tax', 'delivery_amount', 'collection_amount'], 'number'],
-            [['gift_message_comment'], 'string'],
+            [['gift_message_comment','sp_start','sp_end','standard_time','delivery_trigger'], 'string'],
             [['delivery_date', 'collection_date'], 'safe'],
             [['name', 'gift_to', 'gift_from', 'delivery_time', 'delivery_text_time', 'collection_time', 'collection_text_time'], 'string', 'max' => 255],
             [['model'], 'string', 'max' => 64],
@@ -79,9 +85,12 @@ class OrderProduct extends \yii\db\ActiveRecord
             'delivery_text_time' => 'Delivery Text Time',
             'delivery_amount' => 'Delivery Amount',
             'collection_date' => 'Collection Date',
-            'collection_time' => 'Collection Time', 
+            'collection_time' => 'Collection Time',
             'collection_text_time' => 'Collection Text Time',
             'collection_amount' => 'Collection Amount',
+            'sp_end'=>'Special End Time',
+            'sp_start'=>'Special Start Time',
+            'standard_time'=>'Standard Time',
         ];
     }
 
