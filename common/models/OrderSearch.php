@@ -134,6 +134,7 @@ class OrderSearch extends Order
                 ->leftJoin('order_product d','d.order_id=c.order_id')
                 ->groupBy(['c.order_id'])
                 ->where(['c.order_status_id'=>1])
+                ->andWhere(['!=','c.invoice_no_jason',' '])
                 ->andWhere(['!=','d.delivery_date','0000-00-00']);
               //  ->orderBy(['d.delivery_date'=>SORT_ASC,'d.collection_date'=>SORT_ASC]);
 
@@ -242,6 +243,7 @@ class OrderSearch extends Order
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
           ->where(['c.order_status_id'=>1])
+          ->andWhere(['!=','c.invoice_no_jason',' '])
           ->andWhere(['!=','d.delivery_date','0000-00-00']);
 
       $query = (new \yii\db\Query())
@@ -296,7 +298,7 @@ class OrderSearch extends Order
           $this->start = date('Y-m-d');
           $date = new \DateTime($this->start);
           $this->start = $date->modify('+2 day')->format('Y-m-d');
-          $this->end = $date->modify('+2 years')->format('Y-m-d');
+          $this->end = $date->modify('+1 years')->format('Y-m-d');
           $query->andFilterWhere(['between', 'delivery_date', $this->start, $this->end])
               ->orFilterWhere(['between', 'coldate', $this->start, $this->end]);
         }
@@ -333,7 +335,8 @@ class OrderSearch extends Order
           ->groupBy(['c.order_id'])
           ->limit(500)
           ->orderBy(['d.delivery_date'=>SORT_DESC])
-          ->where(['c.order_status_id'=>5]);
+          ->where(['c.order_status_id'=>5])
+          ->andWhere(['!=','c.invoice_no_jason',' ']);
           //->orWhere(['c.order_status_id'=>3]);
 
     //      ->andWhere(['!=','d.delivery_date','0000-00-00']);
@@ -419,9 +422,10 @@ class OrderSearch extends Order
           ->from('order c')
           ->leftJoin('order_product d','d.order_id=c.order_id')
           ->groupBy(['c.order_id'])
-          ->limit(500)
+          ->limit(400)
           ->orderBy(['d.delivery_date'=>SORT_DESC])
-          ->where(['c.order_status_id'=>7]);
+          ->where(['c.order_status_id'=>7])
+          ->andWhere(['!=','c.invoice_no_jason',' ']);
           //->orWhere(['c.order_status_id'=>7]);
 
     //      ->andWhere(['!=','d.delivery_date','0000-00-00']);
@@ -509,7 +513,8 @@ class OrderSearch extends Order
           ->groupBy(['c.order_id'])
           ->limit(500)
           ->orderBy(['d.delivery_date'=>SORT_DESC])
-          ->where(['c.order_status_id'=>3]);
+          ->where(['c.order_status_id'=>3])
+          ->andWhere(['!=','c.invoice_no_jason',' ']);
           //->orWhere(['c.order_status_id'=>7]);
 
     //      ->andWhere(['!=','d.delivery_date','0000-00-00']);
